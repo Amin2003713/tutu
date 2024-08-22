@@ -15,8 +15,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Banner\CommandAndQueries\" />
       <Folder Include="Banner\Interfaces\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Http.Features">
+        <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.8\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
