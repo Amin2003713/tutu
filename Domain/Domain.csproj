@@ -8,10 +8,8 @@
 
     <ItemGroup>
       <Folder Include="Banner\" />
-      <Folder Include="Category\CommandAndQueries\" />
-      <Folder Include="Category\Interfaces\" />
-      <Folder Include="Category\Responses\" />
-      <Folder Include="Users\Auth\Exception\" />
+      <Folder Include="Category\" />
+      <Folder Include="Users\" />
     </ItemGroup>
 
 </Project>
