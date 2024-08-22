@@ -16,4 +16,10 @@
       <ProjectReference Include="..\Application\Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Category\CommandAndQueries\" />
+      <Folder Include="Category\Interfaces\" />
+      <Folder Include="Category\Responses\" />
+    </ItemGroup>
+
 </Project>
