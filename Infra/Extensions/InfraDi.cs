@@ -1,5 +1,7 @@
-﻿using Application.Common;
+﻿using Application.Banner.Interfaces;
+using Application.Common;
 using Application.Users.Auth.Interfaces;
+using Infra.Banner.Implantations;
 using Infra.Common;
 using Infra.Users.Auth.Implantations;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,8 +27,8 @@ public static  class InfraDi
         services.AddHttpClient();
 
         services.AddScoped<IBaseHttpClient, BaseHttpClient>();
-
         services.AddScoped<IUserAuthRepository, UserAuthRepository>();
+        services.AddScoped<IBannerRepository, BannerRepository>();
 
         services.AddHttpClient<BaseHttpClient>(client => { client.BaseAddress = new Uri(baseAddress); });
        

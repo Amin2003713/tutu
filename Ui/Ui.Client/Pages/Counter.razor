@@ -26,7 +26,7 @@
     {
         if (firstRender)
         {
-            var result = Auth.Login(new LoginCommand("09170002340" , "123456789"));
+            var result = Auth.RefreshToken(new RefreshTokenCommand("09170002340"));
         }
 
         return base.OnAfterRenderAsync(firstRender);
