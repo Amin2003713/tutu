@@ -3,7 +3,8 @@ using Application.Banner.Interfaces;
 using Application.Banner.Responses;
 using Application.Common;
 using Domain.Common;
-using Domain.Utils;
+using Domain.Common.Api;
+using Infra.Utils;
 
 namespace Infra.Banner.Implantations;
 

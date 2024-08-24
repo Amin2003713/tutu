@@ -1,4 +1,4 @@
-namespace Infra.Category;
+namespace Infra;
 
 public static class Seller
 {

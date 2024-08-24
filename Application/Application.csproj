@@ -20,4 +20,13 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Common\Order\CommandAndQueries\" />
+      <Folder Include="Common\Order\Interfaces\" />
+      <Folder Include="Common\Order\Responses\" />
+      <Folder Include="MainPage\CommandAndQueries\" />
+      <Folder Include="ShippingMethods\CommandAndQueries\" />
+      <Folder Include="Transactions\Responses\" />
+    </ItemGroup>
+
 </Project>

@@ -1,7 +1,10 @@
-﻿using Application.Category.Interfaces;
+﻿using Application.Category.CommandAndQueries;
+using Application.Category.Interfaces;
+using Application.Category.Responses;
 using Application.Common;
 using Domain.Common;
-using Domain.Utils;
+using Domain.Common.Api;
+using Infra.Utils;
 
 namespace Infra.Category.Implantations;
 

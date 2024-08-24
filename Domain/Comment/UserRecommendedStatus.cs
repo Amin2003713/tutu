@@ -1,3 +1,5 @@
+namespace Domain.Comment;
+
 public enum UserRecommendedStatus
 {
     پیشنهاد_میکنم,

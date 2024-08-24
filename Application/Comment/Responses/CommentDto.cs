@@ -1,4 +1,4 @@
-using Domain.Common;
+namespace Application.Comment.Responses;
 
 public class CommentDto : BaseDto
 {

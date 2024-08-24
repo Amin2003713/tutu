@@ -1,5 +1,3 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Application.Category.Interfaces;
+﻿namespace Application.Category.CommandAndQueries;
 
 public record AddChildCategoryCommand(long ParentId, string Title, string Slug, IFormFile ImageFile, SeoData SeoData);

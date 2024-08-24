@@ -1,3 +1,5 @@
+namespace Domain.Common.Filter;
+
 public class BaseFilter
 {
     public int EntityCount { get; private set; }

@@ -1,7 +1,4 @@
-﻿using Application.Banner.Responses;
-using Microsoft.AspNetCore.Http;
-
-namespace Application.Banner.CommandAndQueries;
+﻿namespace Application.Banner.CommandAndQueries;
 
 public class EditBannerCommand
 {

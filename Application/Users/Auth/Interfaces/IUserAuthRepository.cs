@@ -1,6 +1,5 @@
 ﻿using Application.Users.Auth.CommandAndQueries;
 using Application.Users.Auth.Responses;
-using Domain.Common;
 
 namespace Application.Users.Auth.Interfaces;
 

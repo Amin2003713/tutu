@@ -5,7 +5,7 @@ using Application.Users.Auth.Interfaces;
 using Infra.Banner.Implantations;
 using Infra.Category.Implantations;
 using Infra.Common;
-using Infra.Users.Auth.Implantations;
+using Infra.User.Auth.Implantations;
 using Microsoft.Extensions.DependencyInjection;
 
 

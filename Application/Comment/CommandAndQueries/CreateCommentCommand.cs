@@ -1,3 +1,5 @@
+namespace Application.Comment.CommandAndQueries;
+
 public class CreateCommentCommand 
 {
     public long UserId { get; set; }

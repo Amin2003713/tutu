@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using Application.Common;
 using Domain.Common;
+using Domain.Common.Exceptions;
 using Infra.Utils;
 
 namespace Infra.Common;

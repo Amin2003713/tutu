@@ -1,4 +1,4 @@
-namespace Infra.Category;
+namespace Infra.Comment;
 
 public static class CommentRoutes
 {

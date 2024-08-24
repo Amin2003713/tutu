@@ -1,4 +1,7 @@
-using Domain.Common;
+using Application.Comment.CommandAndQueries;
+using Application.Comment.Responses;
+
+namespace Application.Comment.Interfaces;
 
 public interface ICommentRepository
 {

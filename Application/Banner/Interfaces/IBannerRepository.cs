@@ -1,6 +1,4 @@
 ﻿using Application.Banner.CommandAndQueries;
-using Application.Banner.Responses;
-using Domain.Common;
 
 namespace Application.Banner.Interfaces;
 

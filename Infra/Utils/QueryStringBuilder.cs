@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web; 
+﻿using System.Web;
 
-namespace Domain.Utils
+namespace Infra.Utils
 {
     public static class QueryStringBuilder
     {

@@ -1,4 +1,5 @@
-﻿namespace Infra.Users.Auth;
+﻿
+namespace Infra.User.Auth;
 
 public static class AuthRouts
 {

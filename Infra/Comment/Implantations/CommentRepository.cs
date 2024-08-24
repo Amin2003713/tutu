@@ -1,9 +1,12 @@
+using Application.Comment.CommandAndQueries;
+using Application.Comment.Interfaces;
+using Application.Comment.Responses;
 using Application.Common;
-using Domain.Common;
-using Domain.Utils;
-using Infra.Category;
+using Domain.Comment;
+using Domain.Common.Api;
+using Infra.Utils;
 
-namespace Infra.Comment;
+namespace Infra.Comment.Implantations;
 
 public class CommentRepository(IBaseHttpClient client)  : ICommentRepository
 {

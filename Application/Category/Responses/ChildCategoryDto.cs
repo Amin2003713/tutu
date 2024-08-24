@@ -1,6 +1,4 @@
-﻿using Domain.Common;
-
-namespace Application.Category.Interfaces;
+﻿namespace Application.Category.Responses;
 
 public class ChildCategoryDto : BaseDto
 {

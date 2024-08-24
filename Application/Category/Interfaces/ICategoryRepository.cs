@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using Application.Category.CommandAndQueries;
+using Application.Category.Responses;
 
 namespace Application.Category.Interfaces;
 

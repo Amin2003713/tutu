@@ -2,10 +2,12 @@
 using Application.Users.Auth.Interfaces;
 using Application.Users.Auth.Responses;
 using Domain.Common;
-using Domain.Utils;
+using Domain.Common.Api;
 using Infra.Common;
+using Infra.User.Auth;
+using Infra.Utils;
 
-namespace Infra.Users.Auth.Implantations;
+namespace Infra.User.Auth.Implantations;
 
 public class UserAuthRepository(BaseHttpClient client)   : IUserAuthRepository
 {

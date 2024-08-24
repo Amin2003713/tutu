@@ -8,4 +8,5 @@ public class SeoData
     public string? MetaKeyWords { get; set; }
     public bool IndexPage { get; set; } = true;
     public string? Canonical { get; set; }
+    public string Schema { get; }
 }
