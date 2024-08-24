@@ -22,15 +22,5 @@
     }
 
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            var result = Auth.RefreshToken(new RefreshTokenCommand("09170002340"));
-        }
-
-        return base.OnAfterRenderAsync(firstRender);
-    }
-
   
 }
