@@ -1,0 +1,1 @@
+public record ChangeCommentStatusCommand(long Id, CommentStatus Status) ;

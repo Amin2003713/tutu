@@ -1,0 +1,1 @@
+public record DeleteCommentCommand(long CommentId, long UserId) ;
