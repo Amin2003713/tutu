@@ -9,6 +9,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0"/>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
       <PackageReference Include="System.Net.Http" Version="4.3.4" />
     </ItemGroup>
 
@@ -18,8 +19,6 @@
 
     <ItemGroup>
       <Folder Include="Common\Implantations\" />
-      <Folder Include="ShippingMethods\Implantations\" />
-      <Folder Include="User\Users\Implantations\" />
     </ItemGroup>
 
     <ItemGroup>

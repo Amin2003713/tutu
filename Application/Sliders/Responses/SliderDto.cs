@@ -1,4 +1,4 @@
-﻿namespace Application.Sliders.Sliders;
+﻿namespace Application.Sliders.Responses;
 
 public class SliderDto : BaseDto
 {

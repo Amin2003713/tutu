@@ -1,4 +1,7 @@
-﻿namespace Application.MainPage.Responses;
+﻿using Application.Products.Responses;
+using Application.Sliders.Responses;
+
+namespace Application.MainPage.Responses;
 
 public class MainPageDto
 {

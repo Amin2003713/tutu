@@ -1,9 +1,11 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using System.Text;
 using Application.Common;
 using Domain.Common;
 using Domain.Common.Exceptions;
 using Infra.Utils;
+using Newtonsoft.Json;
 
 namespace Infra.Common;
 
@@ -54,6 +56,32 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     public async Task<TResponse?> DeleteAsync<TResponse>(string uri)
     {
         return await GetResponse<TResponse>(await client.DeleteAsync(uri));
+    }
+
+    /// <summary>
+    /// Sends a DELETE request with a JSON body to the specified URI.
+    /// </summary>
+    /// <typeparam name="TRequest">The type of the request content.</typeparam>
+    /// <typeparam name="TResponse">The expected type of the response.</typeparam>
+    /// <param name="uri">The URI to which the DELETE request is sent.</param>
+    /// <param name="data">The data to be sent as JSON content.</param>
+    /// <returns>A task representing the asynchronous operation, with a result of the expected response type.</returns>
+    public async Task<TResponse?> DeleteAsync<TRequest, TResponse>(string uri, TRequest data)
+    {
+        // Serialize the request data to JSON
+        var json = JsonConvert.SerializeObject(data);
+
+        // Create the DELETE request with the body
+        var request = new HttpRequestMessage(HttpMethod.Delete, uri)
+        {
+            Content = new StringContent(json, Encoding.UTF8, "application/json")
+        };
+
+        // Send the request
+        var response = await client.SendAsync(request);
+
+        // Handle the response
+        return await GetResponse<TResponse>(response);
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-namespace Application.Sliders.Sliders;
+namespace Application.Sliders.CommandAndQueries;
 
 public class EditSliderCommand
 {

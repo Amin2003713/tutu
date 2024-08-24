@@ -1,58 +1,42 @@
-﻿using System.Net.Http.Json;
-using Application.Sliders;
-using Application.Sliders.Sliders;
+﻿using Application.Common;
+using Application.Sliders.CommandAndQueries;
+using Application.Sliders.Interfaces;
+using Application.Sliders.Responses;
 using Domain.Common.Api;
+using Infra.Utils;
 
-namespace Infra.Sliders;
+namespace Infra.Sliders.Implantations;
 
-public class SliderService : ISliderService
+public class SliderService(IBaseHttpClient client) : ISliderService
 {
-    private readonly HttpClient _client;
-    private const string ModuleName = "slider";
-    public SliderService(HttpClient client)
-    {
-        _client = client;
-    }
-    public async Task<ApiResult> CreateSlider(CreateSliderCommand command)
-    {
-        var formData = new MultipartFormDataContent();
-        formData.Add(new StringContent(command.Title), "Title");
-        formData.Add(new StreamContent(command.ImageFile.OpenReadStream()), "ImageFile", command.ImageFile.FileName);
-        formData.Add(new StringContent(command.Link), "Link");
 
-        var result = await _client.PostAsync($"{ModuleName}", formData);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+    public async Task<ApiResult?> CreateSlider(CreateSliderCommand command)
+    {
+        return await client.PostMultipartAsync<CreateSliderCommand ,ApiResult>(
+            SliderRoute.CreateSlider , command);
     }
 
-    public async Task<ApiResult> EditSlider(EditSliderCommand command)
+    public async Task<ApiResult?> EditSlider(EditSliderCommand command)
     {
-        var formData = new MultipartFormDataContent();
-        formData.Add(new StringContent(command.Title), "Title");
-
-        if (command.ImageFile != null && command.ImageFile.IsImage())
-            formData.Add(new StreamContent(command.ImageFile.OpenReadStream()), "ImageFile", command.ImageFile.FileName);
-        formData.Add(new StringContent(command.Link), "Link");
-        formData.Add(new StringContent(command.Id.ToString()), "Id");
-
-        var result = await _client.PutAsync($"{ModuleName}", formData);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.PutMultipartAsync<EditSliderCommand, ApiResult>(
+            SliderRoute.CreateSlider, command);
     }
 
-    public async Task<ApiResult> DeleteSlider(long sliderId)
+    public async Task<ApiResult?> DeleteSlider(long sliderId)
     {
-        var result = await _client.DeleteAsync($"{ModuleName}/{sliderId}");
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.DeleteAsync<ApiResult>(
+            SliderRoute.DeleteSliderById.BuildRequestUrl([sliderId])!);
     }
 
-    public async Task<SliderDto?> GetSliderById(long sliderId)
+    public async Task<ApiResult<SliderDto>?> GetSliderById(long sliderId)
     {
-        var result = await _client.GetFromJsonAsync<ApiResult<SliderDto?>>($"{ModuleName}/{sliderId}");
-        return result.Data;
+        return await client.GetAsync<ApiResult<SliderDto>>(
+            SliderRoute.GetSliderById.BuildRequestUrl([sliderId])!);
     }
 
-    public async Task<List<SliderDto>> GetSliders()
+    public async Task<ApiResult<List<SliderDto>>?> GetSliders()
     {
-        var result = await _client.GetFromJsonAsync<ApiResult<List<SliderDto>>>(ModuleName);
-        return result.Data;
+        return await client.GetAsync<ApiResult<List<SliderDto>>>(
+            SliderRoute.GetAllSliders);
     }
 }

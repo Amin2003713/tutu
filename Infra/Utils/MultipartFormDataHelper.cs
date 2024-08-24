@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace Infra.Utils;
 
@@ -26,6 +27,11 @@ public static class MultipartFormDataHelper
 
             switch (value)
             {
+                case IFormFile file:
+                    content = new StreamContent(file.OpenReadStream());
+                    multipartContent.Add(content, prop.Name, prop.Name);
+                    break;
+
                 case Stream streamValue:
                     content = new StreamContent(streamValue);
                     multipartContent.Add(content, prop.Name, prop.Name);

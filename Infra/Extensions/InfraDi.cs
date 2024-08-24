@@ -1,10 +1,14 @@
 ﻿using Application.Banner.Interfaces;
 using Application.Category.Interfaces;
+using Application.Comment.Interfaces;
 using Application.Common;
-using Application.Users.Auth.Interfaces;
+using Application.Order.Interfaces;
+using Application.User.Auth.Interfaces;
 using Infra.Banner.Implantations;
 using Infra.Category.Implantations;
+using Infra.Comment.Implantations;
 using Infra.Common;
+using Infra.Orders.Implantations;
 using Infra.User.Auth.Implantations;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -32,6 +36,8 @@ public static  class InfraDi
         services.AddScoped<IUserAuthRepository, UserAuthRepository>();
         services.AddScoped<IBannerRepository, BannerRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<ICommentRepository, CommentRepository>();
+        services.AddScoped<IOrderService, OrderService>();
 
         services.AddHttpClient<BaseHttpClient>(client => { client.BaseAddress = new Uri(baseAddress); });
        

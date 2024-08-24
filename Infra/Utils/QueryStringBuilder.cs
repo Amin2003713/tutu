@@ -35,21 +35,27 @@ namespace Infra.Utils
         /// Converts a list of dictionaries into a query string and appends it to the URL.
         /// </summary>
         /// <param name="url">The base URL to which the query string will be appended.</param>
-        /// <param name="sources">A list of dictionaries containing query parameters.</param>
+        /// <param name="filterParams">A list of dictionaries containing query parameters.</param>
         /// <returns>The URL with the query string appended.</returns>
-        private static string? ToQueryString(string url, List<Dictionary<string, string>> sources)
+        public static string ToQueryString<T>(this string url, T filterParams)
         {
-            if (url is null || sources.Count == 0)
-                return url;
+            if (url is null || filterParams is null)
+                return url!;
 
-            // Create the query string from the list of dictionaries
-            var queryString = sources
-                .SelectMany(dict => dict.Select(kvp => $"{HttpUtility.UrlEncode(kvp.Key)}={HttpUtility.UrlEncode(kvp.Value)}"))
+            // Get properties from the filterParams object using reflection
+            var properties = typeof(T).GetProperties()
+                .Where(prop => prop.GetValue(filterParams) != null) // Skip properties with null values
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(filterParams)?.ToString());
+
+            // Create the query string
+            var queryString = properties
+                .Select(kvp => $"{HttpUtility.UrlEncode(kvp.Key)}={HttpUtility.UrlEncode(kvp.Value)}")
                 .Aggregate(url.EndsWith("?") ? url : url + "?", (current, segment) => current + segment + "&");
 
             // Remove any trailing '&' from the query string
             return queryString.TrimEnd('&');
         }
+
 
         /// <summary>
         /// Converts a list of strings into a path and appends it to the URL.

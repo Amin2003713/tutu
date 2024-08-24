@@ -1,74 +1,62 @@
-﻿using System.Net.Http.Json;
-using Application.Sellers;
-using Application.Sellers.Sellers;
-using Application.Sellers.Sellers.Commands;
+﻿using Application.Common;
+using Application.Sellers.CommandAndQueries;
+using Application.Sellers.Interfaces;
+using Application.Sellers.Responses;
 using Domain.Common.Api;
+using Domain.Sellers;
+using Infra.Utils;
 
-namespace Infra.Sellers;
+namespace Infra.Sellers.Implantations;
 
-public class SellerService : ISellerService
+public class SellerService(IBaseHttpClient client) : ISellerService
 {
-    private readonly HttpClient _client;
-    private const string ModuleName = "seller";
-    public SellerService(HttpClient client)
+
+    public async Task<ApiResult?> CreateSeller(CreateSellerCommand command)
     {
-        _client = client;
+        return await client.PostAsync<CreateSellerCommand , ApiResult>(SellerRoute.CreateSeller, command);
     }
 
-    public async Task<ApiResult> CreateSeller(CreateSellerCommand command)
+    public async Task<ApiResult?> EditSeller(EditSellerCommand command)
     {
-        var result = await _client.PostAsJsonAsync(ModuleName, command);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.PutAsync<EditSellerCommand, ApiResult>(SellerRoute.UpdateSeller, command);
     }
 
-    public async Task<ApiResult> EditSeller(EditSellerCommand command)
+    public async Task<ApiResult?> AddInventory(AddSellerInventoryCommand command)
     {
-        var result = await _client.PutAsJsonAsync(ModuleName, command);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.PostAsync<AddSellerInventoryCommand, ApiResult>(SellerRoute.CreateSellerInventory, command);
     }
 
-    public async Task<ApiResult> AddInventory(AddSellerInventoryCommand command)
+    public async Task<ApiResult?> EditInventory(EditSellerInventoryCommand command)
     {
-        var result = await _client.PostAsJsonAsync($"{ModuleName}/inventory", command);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.PutAsync<EditSellerInventoryCommand, ApiResult>(SellerRoute.UpdateSellerInventory, command);
     }
 
-    public async Task<ApiResult> EditInventory(EditSellerInventoryCommand command)
+    public async Task<ApiResult<SellerDto>?> GetSellerById(long sellerId)
     {
-        var result = await _client.PutAsJsonAsync($"{ModuleName}/inventory", command);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.GetAsync< ApiResult<SellerDto>>(SellerRoute.GetSellerById.BuildRequestUrl([sellerId])!);
     }
 
-    public async Task<SellerDto?> GetSellerById(long sellerId)
+    public async Task<ApiResult<SellerDto>?> GetCurrentSeller()
     {
-        var result = await _client.GetFromJsonAsync<ApiResult<SellerDto?>>($"{ModuleName}/{sellerId}");
-        return result.Data;
+        return await client.GetAsync<ApiResult<SellerDto>>(SellerRoute.GetCurrentSeller);
+
     }
 
-    public async Task<SellerDto?> GetCurrentSeller()
+    public async Task<ApiResult<SellerFilterResult>?> GetSellersByFilter(SellerFilterParams filterParams)
     {
-        var result = await _client.GetFromJsonAsync<ApiResult<SellerDto?>>($"{ModuleName}/current");
-        return result.Data;
+        return await client.GetAsync<ApiResult<SellerFilterResult>>(SellerRoute.GetSellersByFilter.ToQueryString(filterParams));
     }
 
-    public async Task<SellerFilterResult> GetSellersByFilter(SellerFilterParams filterParams)
+    public async Task<ApiResult<InventoryDto?>?> GetInventoryById(long inventoryId)
     {
-        var url = filterParams.GenerateBaseFilterUrl(ModuleName) +
-                  $"&NationalCode={filterParams.NationalCode}&ShopName={filterParams.ShopName}";
+        return await client.GetAsync<ApiResult<InventoryDto?>>(
+            SellerRoute.GetInventoryById.BuildRequestUrl([inventoryId])!);
 
-        var result = await _client.GetFromJsonAsync<ApiResult<SellerFilterResult>>(url);
-        return result.Data;
     }
 
-    public async Task<InventoryDto?> GetInventoryById(long inventoryId)
+    public async Task<ApiResult<List<InventoryDto>?>?> GetSellerInventories()
     {
-        var result = await _client.GetFromJsonAsync<ApiResult<InventoryDto?>>($"{ModuleName}/inventory/{inventoryId}");
-        return result.Data;
-    }
-
-    public async Task<List<InventoryDto>> GetSellerInventories()
-    {
-        var result = await _client.GetFromJsonAsync<ApiResult<List<InventoryDto>>>($"{ModuleName}/inventory");
-        return result.Data;
+        return await client.GetAsync<ApiResult<List<InventoryDto>?>>(
+            SellerRoute.GetAllInventories);
     }
 }

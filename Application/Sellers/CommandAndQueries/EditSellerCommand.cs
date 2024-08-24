@@ -1,4 +1,6 @@
-﻿namespace Application.Sellers.Sellers.Commands;
+﻿using Domain.Sellers;
+
+namespace Application.Sellers.CommandAndQueries;
 
 public class EditSellerCommand
 {

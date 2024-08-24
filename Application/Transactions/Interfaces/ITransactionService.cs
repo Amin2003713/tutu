@@ -1,6 +1,8 @@
-﻿namespace Application.Transactions;
+﻿using Application.Transactions.CommandAndQueries;
+
+namespace Application.Transactions.Interfaces;
 
 public interface ITransactionService
 {
-    Task<ApiResult<string>> CreateTransaction(CreateTransactionCommand command);
+    Task<ApiResult?> CreateTransaction(CreateTransactionCommand command);
 }

@@ -1,4 +1,4 @@
-namespace Domain.Products;
+namespace Application.Products.Responses;
 
 public class ProductShopDto : BaseDto
 {

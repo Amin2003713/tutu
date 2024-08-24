@@ -1,4 +1,4 @@
-﻿namespace Application.Sellers.Sellers.Commands;
+﻿namespace Application.Sellers.CommandAndQueries;
 
 public class CreateSellerCommand
 {

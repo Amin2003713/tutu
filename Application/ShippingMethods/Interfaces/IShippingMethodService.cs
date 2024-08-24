@@ -1,8 +1,8 @@
-﻿using Application.ShippingMethods.ShippingMethods;
+﻿using Application.ShippingMethods.Responses;
 
-namespace Application.ShippingMethods;
+namespace Application.ShippingMethods.Interfaces;
 
 public interface IShippingMethodService
 {
-    Task<List<ShippingMethodDto>> GetShippingMethods();
+    Task<ApiResult<ShippingMethodDto?>?> GetShippingMethods();
 }

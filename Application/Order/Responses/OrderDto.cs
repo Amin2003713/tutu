@@ -1,6 +1,6 @@
-﻿using Domain.Common.@base;
+﻿using Domain.Orders;
 
-namespace Domain.Orders;
+namespace Application.Order.Responses;
 
 public class OrderDto : BaseDto
 {

@@ -1,94 +1,75 @@
 ﻿using System.Net.Http.Json;
+using Application.Common;
 using Application.Order.CommandAndQueries;
 using Application.Order.Interfaces;
+using Application.Order.Responses;
 using Domain.Common.Api;
 using Domain.Orders;
+using Infra.Utils;
 
 namespace Infra.Orders.Implantations;
 
-public class OrderService : IOrderService
+public class OrderService(IBaseHttpClient client) : IOrderService
 {
-    private readonly HttpClient _client;
-
-    public OrderService(HttpClient client)
+    public async Task<ApiResult?> AddOrderItem(AddOrderItemCommand command)
     {
-        _client = client;
+        return await client.PostAsync<AddOrderItemCommand , ApiResult>
+            (OrderRoutes.PostOrder, command);
+       
     }
 
-    public async Task<ApiResult> AddOrderItem(AddOrderItemCommand command)
+    public async Task<ApiResult?> CheckoutOrder(CheckOutOrderCommand command)
     {
-        var result = await _client.PostAsJsonAsync("order", command);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.PostAsync<CheckOutOrderCommand , ApiResult>(OrderRoutes.PostOrderCheckout, command);
     }
 
-    public async Task<ApiResult> CheckoutOrder(CheckOutOrderCommand command)
+    public async Task<ApiResult?> IncreaseOrderItem(IncreaseOrderItemCountCommand command)
     {
-        var result = await _client.PostAsJsonAsync("order/checkout", command);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
-    }
-
-    public async Task<ApiResult> IncreaseOrderItem(IncreaseOrderItemCountCommand command)
-    {
-        var result = await _client.PutAsJsonAsync("order/orderItem/IncreaseCount", command);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.PutAsync<IncreaseOrderItemCountCommand , ApiResult>(OrderRoutes.PutIncreaseOrderItemCount, command);
     }
 
     public async Task<ApiResult> DecreaseOrderItem(DecreaseOrderItemCountCommand command)
     {
-        var result = await _client.PutAsJsonAsync("order/orderItem/DecreaseCount", command);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return (await client.PutAsync<DecreaseOrderItemCountCommand , ApiResult>(OrderRoutes.PutDecreaseOrderItemCount, command))!;
     }
 
-    public async Task<ApiResult> DeleteOrderItem(DeleteOrderItemCommand command)
+    public async Task<ApiResult?> DeleteOrderItem(DeleteOrderItemCommand command)
     {
-        var result = await _client.DeleteAsync($"order/orderItem/{command.OrderItemId}");
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.DeleteAsync<ApiResult>(OrderRoutes.DeleteOrderItemById.BuildRequestUrl([command.OrderItemId])!);
     }
 
-    public async Task<ApiResult> SendOrder(long orderId)
+    public async Task<ApiResult?> SendOrder(long orderId)
     {
-        var result = await _client.PutAsync($"order/sendOrder/{orderId}",null);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.PutAsync< object , ApiResult>
+            (OrderRoutes.PutSendOrderById.BuildRequestUrl([orderId])!,null!);
     }
 
-    public async Task<OrderDto?> GetOrderById(long orderId)
+    public async Task<ApiResult<OrderDto?>?> GetOrderById(long orderId)
     {
-        var result = await _client.GetFromJsonAsync<ApiResult<OrderDto?>>($"order/{orderId}");
-        return result?.Data;
+        return await client.GetAsync<ApiResult<OrderDto?>>(OrderRoutes.GetOrderById.BuildRequestUrl([orderId])!);
     }
 
-    public async Task<OrderDto?> GetCurrentOrder()
+    public async Task<ApiResult<OrderDto?>?> GetCurrentOrder()
     {
-        var result = await _client.GetFromJsonAsync<ApiResult<OrderDto?>>($"order/current");
-        return result?.Data;
+        return await client.GetAsync<ApiResult<OrderDto?>>(OrderRoutes.GetCurrentOrder);
     }
 
-    public async Task<OrderFilterResult> GetOrders(OrderFilterParams filterParams)
+    public async Task<ApiResult<OrderFilterResult>?> GetOrders(OrderFilterParams filterParams)
     {
-        var url = $"order/?pageId={filterParams.PageId}&take={filterParams.Take}";
-        if (filterParams.StartDate != null)
-            url += "&startDate=" + filterParams.StartDate;
-
-        if (filterParams.EndDate != null)
-            url += "&endDate=" + filterParams.EndDate;
-
-        if (filterParams.Status != null)
-            url += "&status=" + filterParams.Status;
-
-        if (filterParams.UserId != null)
-            url += "&UserId=" + filterParams.UserId;
-
-        var result = await _client.GetFromJsonAsync<ApiResult<OrderFilterResult>>(url);
-        return result?.Data;
+        return await client.GetAsync<ApiResult<OrderFilterResult>>(OrderRoutes.GetFilteredCurrentOrders.ToQueryString(
+            filterParams)!);
     }
 
-    public async Task<OrderFilterResult> GetUserOrders(int pageId, int take, OrderStatus? orderStatus)
+    public async Task<ApiResult<OrderFilterResult>?> GetUserOrders(int pageId, int take, OrderStatus? orderStatus)
     {
-        var url = $"order/current/filter?pageId={pageId}&take={take}";
-        if (orderStatus != null)
-            url += $"&status={orderStatus}";
-        var result = await _client
-            .GetFromJsonAsync<ApiResult<OrderFilterResult>>(url);
-        return result?.Data;
+        var requestParams = new List<Dictionary<string, string>>()
+        {
+            new() { { "pageId", pageId.ToString() } },
+            new() { { "take", take.ToString() } },
+            new() { { "status", (orderStatus is null ? null : orderStatus.ToString())! } }
+        };
+       
+        return await client.GetAsync<ApiResult<OrderFilterResult>>(
+            OrderRoutes.GetFilteredCurrentOrders.BuildRequestUrl(requestParams)!);
     }
 }

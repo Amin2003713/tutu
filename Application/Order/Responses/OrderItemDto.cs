@@ -1,4 +1,4 @@
-﻿namespace Domain.Orders;
+﻿namespace Application.Order.Responses;
 
 public class OrderItemDto : BaseDto
 {

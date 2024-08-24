@@ -1,21 +1,15 @@
-using System.Net.Http.Json;
-using Application.Transactions;
+using Application.Common;
+using Application.Transactions.CommandAndQueries;
+using Application.Transactions.Interfaces;
 using Domain.Common.Api;
 
-namespace Infra.Transactions;
+namespace Infra.Transactions.Implantations;
 
-public class TransactionService : ITransactionService
+public class TransactionService(IBaseHttpClient client) : ITransactionService
 {
-    private readonly HttpClient _client;
-    private const string ModuleName = "transaction";
-    public TransactionService(HttpClient client)
+    public async Task<ApiResult?> CreateTransaction(CreateTransactionCommand command)
     {
-        _client = client;
-    }
-
-    public async Task<ApiResult<string>> CreateTransaction(CreateTransactionCommand command)
-    {
-        var result = await _client.PostAsJsonAsync(ModuleName, command);
-        return await result.Content.ReadFromJsonAsync<ApiResult<string>>();
+        return await client.PostMultipartAsync<CreateTransactionCommand, ApiResult>(
+            TransactionRouts.CreateTransaction, command);
     }
 }

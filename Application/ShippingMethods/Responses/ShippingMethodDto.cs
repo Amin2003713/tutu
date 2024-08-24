@@ -1,4 +1,4 @@
-﻿namespace Application.ShippingMethods.ShippingMethods;
+﻿namespace Application.ShippingMethods.Responses;
 
 public class ShippingMethodDto : BaseDto
 {

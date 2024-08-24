@@ -1,4 +1,4 @@
-﻿namespace Application.Sellers.Sellers;
+﻿namespace Domain.Sellers;
 
 public enum SellerStatus
 {

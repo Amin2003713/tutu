@@ -1,4 +1,4 @@
-namespace Application.Transactions;
+namespace Application.Transactions.CommandAndQueries;
 
 public class CreateTransactionCommand
 {

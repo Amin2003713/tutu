@@ -1,6 +1,6 @@
-﻿using Application.Users.Auth.CommandAndQueries;
-using Application.Users.Auth.Interfaces;
-using Application.Users.Auth.Responses;
+﻿using Application.User.Auth.CommandAndQueries;
+using Application.User.Auth.Interfaces;
+using Application.User.Auth.Responses;
 using Domain.Common;
 using Domain.Common.Api;
 using Infra.Common;

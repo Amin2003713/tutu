@@ -1,6 +1,6 @@
 ﻿using Domain.Common.@base;
 
-namespace Application.Sellers.Sellers;
+namespace Domain.Sellers;
 
 public class SellerDto : BaseDto
 {

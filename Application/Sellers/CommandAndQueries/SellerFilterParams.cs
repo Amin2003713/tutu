@@ -1,4 +1,4 @@
-namespace Application.Sellers.Sellers;
+namespace Application.Sellers.CommandAndQueries;
 
 public class SellerFilterParams : BaseFilterParam
 {

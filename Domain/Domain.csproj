@@ -11,7 +11,7 @@
       <Folder Include="Category\" />
       <Folder Include="Common\SharedEntities\" />
       <Folder Include="Roles\" />
-      <Folder Include="Users\" />
+      <Folder Include="User\" />
     </ItemGroup>
 
 </Project>

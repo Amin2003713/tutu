@@ -1,133 +1,79 @@
-﻿using System.Net.Http.Json;
-using System.Text;
-using Application.Products;
+﻿using Application.Common;
 using Application.Products.CommandAndQueries;
 using Application.Products.Interfaces;
+using Application.Products.Responses;
 using Domain.Common.Api;
 using Domain.Products;
+using Infra.Utils;
+using ProductFilterResult = Application.Products.Responses.ProductFilterResult;
 
-namespace Infra.Products;
+namespace Infra.Products.Implantations;
 
-public class ProductService : IProductService
+public class ProductService(IBaseHttpClient client) : IProductService
 {
-    private readonly HttpClient _client;
-    private const string ModuleName = "product";
-    public ProductService(HttpClient client)
+    public async Task<ApiResult?> CreateProduct(CreateProductCommand command)
     {
-        _client = client;
+        return await client.PostMultipartAsync<CreateProductCommand, ApiResult>(ProductRouts.CreateProduct, command);
     }
 
-    public async Task<ApiResult> CreateProduct(CreateProductCommand command)
+    public async Task<ApiResult?> EditProduct(EditProductCommand command)
     {
-        var formData = new MultipartFormDataContent();
-        formData.Add(new StringContent(command.Slug), "Slug");
-        formData.Add(new StreamContent(command.ImageFile.OpenReadStream()), "ImageFile", command.ImageFile.FileName);
-        formData.Add(new StringContent(command.Title), "Title");
-        formData.Add(new StringContent(command.Description), "Description");
-        formData.Add(new StringContent(command.CategoryId.ToString()), "CategoryId");
-        formData.Add(new StringContent(command.SubCategoryId.ToString()), "SubCategoryId");
-        if (command.SecondarySubCategoryId != null)
-            formData.Add(new StringContent(command.SecondarySubCategoryId.ToString() ?? string.Empty), "SecondarySubCategoryId");
-        formData.Add(new StringContent(command.SeoData.MetaTitle), "SeoData.MetaTitle");
-        formData.Add(new StringContent(command.SeoData.Canonical), "SeoData.Canonical");
-        formData.Add(new StringContent(command.SeoData.MetaKeyWords), "SeoData.MetaKeyWords");
-        formData.Add(new StringContent(command.SeoData.MetaDescription), "SeoData.MetaDescription");
-        formData.Add(new StringContent(command.SeoData.IndexPage.ToString()), "SeoData.IndexPage");
-        formData.Add(new StringContent(command.SeoData.Schema), "SeoData.Schema");
-
-        var specifications = JsonConvert.SerializeObject(command.Specifications);
-        formData.Add(new StringContent(specifications, Encoding.UTF8, "application/json"), "Specifications");
-
-
-        var result = await _client.PostAsync(ModuleName, formData);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.PutMultipartAsync<EditProductCommand, ApiResult>(ProductRouts.UpdateProduct, command);
     }
 
-    public async Task<ApiResult> EditProduct(EditProductCommand command)
+    public async Task<ApiResult?> AddImage(AddProductImageCommand command)
     {
-        var formData = new MultipartFormDataContent();
-        formData.Add(new StringContent(command.Slug), "Slug");
-        formData.Add(new StringContent(command.ProductId.ToString()), "ProductId");
-        if (command.ImageFile != null)
-            formData.Add(new StreamContent(command.ImageFile.OpenReadStream()), "ImageFile", command.ImageFile.FileName);
-        formData.Add(new StringContent(command.Title), "Title");
-        formData.Add(new StringContent(command.Description), "Description");
-        formData.Add(new StringContent(command.CategoryId.ToString()), "CategoryId");
-        formData.Add(new StringContent(command.SubCategoryId.ToString()), "SubCategoryId");
-        formData.Add(new StringContent(command.SecondarySubCategoryId.ToString() ?? string.Empty), "SecondarySubCategoryId");
-        formData.Add(new StringContent(command.SeoData.MetaTitle), "SeoData.MetaTitle");
-        formData.Add(new StringContent(command.SeoData.Canonical), "SeoData.Canonical");
-        formData.Add(new StringContent(command.SeoData.MetaKeyWords), "SeoData.MetaKeyWords");
-        formData.Add(new StringContent(command.SeoData.MetaDescription), "SeoData.MetaDescription");
-        formData.Add(new StringContent(command.SeoData.IndexPage.ToString()), "SeoData.IndexPage");
-        formData.Add(new StringContent(command.SeoData.Schema), "SeoData.Schema");
+        return await client.PostMultipartAsync<AddProductImageCommand, ApiResult>(ProductRouts.UploadProductImages,
+            command);
 
-        var specifications = JsonConvert.SerializeObject(command.Specifications);
-        formData.Add(new StringContent(specifications, Encoding.UTF8, "application/json"), "Specifications");
-
-        var result = await _client.PutAsync(ModuleName, formData);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
     }
 
-    public async Task<ApiResult> AddImage(AddProductImageCommand command)
+    public async Task<ApiResult?> DeleteProductImage(DeleteProductImageCommand command)
     {
-        var formData = new MultipartFormDataContent();
-        formData.Add(new StreamContent(command.ImageFile.OpenReadStream()), "ImageFile", command.ImageFile.FileName);
-        formData.Add(new StringContent(command.Sequence.ToString()), "Sequence");
-        formData.Add(new StringContent(command.ProductId.ToString()), "ProductId");
+        return await client
+            .PostMultipartAsync<DeleteProductImageCommand, ApiResult>
+                (ProductRouts.DeleteProductImages, command);
 
-        var result = await _client.PostAsync($"{ModuleName}/images", formData);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
     }
 
-    public async Task<ApiResult> DeleteProductImage(DeleteProductImageCommand command)
+    public async Task<ApiResult<ProductDto?>?> GetProductById(long productId)
     {
-        var json = JsonConvert.SerializeObject(command);
-        var message = new HttpRequestMessage(HttpMethod.Delete, $"{ModuleName}/images")
+        return await client
+            .GetAsync <ApiResult<ProductDto?>>
+                (ProductRouts.GetProductById.BuildRequestUrl([productId])!);
+    }
+
+    public async Task<ApiResult<ProductDto?>?> GetProductBySlug(string slug)
+    {
+        return await client
+            .GetAsync<ApiResult<ProductDto?>>
+                (ProductRouts.GetProductBySlug.BuildRequestUrl([slug])!);
+    }
+
+    public async Task<ApiResult<ProductDto?>?> GetSingleProduct(string slug)
+    {
+        return await client
+            .GetAsync<ApiResult<ProductDto?>>
+                (ProductRouts.GetSingleProductBySlug.BuildRequestUrl([slug])!);
+    }
+
+    public async Task<ApiResult<ProductFilterResult>?> GetProductByFilter(ProductFilterParams filterParams)
+    {
+        var requestParams = new List<Dictionary<string, string>>()
         {
-            Content = new StringContent(json, Encoding.UTF8, "application/json")
+            new() { { "pageId", filterParams.PageId.ToString() } },
+            new() { { "take", filterParams.Take.ToString() } },
+            new() { { "Title", filterParams.Title! } },
+            new() { { "Id", filterParams.Id.ToString()! } },
+            new() { { "Slug", filterParams.Slug! } },
         };
-        var result = await _client.SendAsync(message);
-        return await result.Content.ReadFromJsonAsync<ApiResult>();
+        return await client.GetAsync<ApiResult<ProductFilterResult>>(
+            ProductRouts.GetAllProductsFiltered.ToQueryString(filterParams));
     }
 
-    public async Task<ProductDto?> GetProductById(long productId)
+    public async Task<ApiResult<ProductShopResult>?> GetProductForShop(ProductShopFilterParam filterParams)
     {
-        var result = await _client.GetFromJsonAsync<ApiResult<ProductDto?>>($"{ModuleName}/{productId}");
-        return result?.Data;
-    }
-
-    public async Task<ProductDto?> GetProductBySlug(string slug)
-    {
-        var result = await _client.GetFromJsonAsync<ApiResult<ProductDto?>>($"{ModuleName}/bySlug/{slug}");
-        return result?.Data;
-    }
-
-    public async Task<SingleProductDto?> GetSingleProduct(string slug)
-    {
-        var result = await _client.GetFromJsonAsync<ApiResult<SingleProductDto?>>($"{ModuleName}/single/{slug}");
-        return result?.Data;
-    }
-
-    public async Task<ProductFilterResult> GetProductByFilter(ProductFilterParams filterParams)
-    {
-        var url = $"{ModuleName}?pageId={filterParams.PageId}&take={filterParams.Take}" +
-            $"&slug={filterParams.Slug}&title={filterParams.Title}";
-        if (filterParams.Id != null)
-            url += $"&Id={filterParams.Id}";
-        var result = await _client.GetFromJsonAsync<ApiResult<ProductFilterResult>>(url);
-        return result?.Data;
-    }
-
-    public async Task<ProductShopResult> GetProductForShop(ProductShopFilterParam filterParams)
-    {
-        var url = $"{ModuleName}/Shop?pageId={filterParams.PageId}&take={filterParams.Take}" +
-                  $"&categorySlug={filterParams.CategorySlug}&onlyAvailableProducts={filterParams.OnlyAvailableProducts}" +
-                  $"&search={filterParams.Search}&SearchOrderBy={filterParams.SearchOrderBy}";
-        if (filterParams.JustHasDiscount != null)
-            url += $"&JustHasDiscount={filterParams.JustHasDiscount}";
-
-        var result = await _client.GetFromJsonAsync<ApiResult<ProductShopResult>>(url);
-        return result?.Data;
+        return await client.GetAsync<ApiResult<ProductShopResult>>(
+            ProductRouts.GetAllProducts.ToQueryString(filterParams)!);
     }
 }

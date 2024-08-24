@@ -1,7 +1,6 @@
 ﻿using Application.Category.Responses;
-using Domain.Common.Filter;
 
-namespace Domain.Products;
+namespace Application.Products.Responses;
 
 public class ProductShopResult : BaseFilter<ProductShopDto, ProductShopFilterParam>
 {

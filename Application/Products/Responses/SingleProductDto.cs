@@ -1,4 +1,6 @@
-﻿namespace Domain.Products;
+﻿using Domain.Sellers;
+
+namespace Application.Products.Responses;
 
 public class SingleProductDto
 {

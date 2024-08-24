@@ -3,9 +3,6 @@
 global using Application.Banner.Responses;
 global using Application.Category.Interfaces;
 global using Application.Roles.CommandAndQueries;
-global using Application.Sellers.Sellers;
-global using Application.Sellers.Sellers.Commands;
-global using Application.Sliders.Sliders;
 global using Domain.Comment;
 global using Domain.Common;
 global using Domain.Common.Api;
