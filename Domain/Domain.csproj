@@ -9,6 +9,7 @@
     <ItemGroup>
       <Folder Include="Banner\" />
       <Folder Include="Category\" />
+      <Folder Include="Common\SharedEntities\" />
       <Folder Include="Users\" />
     </ItemGroup>
 
