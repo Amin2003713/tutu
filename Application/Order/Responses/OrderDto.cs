@@ -21,10 +21,7 @@ public class OrderDto : BaseDto
             if (ShippingMethod != null)
                 totalPrice += ShippingMethod.ShippingCost;
 
-            if (Discount != null)
-            {
-                totalPrice -= Discount.DiscountAmount;
-            }
+            if (Discount != null) totalPrice -= Discount.DiscountAmount;
             return totalPrice;
         }
     }

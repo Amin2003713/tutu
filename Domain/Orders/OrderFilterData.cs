@@ -1,5 +1,4 @@
-﻿
-using Domain.Common.@base;
+﻿using Domain.Common.@base;
 
 namespace Domain.Orders;
 

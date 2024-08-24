@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using Application.Common;
+﻿using Application.Common;
 using Application.User.UserAddress.CommandAndQueries;
 using Application.User.UserAddress.Interfaces;
 using Application.User.UserAddress.Responses;
@@ -30,8 +29,8 @@ public class UserAddressService(IBaseHttpClient client) : IUserAddressService
 
     public async Task<ApiResult?> SetActiveAddress(long addressId)
     {
-        return (await client.PutAsync<object, ApiResult>(
-            UserAddressRouts.SetActiveUserAddress.BuildRequestUrl([addressId])! , null!));
+        return await client.PutAsync<object, ApiResult>(
+            UserAddressRouts.SetActiveUserAddress.BuildRequestUrl([addressId])!, null!);
     }
 
     public async Task<ApiResult<AddressDto>?> GetAddressById(long id)

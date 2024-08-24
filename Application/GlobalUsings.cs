@@ -10,4 +10,3 @@ global using Domain.Common.@base;
 global using Domain.Common.Filter;
 global using Domain.Products;
 global using Microsoft.AspNetCore.Http;
-using Domain.Common.@base;

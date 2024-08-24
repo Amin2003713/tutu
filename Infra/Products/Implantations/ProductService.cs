@@ -25,7 +25,6 @@ public class ProductService(IBaseHttpClient client) : IProductService
     {
         return await client.PostMultipartAsync<AddProductImageCommand, ApiResult>(ProductRouts.UploadProductImages,
             command);
-
     }
 
     public async Task<ApiResult?> DeleteProductImage(DeleteProductImageCommand command)
@@ -33,13 +32,12 @@ public class ProductService(IBaseHttpClient client) : IProductService
         return await client
             .PostMultipartAsync<DeleteProductImageCommand, ApiResult>
                 (ProductRouts.DeleteProductImages, command);
-
     }
 
     public async Task<ApiResult<ProductDto?>?> GetProductById(long productId)
     {
         return await client
-            .GetAsync <ApiResult<ProductDto?>>
+            .GetAsync<ApiResult<ProductDto?>>
                 (ProductRouts.GetProductById.BuildRequestUrl([productId])!);
     }
 
@@ -59,13 +57,13 @@ public class ProductService(IBaseHttpClient client) : IProductService
 
     public async Task<ApiResult<ProductFilterResult>?> GetProductByFilter(ProductFilterParams filterParams)
     {
-        var requestParams = new List<Dictionary<string, string>>()
+        var requestParams = new List<Dictionary<string, string>>
         {
             new() { { "pageId", filterParams.PageId.ToString() } },
             new() { { "take", filterParams.Take.ToString() } },
             new() { { "Title", filterParams.Title! } },
             new() { { "Id", filterParams.Id.ToString()! } },
-            new() { { "Slug", filterParams.Slug! } },
+            new() { { "Slug", filterParams.Slug! } }
         };
         return await client.GetAsync<ApiResult<ProductFilterResult>>(
             ProductRouts.GetAllProductsFiltered.ToQueryString(filterParams));

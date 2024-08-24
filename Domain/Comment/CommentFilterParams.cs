@@ -9,5 +9,4 @@ public class CommentFilterParams : BaseFilterParam
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
     public CommentStatus? CommentStatus { get; set; }
-
 }

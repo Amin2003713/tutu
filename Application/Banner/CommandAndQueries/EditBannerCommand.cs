@@ -2,7 +2,6 @@
 
 public class EditBannerCommand
 {
-
     public long Id { get; set; }
     public string Link { get; set; }
     public IFormFile? ImageFile { get; set; }

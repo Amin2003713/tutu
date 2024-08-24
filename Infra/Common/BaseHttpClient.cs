@@ -2,7 +2,6 @@
 using System.Net.Http.Json;
 using System.Text;
 using Application.Common;
-using Domain.Common;
 using Domain.Common.Exceptions;
 using Infra.Utils;
 using Newtonsoft.Json;
@@ -10,13 +9,13 @@ using Newtonsoft.Json;
 namespace Infra.Common;
 
 /// <summary>
-/// A base HTTP client implementation that provides methods for making HTTP requests
-/// with support for generic response types and multipart form data.
+///     A base HTTP client implementation that provides methods for making HTTP requests
+///     with support for generic response types and multipart form data.
 /// </summary>
 public class BaseHttpClient(HttpClient client) : IBaseHttpClient
 {
     /// <summary>
-    /// Sends a GET request to the specified URI.
+    ///     Sends a GET request to the specified URI.
     /// </summary>
     public async Task<TResponse?> GetAsync<TResponse>(string uri)
     {
@@ -24,7 +23,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     }
 
     /// <summary>
-    /// Sends a POST request with JSON content to the specified URI.
+    ///     Sends a POST request with JSON content to the specified URI.
     /// </summary>
     public async Task<TResponse?> PostAsync<TRequest, TResponse>(string uri, TRequest data)
     {
@@ -33,7 +32,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     }
 
     /// <summary>
-    /// Sends a PUT request with JSON content to the specified URI.
+    ///     Sends a PUT request with JSON content to the specified URI.
     /// </summary>
     public async Task<TResponse?> PutAsync<TRequest, TResponse>(string uri, TRequest data)
     {
@@ -42,7 +41,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     }
 
     /// <summary>
-    /// Sends a PATCH request with JSON content to the specified URI.
+    ///     Sends a PATCH request with JSON content to the specified URI.
     /// </summary>
     public async Task<TResponse?> PatchAsync<TRequest, TResponse>(string uri, TRequest data)
     {
@@ -51,7 +50,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     }
 
     /// <summary>
-    /// Sends a DELETE request to the specified URI.
+    ///     Sends a DELETE request to the specified URI.
     /// </summary>
     public async Task<TResponse?> DeleteAsync<TResponse>(string uri)
     {
@@ -59,7 +58,34 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     }
 
     /// <summary>
-    /// Sends a DELETE request with a JSON body to the specified URI.
+    ///     Sends a POST request with multipart form data to the specified URI.
+    /// </summary>
+    public async Task<TResponse?> PostMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
+    {
+        var response = await client.PostAsync(uri, data.CreateMultipartContent());
+        return await GetResponse<TResponse>(response);
+    }
+
+    /// <summary>
+    ///     Sends a PUT request with multipart form data to the specified URI.
+    /// </summary>
+    public async Task<TResponse?> PutMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
+    {
+        var response = await client.PutAsync(uri, data.CreateMultipartContent());
+        return await GetResponse<TResponse>(response);
+    }
+
+    /// <summary>
+    ///     Sends a PATCH request with multipart form data to the specified URI.
+    /// </summary>
+    public async Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
+    {
+        var response = await client.PatchAsync(uri, data.CreateMultipartContent());
+        return await GetResponse<TResponse>(response);
+    }
+
+    /// <summary>
+    ///     Sends a DELETE request with a JSON body to the specified URI.
     /// </summary>
     /// <typeparam name="TRequest">The type of the request content.</typeparam>
     /// <typeparam name="TResponse">The expected type of the response.</typeparam>
@@ -85,34 +111,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     }
 
     /// <summary>
-    /// Sends a POST request with multipart form data to the specified URI.
-    /// </summary>
-    public async Task<TResponse?> PostMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
-    {
-        var response = await client.PostAsync(uri, data.CreateMultipartContent());
-        return await GetResponse<TResponse>(response);
-    }
-
-    /// <summary>
-    /// Sends a PUT request with multipart form data to the specified URI.
-    /// </summary>
-    public async Task<TResponse?> PutMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
-    {
-        var response = await client.PutAsync(uri, data.CreateMultipartContent());
-        return await GetResponse<TResponse>(response);
-    }
-
-    /// <summary>
-    /// Sends a PATCH request with multipart form data to the specified URI.
-    /// </summary>
-    public async Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
-    {
-        var response = await client.PatchAsync(uri, data.CreateMultipartContent());
-        return await GetResponse<TResponse>(response);
-    }
-
-    /// <summary>
-    /// Handles the HTTP response, deserializes it if successful, and throws exceptions for errors.
+    ///     Handles the HTTP response, deserializes it if successful, and throws exceptions for errors.
     /// </summary>
     /// <typeparam name="TResponse">The expected type of the response.</typeparam>
     /// <param name="response">The HTTP response message.</param>
@@ -125,7 +124,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
         {
             HttpStatusCode.OK or HttpStatusCode.Created =>
                 // Deserialize the response if the status code is 200 OK or 201 Created
-                (await response.Content.ReadFromJsonAsync<TResponse>()),
+                await response.Content.ReadFromJsonAsync<TResponse>(),
             HttpStatusCode.BadRequest =>
                 // Throw an exception for 400 Bad Request
                 throw new HttpRequestException("Bad Request: The server could not understand the request."),
@@ -142,7 +141,8 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
                 // Throw an exception for 500 Internal Server Error
                 throw new HttpRequestException("Internal Server Error: The server encountered an error."),
 
-            _ => throw new HttpRequestException($"HTTP Error: {(int)response.StatusCode} - {response.ReasonPhrase}. Details: {await response.Content.ReadAsStringAsync()}")
+            _ => throw new HttpRequestException(
+                $"HTTP Error: {(int)response.StatusCode} - {response.ReasonPhrase}. Details: {await response.Content.ReadAsStringAsync()}")
         };
     }
 }

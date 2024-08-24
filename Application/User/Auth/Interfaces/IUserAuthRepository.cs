@@ -5,8 +5,8 @@ namespace Application.User.Auth.Interfaces;
 
 public interface IUserAuthRepository
 {
-   Task<ApiResult<LoginResponse>> Login(LoginCommand command);
-   Task<ApiResult> Register(RegisterCommand command);
-   Task<ApiResult<LoginResponse>> RefreshToken(RefreshTokenCommand command);
-   Task<ApiResult?> Logout();
+    Task<ApiResult<LoginResponse>> Login(LoginCommand command);
+    Task<ApiResult> Register(RegisterCommand command);
+    Task<ApiResult<LoginResponse>> RefreshToken(RefreshTokenCommand command);
+    Task<ApiResult?> Logout();
 }

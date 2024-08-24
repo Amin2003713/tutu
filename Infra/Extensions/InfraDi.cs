@@ -12,10 +12,9 @@ using Infra.Orders.Implantations;
 using Infra.User.Auth.Implantations;
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace Infra.Extensions;
 
-public static  class InfraDi
+public static class InfraDi
 {
     public static IServiceCollection RegisterInfraDependency(this IServiceCollection services)
     {
@@ -40,7 +39,7 @@ public static  class InfraDi
         services.AddScoped<IOrderService, OrderService>();
 
         services.AddHttpClient<BaseHttpClient>(client => { client.BaseAddress = new Uri(baseAddress); });
-       
+
 
         return services;
     }

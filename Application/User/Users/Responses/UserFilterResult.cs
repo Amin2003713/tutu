@@ -2,7 +2,6 @@
 
 namespace Application.User.Users.Responses;
 
-public class UserFilterResult : BaseFilter<UserFilterData,UserFilterParams>
+public class UserFilterResult : BaseFilter<UserFilterData, UserFilterParams>
 {
-
 }

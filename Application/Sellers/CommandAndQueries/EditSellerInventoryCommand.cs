@@ -6,6 +6,7 @@ public class EditSellerInventoryCommand
 {
     public long SellerId { get; set; }
     public long InventoryId { get; set; }
+
     [Display(Name = "تعداد موجود")]
     [Required(ErrorMessage = "{0} را وارد کنید")]
     public int Count { get; set; }

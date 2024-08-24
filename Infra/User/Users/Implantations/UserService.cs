@@ -10,7 +10,6 @@ namespace Infra.User.Users.Implantations;
 
 public class UserService(IBaseHttpClient client) : IUserService
 {
-
     public async Task<ApiResult?> CreateUser(CreateUserCommand command)
     {
         return await client.PostAsync<CreateUserCommand, ApiResult>(

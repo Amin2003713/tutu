@@ -1,7 +1,7 @@
-@page "/Auth/Login"
+@page "/Auth/Register"
 @layout AuthLayout
-
 <div class="page-wrapper auth-page-wrapper">
+
     <!-- Page Content -->
     <main class="page-content">
         <div class="container">
@@ -13,7 +13,7 @@
                         </a>
                     </div>
                     <div class="auth-form-title">
-                        ورود به همتا
+                        ثبت نام در همتا
                     </div>
                     <form action="#">
                         <div class="form-element-row">
@@ -24,12 +24,7 @@
                             </div>
                         </div>
                         <div class="form-element-row">
-                            <label for="password" class="label-element">
-                                <span class="d-flex justify-content-between">
-                                    <span>کلمه عبور</span>
-                                    <a href="#" class="link--with-border-bottom">رمز عبور خود را فراموش کرده‌ام</a>
-                                </span>
-                            </label>
+                            <label for="password" class="label-element">کلمه عبور</label>
                             <div class="form-element-with-icon">
                                 <input type="text" class="input-element" id="password">
                                 <i class="fad fa-key-skeleton"></i>
@@ -37,22 +32,29 @@
                         </div>
                         <div class="form-element-row">
                             <label class="container-checkbox">
-                                مرا به خاطر داشته باش
+                                <a href="#" class="link--with-border-bottom">حریم خصوصی</a> و
+                                <a href="#"
+                                   class="link--with-border-bottom">
+                                    شرایط
+                                    و قوانین
+                                </a> استفاده از سرویس های سایت
+                                همتا را مطالعه نموده
+                                و با کلیه موارد آن موافقم.
                                 <input type="checkbox" checked="checked">
                                 <span class="checkmark"></span>
                             </label>
                         </div>
                         <div class="form-element-row text-left">
-                            <button class="btn-element btn-info-element">
-                                <i class="fad fa-sign-in-alt"></i>
-                                ورود به همتا
+                            <button class="btn-element btn-success-element">
+                                <i class="fad fa-user-edit"></i>
+                                ثبت نام در همتا
                             </button>
                         </div>
 
                     </form>
                     <div class="auth-form-footer">
-                        <span>کاربر جدید هستید؟</span>
-                        <a href="#" class="link--with-border-bottom">ثبت نام در همتا</a>
+                        <span>قبلا در همتا ثبت‌نام کرده‌اید؟</span>
+                        <a href="#" class="link--with-border-bottom">وارد شوید</a>
                     </div>
                 </div>
             </div>

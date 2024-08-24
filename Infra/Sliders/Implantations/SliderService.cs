@@ -9,11 +9,10 @@ namespace Infra.Sliders.Implantations;
 
 public class SliderService(IBaseHttpClient client) : ISliderService
 {
-
     public async Task<ApiResult?> CreateSlider(CreateSliderCommand command)
     {
-        return await client.PostMultipartAsync<CreateSliderCommand ,ApiResult>(
-            SliderRoute.CreateSlider , command);
+        return await client.PostMultipartAsync<CreateSliderCommand, ApiResult>(
+            SliderRoute.CreateSlider, command);
     }
 
     public async Task<ApiResult?> EditSlider(EditSliderCommand command)

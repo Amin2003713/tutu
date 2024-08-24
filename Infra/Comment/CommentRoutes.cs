@@ -2,7 +2,7 @@ namespace Infra.Comment;
 
 public static class CommentRoutes
 {
-    public static  string GetCommentsList = "api/Comment?";
+    public static string GetCommentsList = "api/Comment?";
     public static string GetProductComments = "api/Comment/productComments?";
     public static string GetCommentById = "api/Comment/";
 

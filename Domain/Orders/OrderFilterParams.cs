@@ -8,5 +8,4 @@ public class OrderFilterParams : BaseFilterParam
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
     public OrderStatus? Status { get; set; }
-
 }

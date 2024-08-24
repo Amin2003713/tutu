@@ -2,6 +2,6 @@
 
 public class ShippingMethod
 {
-    public string ShippingType { get;  set; }
-    public int ShippingCost { get;  set; }
+    public string ShippingType { get; set; }
+    public int ShippingCost { get; set; }
 }

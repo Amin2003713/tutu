@@ -4,5 +4,4 @@ namespace Application.Order.Responses;
 
 public class OrderFilterResult : BaseFilter<OrderFilterData, OrderFilterParams>
 {
-
 }

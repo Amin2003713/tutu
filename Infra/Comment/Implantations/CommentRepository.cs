@@ -8,16 +8,17 @@ using Infra.Utils;
 
 namespace Infra.Comment.Implantations;
 
-public class CommentRepository(IBaseHttpClient client)  : ICommentRepository
+public class CommentRepository(IBaseHttpClient client) : ICommentRepository
 {
     public async Task<ApiResult?> ChangeStatus(ChangeCommentStatusCommand command)
     {
-        return await client.PutAsync<ChangeCommentStatusCommand, ApiResult>(CommentRoutes.PutCommentStatusChange, command);
+        return await client.PutAsync<ChangeCommentStatusCommand, ApiResult>(CommentRoutes.PutCommentStatusChange,
+            command);
     }
 
     public async Task<ApiResult?> CreateComment(CreateCommentCommand command)
     {
-        return await client.PostAsync<CreateCommentCommand, ApiResult>(CommentRoutes.PostComment , command);
+        return await client.PostAsync<CreateCommentCommand, ApiResult>(CommentRoutes.PostComment, command);
     }
 
     public async Task<ApiResult?> EditComment(EditCommentCommand command)
@@ -31,20 +32,18 @@ public class CommentRepository(IBaseHttpClient client)  : ICommentRepository
             (CommentRoutes.DeleteCommentById.BuildRequestUrl([command.CommentId])!))!;
     }
 
-  
 
     public async Task<ApiResult<CommentFilterResult>> GetProductComments(ProductCommentsFilterParams filterParams)
     {
-        var apiDictionary = new List<Dictionary<string, string>>()
+        var apiDictionary = new List<Dictionary<string, string>>
         {
             new() { { "ProductId", filterParams.ProductId.ToString()! } },
             new() { { "PageId", filterParams.PageId.ToString()! } },
-            new() { { "Take", filterParams.Take.ToString()! } },
+            new() { { "Take", filterParams.Take.ToString()! } }
         };
 
         return (await client.GetAsync<ApiResult<CommentFilterResult>>
             (CommentRoutes.GetProductComments.BuildRequestUrl(apiDictionary)!))!;
-
     }
 
 
@@ -57,7 +56,7 @@ public class CommentRepository(IBaseHttpClient client)  : ICommentRepository
 
     public async Task<ApiResult<CommentFilterResult>> GetCommentsByFilter(CommentFilterParams filterParams)
     {
-        var apiDictionary = new List<Dictionary<string, string>>()
+        var apiDictionary = new List<Dictionary<string, string>>
         {
             new() { { "UserId", filterParams.UserId.ToString()! } },
             new() { { "ProductId", filterParams.ProductId.ToString()! } },
@@ -65,7 +64,7 @@ public class CommentRepository(IBaseHttpClient client)  : ICommentRepository
             new() { { "EndDate", filterParams.EndDate.ToString()! } },
             new() { { "CommentStatus", filterParams.CommentStatus.ToString()! } },
             new() { { "PageId", filterParams.PageId.ToString()! } },
-            new() { { "Take", filterParams.Take.ToString()! } },
+            new() { { "Take", filterParams.Take.ToString()! } }
         };
 
         return (await client.DeleteAsync<ApiResult<CommentFilterResult>>

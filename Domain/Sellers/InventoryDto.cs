@@ -23,6 +23,7 @@ public class InventoryDto : BaseDto
                 var discount = DiscountPercentage * Price / 100;
                 total -= discount;
             }
+
             return total;
         }
     }

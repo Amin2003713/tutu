@@ -1,3 +1,3 @@
 namespace Application.Comment.CommandAndQueries;
 
-public record ChangeCommentStatusCommand(long Id, CommentStatus Status) ;
+public record ChangeCommentStatusCommand(long Id, CommentStatus Status);

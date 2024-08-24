@@ -5,5 +5,4 @@ namespace Application.Sellers.Responses;
 
 public class SellerFilterResult : BaseFilter<SellerDto, SellerFilterParams>
 {
-
 }

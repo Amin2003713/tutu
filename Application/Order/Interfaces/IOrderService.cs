@@ -18,5 +18,4 @@ public interface IOrderService
     Task<ApiResult<OrderDto?>?> GetCurrentOrder();
     Task<ApiResult<OrderFilterResult>?> GetOrders(OrderFilterParams filterParams);
     Task<ApiResult<OrderFilterResult>?> GetUserOrders(int pageId, int take, OrderStatus? orderStatus);
-
 }

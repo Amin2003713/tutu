@@ -16,5 +16,4 @@ public interface IProductService
     Task<ApiResult<ProductDto?>?> GetSingleProduct(string slug);
     Task<ApiResult<ProductFilterResult>?> GetProductByFilter(ProductFilterParams filterParams);
     Task<ApiResult<ProductShopResult>?> GetProductForShop(ProductShopFilterParam filterParams);
-
 }

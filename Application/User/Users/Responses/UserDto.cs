@@ -2,7 +2,7 @@
 
 namespace Application.User.Users.Responses;
 
-public class UserDto:BaseDto
+public class UserDto : BaseDto
 {
     public string Name { get; set; }
     public string Family { get; set; }
