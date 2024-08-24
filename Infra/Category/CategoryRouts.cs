@@ -2,8 +2,18 @@
 
 public static class CategoryRouts
 {
-    public static string Login = "api/Auth/login";
-    public static string Register = "api/Auth/register";
-    public static string Refresh = "api/Auth/RefreshToken?";
-    public static string Logout = "api/Auth/logout";
+     public static string GetCategoriesList = "api/Category";
+     public static string GetCategoryById = "api/Category/";
+     public static string GetChildListByCategoryId = "api/Category/getChild/";
+
+
+     public static string PostCategoryMultipartData = "api/Category";
+     public static string PostCategoryChildMultipartData = "api/Category/AddChild";
+     public static string PutCategoryMultipartData = "api/Category";
+
+
+
+     public static string DeleteCategoryById = "api/Category/";
+
 }
+

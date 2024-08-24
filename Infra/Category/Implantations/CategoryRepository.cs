@@ -1,48 +1,51 @@
 ﻿using Application.Category.Interfaces;
-using Application.Users.Auth.CommandAndQueries;
-using Application.Users.Auth.Interfaces;
-using Application.Users.Auth.Responses;
+using Application.Common;
 using Domain.Common;
 using Domain.Utils;
-using Infra.Common;
-using Infra.Users.Auth;
 
 namespace Infra.Category.Implantations;
 
-public class CategoryRepository(BaseHttpClient client)   : ICategoryRepository
+public class CategoryRepository(IBaseHttpClient client) : ICategoryRepository
 {
-    public Task<ApiResult<long>> AddChild(AddChildCategoryCommand command)
+    public async Task<ApiResult<long>?> AddChild(AddChildCategoryCommand command)
     {
-        throw new NotImplementedException();
+        return await client.PostMultipartAsync<AddChildCategoryCommand, ApiResult<long>>
+            (CategoryRouts.PostCategoryChildMultipartData, command);
     }
 
-    public Task<ApiResult> Edit(EditCategoryCommand command)
+    public async Task<ApiResult?> Edit(EditCategoryCommand command)
     {
-        throw new NotImplementedException();
+        return await client.PutMultipartAsync<EditCategoryCommand, ApiResult>
+            (CategoryRouts.PutCategoryMultipartData, command);
     }
 
-    public Task<ApiResult<long>> Create(CreateCategoryCommand command)
+    public async Task<ApiResult<long>?> Create(CreateCategoryCommand command)
     {
-        throw new NotImplementedException();
+        return await client.PostMultipartAsync<CreateCategoryCommand, ApiResult<long>>
+            (CategoryRouts.PostCategoryMultipartData, command);
     }
 
-    public Task<ApiResult> Remove(long categoryId)
+    public async Task<ApiResult?> Remove(CategoryIdCommand command)
     {
-        throw new NotImplementedException();
+        return await client.DeleteAsync<ApiResult>
+            (CategoryRouts.DeleteCategoryById.BuildRequestUrl([command.Id])!);
     }
 
-    public Task<CategoryDto> GetCategoryById(long id)
+    public async Task<ApiResult<CategoryDto>?> GetCategoryById(CategoryIdCommand command)
     {
-        throw new NotImplementedException();
+        return await client.DeleteAsync<ApiResult<CategoryDto>>
+            (CategoryRouts.GetCategoryById.BuildRequestUrl([command.Id])!);
     }
 
-    public Task<ApiResult<List<ChildCategoryDto>>> GetCategoriesByParentId(long parentId)
+    public async Task<ApiResult<List<ChildCategoryDto>>?> GetCategoriesByParentId(CategoryIdCommand command)
     {
-        throw new NotImplementedException();
+        return await client.DeleteAsync<ApiResult<List<ChildCategoryDto>>>
+            (CategoryRouts.GetChildListByCategoryId.BuildRequestUrl([command.Id])!);
     }
 
-    public Task<ApiResult<List<CategoryDto>>> GetCategories()
+    public async Task<ApiResult<List<CategoryDto>>?> GetCategories()
     {
-        throw new NotImplementedException();
+        return await client.DeleteAsync<ApiResult<List<CategoryDto>>>
+            (CategoryRouts.GetCategoriesList!);
     }
 }
