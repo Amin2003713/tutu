@@ -1,6 +1,7 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Mvc
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
@@ -13,3 +14,11 @@
 @using Ui.Components.Layout.Contrroles
 @using Ui.Components.Layout.Contrroles.Footers
 @using Ui.Components.Layout
+@using Ui.Components.Pages.Auth.Controles
+@using Application.User.Auth.CommandAndQueries
+@using Application.User.Auth.Interfaces
+@inject IUserAuthRepository Auth
+@inject NavigationManager NavigationManager
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IJSRuntime JsRuntime
+

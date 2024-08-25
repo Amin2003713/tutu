@@ -1,0 +1,16 @@
+
+
+<div class="form-element-row text-left">
+    <button @attributes="InputAttributes!">
+        @IconControl
+        @ButtonText
+    </button>
+</div>
+
+@code {  
+    
+    [Parameter] public string? ButtonText { get; set; }
+    [Parameter] public RenderFragment? IconControl { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? InputAttributes { get; set; }
+}

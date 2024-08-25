@@ -1,102 +1,101 @@
-@page "/Auth/Login"
+@page "/Auth/Login" 
+@inject ProtectedLocalStorage Local
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+
+
+
 @layout AuthLayout
+@rendermode InteractiveServer 
 
-<div class="page-wrapper auth-page-wrapper">
-    <!-- Page Content -->
-    <main class="page-content">
-        <div class="container">
-            <div class="auth-wrapper">
-                <div class="auth-form shadow-around">
-                    <div class="site-logo">
-                        <a href="#">
-                            <img src="./assets/images/logo.png" alt="logo">
-                        </a>
-                    </div>
-                    <div class="auth-form-title">
-                        ورود به همتا
-                    </div>
-                    <form action="#">
-                        <div class="form-element-row">
-                            <label for="phone-number" class="label-element">شماره موبایل</label>
-                            <div class="form-element-with-icon">
-                                <input type="text" class="input-element" id="phone-number">
-                                <i class="fad fa-mobile-alt"></i>
-                            </div>
-                        </div>
-                        <div class="form-element-row">
-                            <label for="password" class="label-element">
-                                <span class="d-flex justify-content-between">
-                                    <span>کلمه عبور</span>
-                                    <a href="#" class="link--with-border-bottom">رمز عبور خود را فراموش کرده‌ام</a>
-                                </span>
-                            </label>
-                            <div class="form-element-with-icon">
-                                <input type="text" class="input-element" id="password">
-                                <i class="fad fa-key-skeleton"></i>
-                            </div>
-                        </div>
-                        <div class="form-element-row">
-                            <label class="container-checkbox">
-                                مرا به خاطر داشته باش
-                                <input type="checkbox" checked="checked">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <div class="form-element-row text-left">
-                            <button class="btn-element btn-info-element">
-                                <i class="fad fa-sign-in-alt"></i>
-                                ورود به همتا
-                            </button>
-                        </div>
+<EditForm  Model="Command" FormName="Login" class="auth-form shadow-around" OnValidSubmit="Submit" Enhance="true">
+    <DataAnnotationsValidator/>
+    <p hidden="@IsHidden">@LoginError</p>
 
-                    </form>
-                    <div class="auth-form-footer">
-                        <span>کاربر جدید هستید؟</span>
-                        <a href="#" class="link--with-border-bottom">ثبت نام در همتا</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-    <!-- end Page Content -->
+    <div class="site-logo">
+        <a href="#">
+            <img src="./assets/images/logo.png" alt="logo">
+        </a>
+    </div>
+    <div class="auth-form-title">
+        ورود به همتا
+    </div>
 
-    <!-- Page mini-Footer -->
-    <footer class="mini-footer">
-        <div class="container main-container">
-            <div class="row">
-                <div class="col-12">
-                    <ul class="mini-footer-menu">
-                        <li>
-                            <a href="#">درباره ما</a>
-                        </li>
-                        <li>
-                            <a href="#">فرصت های شغلی</a>
-                        </li>
-                        <li>
-                            <a href="#">تماس با ما</a>
-                        </li>
-                        <li>
-                            <a href="#">همکاری با سازمان ها</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-12 mt-2 mb-3">
-                    <div class="footer-light-text">
-                        استفاده از مطالب فروشگاه اینترنتی همتا فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع است..
-                    </div>
-                </div>
-                <div class="col-12 text-center">
-                    <div class="copy-right-mini-footer">
-                        © All rights reserved. Designed by BahramiiiRad
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- end Page mini-Footer -->
+    <AuthInput LabelText="شماره موبایل" InputId="phone-number">
+            <InputControl>
+                <InputText type="text"  @bind-Value="Command.PhoneNumber" class="input-element" id="phone-number"/>
+            </InputControl>
+            <InputIcon>
+                <i class="fad fa-mobile-alt"></i>
+            </InputIcon>
+            <ValidationControl>
+                <ValidationMessage For="() => Command.PhoneNumber"></ValidationMessage>
+            </ValidationControl>
+        </AuthInput>
 
-</div>
+        <AuthInput LabelText="کلمه عبور" InputId="password">
+            <InputControl>
+                <InputText type="text" @bind-Value="Command.Password" class="input-element" id="password"/>
+            </InputControl>  
+            <InputIcon>
+                <i class="fad fa-key-skeleton"></i>
+            </InputIcon>
+            <AnchorControl>
+                <a href="#" class="link--with-border-bottom">رمز عبور خود را فراموش کرده‌ام</a>
+            </AnchorControl>
+            <ValidationControl>
+                <ValidationMessage For="@(() =>Command.Password )"></ValidationMessage>
+            </ValidationControl>
+        </AuthInput>
+
+
+        <AuthButton ButtonText="ورود به همتا" class="btn-element btn-info-element" type="submit">
+            <IconControl>
+                <i class="fad fa-sign-in-alt"></i>
+            </IconControl>
+        </AuthButton>
+   
+</EditForm>
+
 
 @code {
+
+    [SupplyParameterFromForm(FormName = "login")]
+    public LoginCommand Command { get; set; } = new();
+
+    private string? LoginError { get; set; }
+
+    private bool IsHidden { get; set; } = true;
+    // [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+
+
+// protected override async Task OnInitializedAsync()
+//     {
+//         if (HttpMethods.IsGet(HttpContext.Request.Method))
+//         {
+//             // Clear the existing external cookie to ensure a clean login process
+//             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+//         }
+//     }    
+      [ValidateAntiForgeryToken]
+    private async Task Submit(EditContext obj)
+    {
+        var result =await Auth.Login(Command);
+
+        if (!result.IsSuccess)
+        {
+            LoginError = result.MetaData.Message;
+            IsHidden = false;
+            return;
+        }
+
+        var token = result.Data.Token;
+
+      
+        await Local.SetAsync("Token", token);
+        await Local.SetAsync("refresh", result.Data.RefreshToken);
+
+        NavigationManager.NavigateTo("/");
+    }                
 
 }

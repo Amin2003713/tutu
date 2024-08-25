@@ -13,6 +13,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.RegisterApplicationDependency();
 builder.Services.RegisterInfraDependency();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

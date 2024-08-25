@@ -1,0 +1,37 @@
+                  
+@typeparam TType
+
+<EditForm Model="@Model" FormName="@FormName"  class="auth-form shadow-around" @attributes="FormAttributes!">
+    <div class="site-logo">
+        <a href="#">
+           @FormLogo
+        </a>
+    </div>
+    <div class="auth-form-title">
+        @Title
+    </div>
+    @ChildContent
+    <div class="auth-form-footer">
+        @Footer
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public TType? Model { get; set; }
+    [Parameter] public string? FormName { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public RenderFragment? FormLogo { get; set; }
+    [Parameter] public RenderFragment? Footer { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? FormAttributes { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Model == null)
+        {
+            throw new InvalidOperationException("Model cannot be null. Please provide a valid model.");
+        }
+    }
+}

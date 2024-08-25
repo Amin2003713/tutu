@@ -1,0 +1,23 @@
+
+
+<div class="form-element-row">
+    <label for="@InputId" style="display: flex; justify-content: space-between; width: 100%;">
+        <span>@LabelText</span>
+        <span>@AnchorControl</span>
+    </label>
+    <div class="form-element-with-icon">
+        @InputControl
+        @InputIcon
+    </div>  
+    @ValidationControl
+</div>
+
+@code {   
+    [Parameter] public RenderFragment? InputIcon { get; set; }
+    [Parameter] public RenderFragment? InputControl { get; set; }
+    [Parameter] public RenderFragment? AnchorControl { get; set; }
+    [Parameter] public RenderFragment? ValidationControl { get; set; }
+
+    [Parameter] public string? LabelText { get; set; }
+    [Parameter] public string? InputId { get; set; }
+}
