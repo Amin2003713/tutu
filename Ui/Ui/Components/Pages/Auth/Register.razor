@@ -1,104 +1,85 @@
 @page "/Auth/Register"
 @layout AuthLayout
-<div class="page-wrapper auth-page-wrapper">
 
-    <!-- Page Content -->
-    <main class="page-content">
-        <div class="container">
-            <div class="auth-wrapper">
-                <div class="auth-form shadow-around">
-                    <div class="site-logo">
-                        <a href="#">
-                            <img src="./assets/images/logo.png" alt="logo">
-                        </a>
-                    </div>
-                    <div class="auth-form-title">
-                        ثبت نام در همتا
-                    </div>
-                    <form action="#">
-                        <div class="form-element-row">
-                            <label for="phone-number" class="label-element">شماره موبایل</label>
-                            <div class="form-element-with-icon">
-                                <input type="text" class="input-element" id="phone-number">
-                                <i class="fad fa-mobile-alt"></i>
-                            </div>
-                        </div>
-                        <div class="form-element-row">
-                            <label for="password" class="label-element">کلمه عبور</label>
-                            <div class="form-element-with-icon">
-                                <input type="text" class="input-element" id="password">
-                                <i class="fad fa-key-skeleton"></i>
-                            </div>
-                        </div>
-                        <div class="form-element-row">
-                            <label class="container-checkbox">
-                                <a href="#" class="link--with-border-bottom">حریم خصوصی</a> و
-                                <a href="#"
-                                   class="link--with-border-bottom">
-                                    شرایط
-                                    و قوانین
-                                </a> استفاده از سرویس های سایت
-                                همتا را مطالعه نموده
-                                و با کلیه موارد آن موافقم.
-                                <input type="checkbox" checked="checked">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <div class="form-element-row text-left">
-                            <button class="btn-element btn-success-element">
-                                <i class="fad fa-user-edit"></i>
-                                ثبت نام در همتا
-                            </button>
-                        </div>
+              
+<EditForm Model="Command" OnValidSubmit="Submit" FormName="Register" Enhance="true" class="auth-form shadow-around">
+    <div class="site-logo">
+        <a href="#">
+            <img src="./assets/images/logo.png" alt="logo">
+        </a>
+    </div>
+    <div class="auth-form-title">
+        ثبت نام در همتا
+    </div>
+         
+    
+    <AuthInput InputId="phone-number" LabelText="شماره موبایل">
+        <InputIcon>
+            <i class="fad fa-mobile-alt"></i>
+        </InputIcon>
+        
+        <InputControl>
+            <InputText type="text" @bind-Value="Command.PhoneNumber" class="input-element" id="phone-number"/>
+        </InputControl>
 
-                    </form>
-                    <div class="auth-form-footer">
-                        <span>قبلا در همتا ثبت‌نام کرده‌اید؟</span>
-                        <a href="#" class="link--with-border-bottom">وارد شوید</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-    <!-- end Page Content -->
+        <ValidationControl>
+            <ValidationMessage For="@(() =>Command.PhoneNumber )"></ValidationMessage>
+        </ValidationControl>
+    </AuthInput>
 
-    <!-- Page mini-Footer -->
-    <footer class="mini-footer">
-        <div class="container main-container">
-            <div class="row">
-                <div class="col-12">
-                    <ul class="mini-footer-menu">
-                        <li>
-                            <a href="#">درباره ما</a>
-                        </li>
-                        <li>
-                            <a href="#">فرصت های شغلی</a>
-                        </li>
-                        <li>
-                            <a href="#">تماس با ما</a>
-                        </li>
-                        <li>
-                            <a href="#">همکاری با سازمان ها</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-12 mt-2 mb-3">
-                    <div class="footer-light-text">
-                        استفاده از مطالب فروشگاه اینترنتی همتا فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع است..
-                    </div>
-                </div>
-                <div class="col-12 text-center">
-                    <div class="copy-right-mini-footer">
-                        © All rights reserved. Designed by BahramiiiRad
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- end Page mini-Footer -->
 
-</div>
+    <AuthInput InputId="password" LabelText="کلمه عبور">
+        <InputIcon>
+            <i class="fad fa-key-skeleton"></i>
+        </InputIcon>
+
+        <InputControl>
+            <InputText type="password" class="input-element" id="password" @bind-Value="Command.Password"/>
+        </InputControl>
+
+        <ValidationControl>
+            <ValidationMessage For="@(() =>Command.PhoneNumber )"></ValidationMessage>
+        </ValidationControl>
+    </AuthInput>
+
+    <div class="form-element-row">
+        <label class="container-checkbox">
+            <a href="#" class="link--with-border-bottom">حریم خصوصی</a> و
+            <a href="#"
+               class="link--with-border-bottom">
+                شرایط
+                و قوانین
+            </a> استفاده از سرویس های سایت
+            همتا را مطالعه نموده
+            و با کلیه موارد آن موافقم.
+            <input type="checkbox" checked="checked">
+            <span class="checkmark"></span>
+        </label>
+    </div>
+    <div class="form-element-row text-left">
+        <button class="btn-element btn-success-element">
+            <i class="fad fa-user-edit"></i>
+            ثبت نام در همتا
+        </button>
+    </div>
+
+    <div class="auth-form-footer">
+        <span>قبلا در همتا ثبت‌نام کرده‌اید؟</span>
+        <a href="/auth/login" class="link--with-border-bottom">وارد شوید</a>
+    </div>
+
+</EditForm>
+
+
+
+
 
 @code {
+    private RegisterCommand Command { get; set; } = new();
+
+    private void Submit(EditContext obj)
+    {
+     
+    }
 
 }

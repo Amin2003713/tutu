@@ -1,3 +1,9 @@
 ﻿namespace Application.User.Auth.CommandAndQueries;
 
-public abstract record RegisterCommand(string PhoneNumber, string Password, string ConfirmPassword);
+public class RegisterCommand
+{
+    public string PhoneNumber { get; set; } 
+    public string Password { get; set; } 
+    public string ConfirmPassword { get; set; }
+
+}
