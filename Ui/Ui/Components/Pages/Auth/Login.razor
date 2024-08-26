@@ -1,4 +1,6 @@
 @page "/Auth/Login"
+@using Domain.Common.Exceptions
+@using Ui.Components.Common
 
 
 @layout AuthLayout
@@ -6,7 +8,10 @@
 
 <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
 
-
+<Toast ErrorMessage="@ErrorMassage"
+            IsVisible="@ShowToast"
+            MessageType="ToastType"
+            OnClose="CloseToast"/>
     
     <AuthForm Model="LoginCommand" OnValidSubmit="Submit" FormName="Login" Enhance="@true"
               class="auth-form shadow-around">
@@ -53,6 +58,10 @@
     [SupplyParameterFromForm(FormName = "LoginForm")]
     public LoginCommand LoginCommand { get; set; } = new();
 
+    private bool ShowToast { get; set; }
+    private string ErrorMassage { get; set; }
+    public Toast.MessageTypes ToastType { get; set; }
+
 
     private async Task Submit()
     {
@@ -61,15 +70,33 @@
             var result = await Auth.Login(LoginCommand);
             if (!result.IsSuccess)
             {
-                // Toast!.ShowToast(result.MetaData.Message  , ToastType.Danger);
+                ErrorMassage = result.MetaData.Message;
+                ToastType = Toast.MessageTypes.Info;
+                ShowToast = true;
+                await InvokeAsync(StateHasChanged);
+                return;
             }
         }
-        catch (Exception ex)
+        catch (NotFoundException ex)
         {
-            // Toast!.ShowToast("went wrong", ToastType.Danger);
-
-          
+        ErrorMassage = ex.Message;
+        ToastType = Toast.MessageTypes.Danger;
+        ShowToast = true;
+        await InvokeAsync(StateHasChanged); 
         }
+        catch (HttpRequestException ex)
+        {
+            ErrorMassage = ex.Message;
+            ToastType = Toast.MessageTypes.Danger;
+            ShowToast = true;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void CloseToast()
+    {
+        ShowToast = false;
+        StateHasChanged();
     }
 
 }

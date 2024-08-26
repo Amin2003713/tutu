@@ -1,58 +1,92 @@
-<div id="toast" class="toast" style="display: none;">
-    <div class="toast-content">
-        <span>@Message</span>
-        <button class="close-btn" @onclick="Hide">x</button>
+<div class="toast @ModalClass @TypeClass" style="position: fixed; top: 20px; right: 20px; min-width: 250px;"
+     role="alert">
+    <div class="toast-header d-flex justify-content-between align-items-center @HeaderClass">
+        <strong class="StatusHeader">@GetHeaderText()</strong>
+        <button type="button" class="btn-close justify-content-end" aria-label="بستن" @onclick="CloseModal"></button>
+    </div>
+    <div class="toast-body">
+        @ErrorMessage
     </div>
 </div>
 
-<script>
-    window.showToast = function () {
-        var toast = document.getElementById('toast');
-        toast.style.display = 'block';
-        setTimeout(function () {
-            toast.style.opacity = '1';
-        }, 100);
-
-        // Automatically hide the toast after 3 seconds
-        setTimeout(function () {
-            hideToast();
-        }, 3000);
-    };
-
-    window.hideToast = function () {
-        var toast = document.getElementById('toast');
-        toast.style.opacity = '0';
-        setTimeout(function () {
-            toast.style.display = 'none';
-        }, 500); // Wait for the opacity transition to finish
-    };
-</script>
-
-
 @code {
-    [Parameter] public string Message { get; set; } = "Something went wrong.";
+    [Parameter] public string ErrorMessage { get; set; }
     [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public MessageTypes MessageType { get; set; } = MessageTypes.Info; // Default to "Info"
+    [Parameter] public EventCallback OnClose { get; set; }
+    
+    private Timer? _autoCloseTimer;
 
-    private bool isToastVisible;
+    private string ModalClass => IsVisible ? "show" : "";
+
+    private string TypeClass => MessageType switch
+    {
+        MessageTypes.Warning => "toast-warning",
+        MessageTypes.Error => "toast-error",
+        MessageTypes.Success => "toast-success",
+        MessageTypes.Danger => "toast-danger",
+        _ => "toast-info"
+    };
+
+    private string GetHeaderText()
+    {
+        return MessageType switch
+        {
+            MessageTypes.Warning => "⚠️ هشدار",
+            MessageTypes.Error => "❌ خطا",
+            MessageTypes.Success => "✅ موفقیت",
+            MessageTypes.Danger => "❗ خطر",
+            _ => "ℹ️ اطلاع"
+        };
+    }
+
+    private string HeaderClass => MessageType switch
+    {
+        MessageTypes.Warning => "header-warning",
+        MessageTypes.Error => "header-error",
+        MessageTypes.Success => "header-success",
+        MessageTypes.Danger => "header-danger",
+        _ => "header-info"
+    };
 
     protected override void OnParametersSet()
     {
-        if (IsVisible && !isToastVisible)
+        if (IsVisible)
         {
-            Show();
+            StartAutoCloseTimer();
         }
     }
 
-    public void Show()
+    private void StartAutoCloseTimer()
     {
-        isToastVisible = true;
-        Js.InvokeVoidAsync("showToast");
+        // Stop the timer if it's already running
+        _autoCloseTimer?.Dispose();
+
+        // Start a new timer that triggers CloseModal after 3 seconds
+        _autoCloseTimer = new Timer(_ => CloseModal(), null, 3000, Timeout.Infinite);
     }
 
-    public void Hide()
+    private void CloseModal()
     {
-        isToastVisible = false;
-        Js.InvokeVoidAsync("hideToast");
+        if (IsVisible)
+        {
+            IsVisible = false;
+            InvokeAsync(StateHasChanged);
+            OnClose.InvokeAsync();
+        }
     }
 
+    public enum MessageTypes
+    {
+        Info,
+        Warning,
+        Error,
+        Success,
+        Danger
+    }
+
+    public void Dispose()
+    {
+        _autoCloseTimer?.Dispose();
+    }
 }
