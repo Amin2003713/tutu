@@ -1,0 +1,25 @@
+<div class="form-element-row">
+    <label for="@Label" class="label-element">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                @Label
+            </div>
+            <div>
+                @Anchor
+            </div>
+        </div>
+    </label>
+    <div class="form-element-with-icon">
+        @Control
+        <i class="@Icon"></i>
+        @Validation
+    </div>
+</div>
+
+@code {
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public string? Icon { get; set; }
+    [Parameter] public RenderFragment? Control { get; set; }
+    [Parameter] public RenderFragment? Anchor { get; set; }
+    [Parameter] public RenderFragment? Validation { get; set; }
+}

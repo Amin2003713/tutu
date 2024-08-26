@@ -1,0 +1,58 @@
+<div id="toast" class="toast" style="display: none;">
+    <div class="toast-content">
+        <span>@Message</span>
+        <button class="close-btn" @onclick="Hide">x</button>
+    </div>
+</div>
+
+<script>
+    window.showToast = function () {
+        var toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(function () {
+            toast.style.opacity = '1';
+        }, 100);
+
+        // Automatically hide the toast after 3 seconds
+        setTimeout(function () {
+            hideToast();
+        }, 3000);
+    };
+
+    window.hideToast = function () {
+        var toast = document.getElementById('toast');
+        toast.style.opacity = '0';
+        setTimeout(function () {
+            toast.style.display = 'none';
+        }, 500); // Wait for the opacity transition to finish
+    };
+</script>
+
+
+@code {
+    [Parameter] public string Message { get; set; } = "Something went wrong.";
+    [Parameter] public bool IsVisible { get; set; }
+
+    private bool isToastVisible;
+
+    protected override void OnParametersSet()
+    {
+        if (IsVisible && !isToastVisible)
+        {
+            Show();
+        }
+    }
+
+    public void Show()
+    {
+        isToastVisible = true;
+        JS.InvokeVoidAsync("showToast");
+    }
+
+    public void Hide()
+    {
+        isToastVisible = false;
+        JS.InvokeVoidAsync("hideToast");
+    }
+
+}
