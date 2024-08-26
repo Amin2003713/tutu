@@ -1,4 +1,5 @@
 @page "/Auth/Register"
+
 @rendermode InteractiveServer
 @layout AuthLayout
 
@@ -57,29 +58,23 @@
 @code {
     private RegisterCommand Command { get; } = new();
     public bool IsToastVisible { get; private set; }
-
-
+    
     private async Task Submit()
     {
         try
         {
             var result = await Auth.Register(Command);
-
             if (!result.IsSuccess)
             {
-                // If an error occurs, show the toast notification
-                IsToastVisible = true;
-
-                // Optionally hide the toast after a few seconds
-                await Task.Delay(3000);
-                IsToastVisible = false;
+                // ToastService.ShowToast(result.MetaData.Message, ToastType.Info);
             }
-
-            NavigationManager.NavigateTo("/auth/login");
+            NavigationManager.NavigateTo("auth/login");
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e.ToString());
+            // ToastService.ShowToast("went wrong", ToastType.Danger);
+
+
         }
     }
 }

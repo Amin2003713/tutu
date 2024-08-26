@@ -4,7 +4,6 @@
 @layout AuthLayout
 @rendermode InteractiveServer
 
-
 <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
 
 
@@ -54,8 +53,6 @@
     [SupplyParameterFromForm(FormName = "LoginForm")]
     public LoginCommand LoginCommand { get; set; } = new();
 
-    private bool isToastVisible;
-
 
     private async Task Submit()
     {
@@ -64,22 +61,14 @@
             var result = await Auth.Login(LoginCommand);
             if (!result.IsSuccess)
             {
-                // If an error occurs, show the toast notification
-                isToastVisible = true;
-
-                // Optionally hide the toast after a few seconds
-                await Task.Delay(3000);
-                isToastVisible = false;
+                // Toast!.ShowToast(result.MetaData.Message  , ToastType.Danger);
             }
         }
         catch (Exception ex)
         {
-            // Show the toast notification when an error occurs
-            isToastVisible = true;
+            // Toast!.ShowToast("went wrong", ToastType.Danger);
 
-            // Automatically hide the toast after a few seconds
-            await Task.Delay(3500);
-            isToastVisible = false;
+          
         }
     }
 

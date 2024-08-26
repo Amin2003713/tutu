@@ -11,6 +11,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 
+
 builder.Services.RegisterApplicationDependency();
 builder.Services.RegisterInfraDependency();
 builder.Services.AddHttpContextAccessor();
