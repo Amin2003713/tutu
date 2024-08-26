@@ -1,9 +1,13 @@
 using Application.Extensions;
 using Infra.Extensions;
+using MudBlazor.Services;
 using Ui.Components;
 using _Imports = Ui.Client._Imports;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddMudServices();
+
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
