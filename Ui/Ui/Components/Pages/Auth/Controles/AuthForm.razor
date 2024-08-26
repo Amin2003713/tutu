@@ -1,10 +1,13 @@
-<EditForm Model="@Model" OnValidSubmit="@OnValidSubmit">
+<EditForm Model="@Model" OnValidSubmit="@OnValidSubmit" FormName="@FormName" Enhance="Enhance" @attributes="Attributes!">
     <DataAnnotationsValidator/>
     @ChildContent
 </EditForm>
 
 @code {
-    [Parameter] public object Model { get; set; }
-    [Parameter] public EventCallback OnValidSubmit { get; set; }
-    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public required object Model { get; set; }
+    [Parameter] public required string FormName { get; set; }
+    [Parameter] public required EventCallback OnValidSubmit { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? Attributes { get; set; }
+    [Parameter] public bool Enhance { get; set; } = true;
 }

@@ -1,74 +1,53 @@
 @page "/Auth/Login"
-@using Ui.Components.Common
 
 
 @layout AuthLayout
 @rendermode InteractiveServer
 
-<Toast Message="Something went wrong, please try again." IsVisible="@isToastVisible"/>
-
 
 <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
-<div class="page-wrapper auth-page-wrapper">
-    <main class="page-content">
-        <div class="container">
-            <div class="auth-wrapper">
-                <div class="auth-form shadow-around">
-                    <div class="site-logo">
-                        <a href="#">
-                            <img src="./assets/images/logo.png" alt="logo">
-                        </a>
-                    </div>
-                    <div class="auth-form-title">
-                        ورود به سامانه
-                    </div>
-                    <AuthForm Model="LoginCommand" OnValidSubmit="Submit">
 
-                        <AuthInput Label="نام کاربری/شماره همراه" Icon="fad fa-mobile-alt">
-                            <Control>
-                                <InputText @bind-Value="LoginCommand.PhoneNumber" class="input-element"
-                                           id="phone-number"/>
-                            </Control>
-                            <Validation>
-                                <ValidationMessage For="@(() => LoginCommand.PhoneNumber)"/>
-                            </Validation>
-                        </AuthInput>
 
-                        <AuthInput Label="کلمه عبور" Icon="fad fa-key-skeleton">
-                            <Control>
-                                <InputText @bind-Value="LoginCommand.Password" class="input-element" id="password"/>
-                            </Control>
-                            <Anchor>
-                                <a href="#" class="link--with-border-bottom">رمز عبور خود را فراموش کرده‌ام</a>
-                            </Anchor>
-                            <Validation>
-                                <ValidationMessage For="@(() => LoginCommand.Password)"/>
-                            </Validation>
-                        </AuthInput>
+    
+    <AuthForm Model="LoginCommand" OnValidSubmit="Submit" FormName="Login" Enhance="@true"
+              class="auth-form shadow-around">
 
-                        <div class="form-element-row">
-                            <label class="container-checkbox">
-                                مرا به خاطر داشته باش
-                                <input type="checkbox" checked="checked">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <div class="form-element-row text-left">
-                            <button class="btn-element btn-info-element">
-                                <i class="fad fa-sign-in-alt"></i>
-                                ورود به همتا
-                            </button>
-                        </div>
-                    </AuthForm>
-                    <div class="auth-form-footer">
-                        <span>کاربر جدید هستید؟</span>
-                        <a href="#" class="link--with-border-bottom">ثبت نام در همتا</a>
-                    </div>
-                </div>
-            </div>
+        <div class="site-logo">
+            <a href="#">
+                <img src="./assets/images/logo.png" alt="logo">
+            </a>
         </div>
-    </main>
-</div>
+        <div class="auth-form-title">
+            ورود به سامانه
+        </div>
+
+        <AuthInput Label="نام کاربری/شماره همراه" Icon="fad fa-mobile-alt">
+            <Control>
+                <InputText @bind-Value="LoginCommand.PhoneNumber" class="input-element"
+                           id="phone-number"/>
+            </Control>
+            <Validation>
+                <ValidationMessage For="@(() => LoginCommand.PhoneNumber)"/>
+            </Validation>
+        </AuthInput>
+
+        <AuthInput Label="کلمه عبور" Icon="fad fa-key-skeleton">
+            <Control>
+                <InputText @bind-Value="LoginCommand.Password" class="input-element" id="password"/>
+            </Control>
+            <Anchor>
+                <AuthAnchor class="link--with-border-bottom" NavigationText="رمز عبور خود را فراموش کرده‌ام"
+                            ToAddress="/Auth/ForgetPassword"></AuthAnchor>
+            </Anchor>
+            <Validation>
+                <ValidationMessage For="@(() => LoginCommand.Password)"/>
+            </Validation>
+        </AuthInput>
+
+        <AuthButton ButtonText="ورود به همتا" class="btn-element btn-info-element"  Icon="fad fa-sign-in-alt"/>
+        
+        <AuthAnchor class="link--with-border-bottom" Label="کاربر جدید هستید" NavigationText="ثبت نام در همتا" ToAddress="/Auth/Register"/>
+    </AuthForm>
 
 @code {
 

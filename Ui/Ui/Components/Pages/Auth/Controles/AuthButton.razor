@@ -1,8 +1,8 @@
 
 
 <div class="form-element-row text-left">
-    <button @attributes="InputAttributes!">
-        @IconControl
+    <button  @attributes="InputAttributes!">
+        <i class="@Icon"></i>
         @ButtonText
     </button>
 </div>
@@ -10,7 +10,8 @@
 @code {  
     
     [Parameter] public string? ButtonText { get; set; }
-    [Parameter] public RenderFragment? IconControl { get; set; }
+    [Parameter] public string? Icon { get; set; }
+
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? InputAttributes { get; set; }
 }
