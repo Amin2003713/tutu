@@ -11,6 +11,7 @@ using Infra.Common;
 using Infra.Orders.Implantations;
 using Infra.User.Auth.Implantations;
 using Infra.UtilsService;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infra.Extensions;
@@ -32,6 +33,7 @@ public static class InfraDi
 
         services.AddHttpClient();
         services.AddScoped<LocalStorage>();
+        services.AddScoped<ProtectedLocalStorage>();
         services.AddScoped<IBaseHttpClient, BaseHttpClient>();
         services.AddScoped<IUserAuthRepository, UserAuthRepository>();
         services.AddScoped<IBannerRepository, BannerRepository>();

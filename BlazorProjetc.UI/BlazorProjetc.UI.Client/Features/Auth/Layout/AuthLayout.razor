@@ -1,13 +1,13 @@
 ﻿@inherits LayoutComponentBase
 
 <MudContainer class="page-wrapper auth-page-wrapper">
-
-    <!-- Page Content -->
     <MudMainContent class="page-content">
-        <MudContainer>
-            <MudContainer Class="auth-wrapper">
-                @Body
-            </MudContainer>
+        <MudContainer Class="auth-wrapper">
+            @Body
         </MudContainer>
     </MudMainContent>
 </MudContainer>
+
+<MudProgressCircular Class="main-loader" Color="Color.Primary" Size="Size.Small"/>
+
+<MudSnackbarProvider/>
