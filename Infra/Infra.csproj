@@ -22,6 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Reference Include="Microsoft.AspNetCore.Components.Server">
+          <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.8\Microsoft.AspNetCore.Components.Server.dll</HintPath>
+        </Reference>
         <Reference Include="Microsoft.AspNetCore.Http.Features">
             <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.8\Microsoft.AspNetCore.Http.Features.dll</HintPath>
         </Reference>

@@ -1,0 +1,96 @@
+@page "/Auth/Login"
+@using Application.User.Auth.CommandAndQueries
+@using BlazorProjetc.UI.Client.Features.Auth.Layout
+@using Domain.Common.Exceptions
+
+
+@layout AuthLayout
+@rendermode InteractiveServer
+
+<MudAlert Severity="@ToastType" Elevation="0" IsVisible="@ShowToast" Closeable="true" OnClosed="@CloseToast">
+    @ErrorMassage
+</MudAlert>
+
+<MudForm @ref="loginForm" Model="LoginCommand" OnValidSubmit="Submit" Class="auth-form shadow-around">
+
+    <div class="site-logo">
+        <a href="#">
+            <img src="./assets/images/logo.png" alt="logo">
+        </a>
+    </div>
+    <MudText Typo="Typo.h5" Align="Align.Center">ورود به سامانه</MudText>
+
+    <MudTextField Label="نام کاربری/شماره همراه" @bind-Value="LoginCommand.PhoneNumber" Variant="Variant.Outlined"
+                  Required="true" FullWidth="true"/>
+
+    <MudTextField Label="کلمه عبور" @bind-Value="LoginCommand.Password" Variant="Variant.Outlined" Required="true"
+                  FullWidth="true" InputType="InputType.Password">
+        <MudIconButton Icon="@Icons.Material.Filled.VisibilityOff"/>
+    </MudTextField>
+
+    <MudButton Variant="Variant.Filled" Color="Color.Info" FullWidth="true" StartIcon="@Icons.Material.Filled.Login">
+        ورود به همتا
+    </MudButton>
+
+    <MudText Typo="Typo.subtitle2" Align="Align.Center">
+        <MudLink Href="/Auth/ForgetPassword">رمز عبور خود را فراموش کرده‌ام</MudLink>
+    </MudText>
+
+    <MudText Typo="Typo.subtitle2" Align="Align.Center">
+        <MudLink Href="/Auth/Register">کاربر جدید هستید؟ ثبت نام در همتا</MudLink>
+    </MudText>
+</MudForm>
+
+@code {
+
+    [SupplyParameterFromForm(FormName = "LoginForm")]
+    public LoginCommand LoginCommand { get; set; } = new();
+
+    private MudForm loginForm;
+    private bool ShowToast { get; set; }
+    private string ErrorMassage { get; set; }
+    private Severity ToastType { get; set; }
+
+
+    private async Task Submit()
+    {
+        try
+        {
+            var result = await Auth.Login(LoginCommand);
+            if (!result.IsSuccess)
+            {
+                ErrorMassage = result.MetaData.Message;
+                ToastType = Severity.Info;
+                ShowToast = true;
+                await InvokeAsync(StateHasChanged);
+                return;
+            }
+
+            await local.SetAsync("Token", result.Data.Token);
+            await local.SetAsync("RefreshToken", result.Data.RefreshToken);
+        }
+        catch (NotFoundException ex)
+        {
+            ErrorMassage = ex.Message;
+            ToastType = Severity.Error;
+            ShowToast = true;
+            await loginForm.ResetAsync();
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (HttpRequestException ex)
+        {
+            ErrorMassage = ex.Message;
+            ToastType = Severity.Error;
+            ShowToast = true;
+        await loginForm.ResetAsync();
+        await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void CloseToast()
+    {
+        ShowToast = false;
+        StateHasChanged();
+    }
+
+}
