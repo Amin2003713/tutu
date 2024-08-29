@@ -10,6 +10,7 @@ using Infra.Comment.Implantations;
 using Infra.Common;
 using Infra.Orders.Implantations;
 using Infra.User.Auth.Implantations;
+using Infra.UtilsService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infra.Extensions;
@@ -30,7 +31,7 @@ public static class InfraDi
         const string baseAddress = "https://localhost:5001/";
 
         services.AddHttpClient();
-
+        services.AddScoped<LocalStorage>();
         services.AddScoped<IBaseHttpClient, BaseHttpClient>();
         services.AddScoped<IUserAuthRepository, UserAuthRepository>();
         services.AddScoped<IBannerRepository, BannerRepository>();

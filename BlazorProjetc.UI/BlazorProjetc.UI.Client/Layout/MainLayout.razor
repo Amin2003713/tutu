@@ -1,0 +1,28 @@
+﻿@using BlazorProjetc.UI.Client.Layout.Contrroles.Headers
+@using BlazorProjetc.UI.Client.Layout.Contrroles.Footers
+@inherits LayoutComponentBase
+
+<MudLayout>
+    <MudAppBar>
+        <MainHeader/>
+    </MudAppBar>
+
+    <MudContainer Class="page">
+        <MudMainContent Class="page-content">
+            <MudContainer>
+                <MudPaper Class="content px-4" Elevation="0">
+                    @Body
+                </MudPaper>
+            </MudContainer>
+        </MudMainContent>
+    </MudContainer>
+
+    <MudContainer Class="main-footer">
+        <MainFooter/>
+    </MudContainer>
+
+    <MudProgressCircular Class="main-loader" Color="Color.Primary" Size="Size.Small"/>
+
+    <MudSnackbarProvider/>
+    
+</MudLayout>
