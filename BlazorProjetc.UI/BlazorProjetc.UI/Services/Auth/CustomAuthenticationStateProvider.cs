@@ -17,40 +17,41 @@ public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage ,
     {
         try
         {
-            if (navigationManager.Uri.StartsWith("http"))
+            if (!navigationManager.Uri.StartsWith("http"))
+                return await Task.FromResult(new AuthenticationState(_anonymous));
+
+            await EnsureClientSideInitializationAsync();
+
+            var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
+
+            if (tokenResult is null)
+                return await Task.FromResult(new AuthenticationState(_anonymous));
+
+            var userInfo = await storage.GetAsync<UserDto>("UserInfo");
+
+            if (userInfo is null)
+                return await Task.FromResult(new AuthenticationState(_anonymous));
+
+            var claimIdentityList = new List<Claim>
             {
-                var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
-
-                if (tokenResult is null)
-                    return await Task.FromResult(new AuthenticationState(_anonymous));
-
-                var userInfo = await storage.GetAsync<UserDto>("UserInfo");
-
-                if (userInfo is null)
-                    return await Task.FromResult(new AuthenticationState(_anonymous));
-
-                var claimIdentityList = new List<Claim>
-                {
-                    new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
-                    new(ClaimTypes.Name, userInfo.PhoneNumber),
-                    new(ClaimTypes.Surname, userInfo.Family),
-                    new(ClaimTypes.GivenName, userInfo.Name),
-                    new(ClaimTypes.Email, userInfo.Email),
-                    new(ClaimTypes.Gender, userInfo.Gender.ToString()),
-                    new(ClaimTypes.UserData, userInfo.AvatarName)
-                };
-                claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, a.RoleTitle))
-                    .ToList());
-                var claims = new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "CustomAuth"));
+                new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
+                new(ClaimTypes.Name, userInfo.PhoneNumber),
+                new(ClaimTypes.Surname, userInfo.Family),
+                new(ClaimTypes.GivenName, userInfo.Name),
+                new(ClaimTypes.Email, userInfo.Email),
+                new(ClaimTypes.Gender, userInfo.Gender.ToString()),
+                new(ClaimTypes.UserData, userInfo.AvatarName)
+            };
+            claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, a.RoleTitle))
+                .ToList());
+            var claims = new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "CustomAuth"));
 
 
-                await AddAuthorizationHeader();
+            await AddAuthorizationHeader();
 
 
-                return await Task.FromResult(new AuthenticationState(claims));
-            }
+            return await Task.FromResult(new AuthenticationState(claims));
 
-            return await Task.FromResult(new AuthenticationState(_anonymous));
         }
         catch 
         {
@@ -114,5 +115,14 @@ public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage ,
                 context.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "");
             }
         }
-    } 
+    }
+
+
+    private async Task EnsureClientSideInitializationAsync()
+    {
+        if (navigationManager.Uri.StartsWith("http"))
+        {
+            await Task.Yield(); // Ensures the app is fully initialized
+        }
+    }
 }

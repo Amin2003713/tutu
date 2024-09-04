@@ -9,12 +9,7 @@
 @code {
       [CascadingParameter] public Task<AuthenticationState>? AuthenticationState { get; set; }
 
-      protected override async Task OnAfterRenderAsync(bool firstRender)
-      {
-          var state = await AuthenticationState!;
-
-          Snackbar.Add(state.User.Identity!.Name ?? "nobody", Severity.Success);
-      }
+      
 
       
 }

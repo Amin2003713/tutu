@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 namespace BlazorProjetc.UI.Client.Common.Auth;
 
 public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage, HttpClient context ,
-    NavigationManager _navigationManager)
+    NavigationManager navigationManager)
     : AuthenticationStateProvider
 {
     private readonly ClaimsPrincipal _anonymous = new(new ClaimsIdentity());
@@ -18,43 +18,44 @@ public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage, 
     {
         try
         {
-            if (_navigationManager.Uri.StartsWith("http"))
+            if (!navigationManager.Uri.StartsWith("http"))
+                return await Task.FromResult(new AuthenticationState(_anonymous));
+
+            await EnsureClientSideInitializationAsync();
+
+
+            var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
+
+            if (tokenResult is null)
+                return await Task.FromResult(new AuthenticationState(_anonymous));
+
+            var userInfo = await storage.GetAsync<UserDto>("UserInfo");
+
+            if (userInfo is null)
+                return await Task.FromResult(new AuthenticationState(_anonymous));
+
+            var claimIdentityList = new List<Claim>
             {
-                var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
-
-                if (tokenResult is null)
-                    return await Task.FromResult(new AuthenticationState(_anonymous));
-
-                var userInfo = await storage.GetAsync<UserDto>("UserInfo");
-
-                if (userInfo is null)
-                    return await Task.FromResult(new AuthenticationState(_anonymous));
-
-                var claimIdentityList = new List<Claim>
-                {
-                    new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
-                    new(ClaimTypes.Name, userInfo.PhoneNumber),
-                    new(ClaimTypes.Surname, userInfo.Family),
-                    new(ClaimTypes.GivenName, userInfo.Name),
-                    new(ClaimTypes.Email, userInfo.Email),
-                    new(ClaimTypes.Gender, userInfo.Gender.ToString()),
-                    new(ClaimTypes.UserData, userInfo.AvatarName)
-                };
-                claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, a.RoleTitle))
-                    .ToList());
-                var claims = new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "CustomAuth"));
+                new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
+                new(ClaimTypes.Name, userInfo.PhoneNumber),
+                new(ClaimTypes.Surname, userInfo.Family),
+                new(ClaimTypes.GivenName, userInfo.Name),
+                new(ClaimTypes.Email, userInfo.Email),
+                new(ClaimTypes.Gender, userInfo.Gender.ToString()),
+                new(ClaimTypes.UserData, userInfo.AvatarName)
+            };
+            claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, a.RoleTitle))
+                .ToList());
+            var claims = new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "CustomAuth"));
 
 
-                await AddAuthorizationHeader();
+            await AddAuthorizationHeader();
 
 
-                return await Task.FromResult(new AuthenticationState(claims));
-            }
-
-            return await Task.FromResult(new AuthenticationState(_anonymous));
+            return await Task.FromResult(new AuthenticationState(claims));
 
         }
-        catch
+        catch (Exception e)
         {
             await RemoveAuthorizationHeader();
 
@@ -96,7 +97,7 @@ public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage, 
 
     private async Task AddAuthorizationHeader()
     {
-        if (_navigationManager.Uri.StartsWith("http"))
+        if (navigationManager.Uri.StartsWith("http"))
         {
             var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
 
@@ -108,13 +109,19 @@ public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage, 
 
     private async Task RemoveAuthorizationHeader()
     {
-        if (_navigationManager.Uri.StartsWith("http"))
-        {
+      
             var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
 
             if (!string.IsNullOrEmpty(tokenResult.Token))
                 context.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "");
-        }
+        
     }
 
+    private async Task EnsureClientSideInitializationAsync()
+    {
+        if (navigationManager.Uri.StartsWith("http"))
+        {
+            await Task.Yield(); // Ensures the app is fully initialized
+        }
+    }
 }
