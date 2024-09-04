@@ -1,13 +1,13 @@
 @page "/Auth/Login"
 
 
-@layout AuthLayout  
-
+@layout AuthLayout
+@rendermode InteractiveServer
 
 <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
 
 
-<EditForm Model="LoginCommand" OnValidSubmit="Submit" FormName="LoginForm"  Enhance="@true"
+<EditForm Model="LoginCommand" OnValidSubmit="Submit" FormName="LoginForm" Enhance="@true"
           class="auth-form shadow-around">
     <DataAnnotationsValidator/>
     <div class="site-logo">
@@ -35,7 +35,8 @@
         </Control>
         <Anchor>
             <AuthAnchor class="link--with-border-bottom" NavigationText="رمز عبور خود را فراموش کرده‌ام"
-                        ToAddress="/Auth/ForgetPassword"></AuthAnchor>
+                        ToAddress="/Auth/ForgetPassword">
+            </AuthAnchor>
         </Anchor>
         <Validation>
             <ValidationMessage For="@(() => LoginCommand.Password)"/>
@@ -61,14 +62,16 @@
             var result = await Auth.Login(LoginCommand);
             if (!result.IsSuccess)
             {
-                ShowSnackBar("Cannot Login");
+                ShowSnackBar(result.MetaData.Message);
+                LoginCommand = new LoginCommand();
                 return;
             }
 
             var userInfo = await UserService.GetCurrentUser();
             if (!userInfo!.IsSuccess)
             {
-                ShowSnackBar("Cannot Find user Infos.");
+                ShowSnackBar(userInfo.MetaData.Message);
+                LoginCommand = new LoginCommand();
                 return;
             }
 
@@ -76,31 +79,36 @@
             await Local.SetAsync("LoginResponse", result.Data);
 
             await AuthenticationStateProvider.UpdateAuthenticationStateAsync(userInfo.Data);
+
+            NavigationManager.NavigateTo("/");
         }
         catch (NotFoundException ex)
         {
             ShowSnackBar(ex.Message);
-
-
-            LoginCommand  = new();
+            LoginCommand = new LoginCommand();
         }
         catch (HttpRequestException ex)
         {
             ShowSnackBar(ex.Message);
 
-            LoginCommand = new();
+            LoginCommand = new LoginCommand();
         }
     }
 
     private void ShowSnackBar(string message)
     {
         Snackbar.Clear();
-        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopStart;
-        Snackbar.Configuration.MaxDisplayedSnackbars = 10;
-        Snackbar.Add($"Normal {message}" , Severity.Error, c =>
+        Snackbar.Add($"{message}", Severity.Error, c =>
         {
-            c.SnackbarVariant = Variant.Filled;
-            c.ShowCloseIcon = true;
+            c.SnackbarVariant = Variant.Text;
+            c.HideIcon = true;
+            c.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+            c.CloseAfterNavigation = true;
+            c.Onclick = snackbar =>
+            {
+                snackbar.ForceClose();
+                return Task.CompletedTask;
+            };
         });
     }
 
