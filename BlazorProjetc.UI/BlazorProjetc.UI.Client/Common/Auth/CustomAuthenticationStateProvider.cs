@@ -49,7 +49,7 @@ public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage, 
             var claims = new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "CustomAuth"));
 
 
-            await AddAuthorizationHeader();
+            // await AddAuthorizationHeader();
 
 
             return await Task.FromResult(new AuthenticationState(claims));
@@ -57,7 +57,7 @@ public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage, 
         }
         catch (Exception e)
         {
-            await RemoveAuthorizationHeader();
+            // await RemoveAuthorizationHeader();
 
             return await Task.FromResult(new AuthenticationState(_anonymous));
         }
@@ -83,13 +83,13 @@ public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage, 
             };
             claimIdentityList.AddRange(userDto.Roles.Select(a => new Claim(ClaimTypes.Role, a.RoleTitle)).ToList());
             claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "CustomAuth"));
-            await AddAuthorizationHeader();
+            // await AddAuthorizationHeader();
         }
         else
         {
             await storage.DeleteAsync("UserInfo");
             claimsPrincipal = _anonymous;
-            await RemoveAuthorizationHeader();
+            // await RemoveAuthorizationHeader();
         }
 
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));

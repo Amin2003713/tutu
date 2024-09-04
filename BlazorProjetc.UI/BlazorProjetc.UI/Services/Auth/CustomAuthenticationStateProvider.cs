@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BlazorProjetc.UI.Services.Auth;
 
-public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage , HttpClient context ,
+public class CustomAuthenticationStateProvider(
+    LocalStorage storage , HttpClient context ,
     NavigationManager navigationManager) : AuthenticationStateProvider
 {
     private readonly ClaimsPrincipal _anonymous = new(new ClaimsIdentity());
@@ -47,7 +48,7 @@ public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage ,
             var claims = new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "CustomAuth"));
 
 
-            await AddAuthorizationHeader();
+            // await AddAuthorizationHeader();
 
 
             return await Task.FromResult(new AuthenticationState(claims));
@@ -55,7 +56,7 @@ public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage ,
         }
         catch 
         {
-            await RemoveAuthorizationHeader();
+            // await RemoveAuthorizationHeader();
 
             return await Task.FromResult(new AuthenticationState(_anonymous));
         }
@@ -81,41 +82,41 @@ public class CustomAuthenticationStateProvider(WebAssemblyLocalStorage storage ,
             };
             claimIdentityList.AddRange(userDto.Roles.Select(a => new Claim(ClaimTypes.Role, a.RoleTitle)).ToList());
             claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "CustomAuth"));
-            await AddAuthorizationHeader();
+            // await AddAuthorizationHeader();
 
         }
         else
         {
             await storage.DeleteAsync("UserInfo");
             claimsPrincipal = _anonymous;
-            await RemoveAuthorizationHeader();
+            // await RemoveAuthorizationHeader();
         }
 
         NotifyAuthenticationStateChanged(Task.FromResult<AuthenticationState>(new AuthenticationState(claimsPrincipal)));
     }
 
-    private async Task AddAuthorizationHeader()
-    {
-        var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
-
-        if (!string.IsNullOrEmpty(tokenResult.Token))
-        {
-            context.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResult.Token);
-        }
-    }
-
-    private async Task RemoveAuthorizationHeader()
-    {
-        if (navigationManager.Uri.StartsWith("http"))
-        {
-            var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
-
-            if (!string.IsNullOrEmpty(tokenResult.Token))
-            {
-                context.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "");
-            }
-        }
-    }
+    // private async Task AddAuthorizationHeader()
+    // {
+    //     var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
+    //
+    //     if (!string.IsNullOrEmpty(tokenResult.Token))
+    //     {
+    //         context.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResult.Token);
+    //     }
+    // }
+    //
+    // private async Task RemoveAuthorizationHeader()
+    // {
+    //     if (navigationManager.Uri.StartsWith("http"))
+    //     {
+    //         var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
+    //
+    //         if (!string.IsNullOrEmpty(tokenResult.Token))
+    //         {
+    //             context.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "");
+    //         }
+    //     }
+    // }
 
 
     private async Task EnsureClientSideInitializationAsync()

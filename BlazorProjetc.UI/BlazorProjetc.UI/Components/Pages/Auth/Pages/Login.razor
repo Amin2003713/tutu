@@ -3,6 +3,8 @@
 
 @layout AuthLayout
 @rendermode InteractiveServer
+@inject  AuthenticationStateProvider AuthenticationStateProvider
+
 
 <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
 

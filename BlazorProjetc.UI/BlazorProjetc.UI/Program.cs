@@ -12,6 +12,7 @@ using Infra.Common;
 using Infra.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.IdentityModel.Tokens;
 using MudBlazor;
 
@@ -55,7 +56,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddScoped<WebAssemblyLocalStorage>();
+builder.Services.AddScoped<LocalStorage>();
+builder.Services.AddScoped<ProtectedLocalStorage>();
 
 
 builder.Services.AddScoped<CustomAuthenticationStateProvider>();
@@ -83,6 +85,7 @@ builder.Services.AddAuthentication(option =>
 
 
 builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 
