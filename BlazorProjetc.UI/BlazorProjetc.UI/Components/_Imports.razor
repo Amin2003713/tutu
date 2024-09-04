@@ -1,5 +1,10 @@
-﻿@using System.Net.Http
+﻿@using Application.User.Auth.CommandAndQueries
+@using Domain.Common.Exceptions
+@using BlazorProjetc.UI.Client.Layout.Auth
+@inject  ISnackbar Snackbar
+@using System.Net.Http
 @using System.Net.Http.Json
+@using Application.User.Auth.Interfaces
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
@@ -11,3 +16,12 @@
 @using BlazorProjetc.UI
 @using BlazorProjetc.UI.Client
 @using BlazorProjetc.UI.Components
+@using BlazorProjetc.UI.Components.Pages.Auth.Pages.Controles
+@using BlazorProjetc.UI.Services
+@inject IUserAuthRepository Auth
+@inject NavigationManager NavigationManager
+@inject LocalStorage Local
+@using Application.User.Users.Interfaces
+@using BlazorProjetc.UI.Services.Auth
+@inject  IUserService UserService
+@inject  CustomAuthenticationStateProvider AuthenticationStateProvider

@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.*"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.8" />
         <PackageReference Include="MudBlazor" Version="7.*"/>
     </ItemGroup>
 
@@ -35,6 +36,10 @@
       <AdditionalFiles Include="Layout\Contrroles\Headers\MainHeader.razor" />
       <AdditionalFiles Include="Layout\Contrroles\MainLoader.razor" />
       <AdditionalFiles Include="Layout\Contrroles\Scripts.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\" />
     </ItemGroup>
 
 </Project>

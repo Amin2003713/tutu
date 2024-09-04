@@ -22,4 +22,21 @@
       </Content>
     </ItemGroup>
 
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\Pages\Auth\Layout\AuthLayout.razor" />
+      <AdditionalFiles Include="Components\Pages\Auth\Pages\Controles\AuthAnchor.razor" />
+      <AdditionalFiles Include="Components\Pages\Auth\Pages\Controles\AuthButton.razor" />
+      <AdditionalFiles Include="Components\Pages\Auth\Pages\Controles\AuthInput.razor" />
+      <AdditionalFiles Include="Components\Pages\Auth\Pages\ForgetPassword.razor" />
+      <AdditionalFiles Include="Components\Pages\Auth\Pages\Login.razor" />
+      <AdditionalFiles Include="Components\Pages\Auth\Pages\Register.razor" />
+      <AdditionalFiles Include="Components\Pages\Auth\Pages\ResetPassword.razor" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Folder Include="Components\Pages\Auth\Layout\" />
+    </ItemGroup>
+
 </Project>

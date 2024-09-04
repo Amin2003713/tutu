@@ -1,11 +1,22 @@
+using System.Net.Http.Headers;
 using Application.Extensions;
 using MudBlazor.Services;
 using BlazorProjetc.UI.Components;
+using BlazorProjetc.UI.Services;
+using BlazorProjetc.UI.Services.Auth;
+using Infra.Common;
 using Infra.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
+const string baseAddress = "https://localhost:5001/";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.RegisterInfraDependency();
+builder.Services.RegisterApplicationDependency();
+
 
 // Add MudBlazor services
 builder.Services.AddMudServices();
@@ -16,7 +27,9 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 
-
+builder.Services.AddScoped<LocalStorage>();
+builder.Services.AddScoped<CustomAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
 builder.Services.AddAuthentication(option =>
 {
@@ -38,8 +51,7 @@ builder.Services.AddAuthentication(option =>
     };
 });
 
-builder.Services.RegisterApplicationDependency();
-builder.Services.RegisterInfraDependency();
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
@@ -61,15 +73,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
-app.Use(async (context, next) =>
-{
-    var token = context.Request.Cookies["token"]?.ToString();
-
-    if (!token.IsNullOrEmpty())
-        context.Request.Headers.Append("authorization", $"Bearer {token}");
-
-    await next();
-});
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

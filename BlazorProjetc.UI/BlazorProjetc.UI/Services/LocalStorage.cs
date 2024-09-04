@@ -1,6 +1,7 @@
+
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
-namespace Infra.UtilsService;
+namespace BlazorProjetc.UI.Services;
 
 public class LocalStorage(ProtectedLocalStorage storage)  
 {

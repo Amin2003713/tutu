@@ -1,14 +1,8 @@
 @page "/Auth/Login"
-@page "/"
-@using Application.User.Auth.CommandAndQueries
-@using BlazorProjetc.UI.Client.Features.Auth.Layout
-@using Domain.Common.Exceptions 
-@using BlazorProjetc.UI.Client.Features.Auth.Pages.Controles
-@inject  ISnackbar Snackbar
 
 
-@layout AuthLayout
-@rendermode InteractiveServer
+@layout AuthLayout  
+
 
 <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
 
@@ -71,8 +65,17 @@
                 return;
             }
 
-            await local.SetAsync("Token", result.Data.Token);
-            await local.SetAsync("RefreshToken", result.Data.RefreshToken);
+            var userInfo = await UserService.GetCurrentUser();
+            if (!userInfo!.IsSuccess)
+            {
+                ShowSnackBar("Cannot Find user Infos.");
+                return;
+            }
+
+            await Local.SetAsync("UserInfo", userInfo.Data);
+            await Local.SetAsync("LoginResponse", result.Data);
+
+            await AuthenticationStateProvider.UpdateAuthenticationStateAsync(userInfo.Data);
         }
         catch (NotFoundException ex)
         {
