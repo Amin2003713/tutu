@@ -78,8 +78,9 @@
             await Local.SetAsync("UserInfo", userInfo.Data);
             await Local.SetAsync("LoginResponse", result.Data);
 
-            await AuthenticationStateProvider.UpdateAuthenticationStateAsync(userInfo.Data);
+            var customAuth = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
 
+            await customAuth.UpdateAuthenticationStateAsync(userInfo.Data);
             NavigationManager.NavigateTo("/");
         }
         catch (NotFoundException ex)
