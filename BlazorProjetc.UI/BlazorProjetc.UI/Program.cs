@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.IdentityModel.Tokens;
 using MudBlazor;
 
-const string baseAddress = "https://localhost:5001/";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,6 +87,8 @@ builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

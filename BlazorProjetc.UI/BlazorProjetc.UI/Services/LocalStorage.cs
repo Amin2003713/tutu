@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
-namespace BlazorProjetc.UI.Services.Auth;
+namespace BlazorProjetc.UI.Services;
 
 public class LocalStorage(ProtectedLocalStorage storage)
 {
     public async Task SetAsync<TItem>(string key, TItem data) => await storage.SetAsync(key, data!);
 
-    public async Task<TItem> GetAsync<TItem>(string key)
+    public async Task<ProtectedBrowserStorageResult<TItem>> GetAsync<TItem>(string key)
     {
-        var result = (await storage.GetAsync<TItem>(key));
-        return result.Success ? result.Value! : default!;
+        return (await storage.GetAsync<TItem>(key));
     }
 
 

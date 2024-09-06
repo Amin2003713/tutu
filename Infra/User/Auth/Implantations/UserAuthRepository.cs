@@ -1,4 +1,5 @@
-﻿using Application.User.Auth.CommandAndQueries;
+﻿using Application.Common;
+using Application.User.Auth.CommandAndQueries;
 using Application.User.Auth.Interfaces;
 using Application.User.Auth.Responses;
 using Domain.Common.Api;
@@ -7,7 +8,7 @@ using Infra.Utils;
 
 namespace Infra.User.Auth.Implantations;
 
-public class UserAuthRepository(BaseHttpClient client) : IUserAuthRepository
+public class UserAuthRepository(IBaseHttpClient client) : IUserAuthRepository
 {
     public async Task<ApiResult<LoginResponse>> Login(LoginCommand command)
     {

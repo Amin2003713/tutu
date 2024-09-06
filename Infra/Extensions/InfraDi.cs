@@ -30,15 +30,15 @@ public static class InfraDi
     }
 
 
-    public static IServiceCollection AddApisToDiRegistry(this IServiceCollection services)
+    private static IServiceCollection AddApisToDiRegistry(this IServiceCollection services)
     {
         const string baseAddress = "https://localhost:5001/";
-services.AddHttpClient<BaseHttpClient>(client =>
+
+        services.AddHttpClient<IBaseHttpClient, BaseHttpClient>(client =>
         {
             client.BaseAddress = new Uri(baseAddress);
         });
-        services.AddHttpClient();
-        services.AddScoped<IBaseHttpClient, BaseHttpClient>();
+
         services.AddScoped<IUserAuthRepository, UserAuthRepository>();
         services.AddScoped<IBannerRepository, BannerRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
