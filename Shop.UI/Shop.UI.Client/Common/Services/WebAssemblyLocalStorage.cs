@@ -2,8 +2,7 @@ using System.Text;
 using System.Text.Json;
 using Blazored.LocalStorage;
 
-
-namespace BlazorProjetc.UI.Client.Common.Services;
+namespace Shop.UI.Client.Common.Services;
 
 public class WebAssemblyLocalStorage(ILocalStorageService storage)
 {

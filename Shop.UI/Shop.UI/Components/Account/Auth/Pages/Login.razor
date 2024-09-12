@@ -1,9 +1,12 @@
 @page "/Auth/Login"
 
 
+
 @layout AuthLayout
 @rendermode InteractiveServer
-@inject  AuthenticationStateProvider AuthenticationStateProvider
+
+
+
 
 
 <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
@@ -56,8 +59,20 @@
     [SupplyParameterFromForm(FormName = "LoginForm")]
     public LoginCommand LoginCommand { get; set; } = new();
 
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
-    private async Task Submit()
+    [SupplyParameterFromQuery] private string? ReturnUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        {
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+        }
+    }
+
+    public async Task LoginUser()
     {
         try
         {
@@ -80,9 +95,8 @@
             await Local.SetAsync("UserInfo", userInfo.Data);
             await Local.SetAsync("LoginResponse", result.Data);
 
-            var customAuth = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+            var customAuth = (PersistingServerAuthenticationStateProvider)AuthenticationStateProvider;
 
-            await customAuth.UpdateAuthenticationStateAsync(userInfo.Data);
             NavigationManager.NavigateTo("/");
         }
         catch (NotFoundException ex)
@@ -98,6 +112,13 @@
         }
     }
 
+
+
+    private async Task Submit()
+    {
+ 
+    }
+
     private void ShowSnackBar(string message)
     {
         Snackbar.Clear();
@@ -109,7 +130,7 @@
             c.CloseAfterNavigation = true;
             c.Onclick = snackbar =>
             {
-                snackbar.ForceClose();
+                snackbar.Dispose();
                 return Task.CompletedTask;
             };
         });
