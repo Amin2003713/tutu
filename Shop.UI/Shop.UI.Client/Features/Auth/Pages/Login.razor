@@ -64,10 +64,7 @@
 
     [SupplyParameterFromQuery] private string? ReturnUrl { get; set; }
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        ShowSnackBar("Rendered");
-    }
+  
 
     public async Task LoginUser()
     {
