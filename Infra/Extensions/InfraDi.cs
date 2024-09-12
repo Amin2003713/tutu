@@ -29,6 +29,7 @@ public static class InfraDi
     {
         services.AddApisToDiRegistry();
 
+        services.AddTransient<ILocalStorage, LocalStorage>();
 
         return services;
     }
