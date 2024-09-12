@@ -2,9 +2,9 @@ using System.Text;
 using System.Text.Json;
 using Blazored.LocalStorage;
 
-namespace Shop.UI.Client.Common.Services;
+namespace Infra.Utils;
 
-public class WebAssemblyLocalStorage(ILocalStorageService storage)
+public class LocalStorage(ILocalStorageService storage) : ILocalStorage
 {
 
     public async Task SetAsync<TItem>(string key, TItem data)
