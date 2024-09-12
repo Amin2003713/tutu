@@ -8,7 +8,7 @@ using Infra.Utils;
 
 namespace Infra.User.Users.Implantations;
 
-public class UserService(IBaseHttpClient client) : IUserService
+public class UserService(IBaseHttpClient client ) : IUserService
 {
     public async Task<ApiResult?> CreateUser(CreateUserCommand command)
     {

@@ -19,13 +19,12 @@
 @using Application.User.Users.Interfaces
 @using Domain.Common.Exceptions
 @using Infra.User.Users.Implantations
+@using Infra.Utils
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
-@using Shop.UI.Components.Account.Auth.Pages.Controles
-@using Shop.UI.Services
+
 @inject  AuthenticationStateProvider AuthenticationStateProvider
 @inject  ISnackbar Snackbar
 @inject  IUserAuthRepository Auth
 @inject  IUserService UserService
 @inject  NavigationManager NavigationManager 
-@inject ILocalStorage Local

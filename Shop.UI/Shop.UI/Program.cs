@@ -1,7 +1,9 @@
 using Application.Extensions;
 using Infra.Extensions;
+using Infra.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.IdentityModel.Tokens;
 using MudBlazor;
 using Shop.UI.Components;

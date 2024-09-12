@@ -10,3 +10,23 @@
 @using Shop.UI.Client
 @using MudBlazor
 @using MudBlazor.Services
+
+
+
+
+
+@using Shop.UI.Client.Layout.Auth
+@using Application.User.Auth.CommandAndQueries
+@using Application.User.Auth.Interfaces
+@using Application.User.Users.Interfaces
+@using Domain.Common.Exceptions
+@using Infra.User.Users.Implantations
+@using Infra.Utils
+
+
+@inject  AuthenticationStateProvider AuthenticationStateProvider
+@inject  ISnackbar Snackbar
+@inject  IUserAuthRepository Auth
+@inject  IUserService UserService
+@inject  NavigationManager NavigationManager 
+@inject ILocalStorage Local

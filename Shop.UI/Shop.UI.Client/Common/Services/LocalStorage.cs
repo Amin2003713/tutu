@@ -1,10 +1,11 @@
+
 using System.Text;
 using System.Text.Json;
-using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 
 namespace Infra.Utils;
 
-public class LocalStorage(ILocalStorageService storage) : ILocalStorage
+public class LocalStorage(ISessionStorageService storage) : ILocalStorage
 {
 
     public async Task SetAsync<TItem>(string key, TItem data)

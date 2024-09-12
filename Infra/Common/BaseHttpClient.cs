@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using Application.Common;
@@ -19,6 +20,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     /// </summary>
     public async Task<TResponse?> GetAsync<TResponse>(string uri)
     {
+       
         return await GetResponse<TResponse>(await client.GetAsync(uri));
     }
 

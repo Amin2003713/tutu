@@ -8,7 +8,7 @@ using Application.Common;
 using Application.Order.Interfaces;
 using Application.User.Auth.Interfaces;
 using Application.User.Users.Interfaces;
-using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using Infra.Banner.Implantations;
 using Infra.Category.Implantations;
 using Infra.Comment.Implantations;
@@ -30,17 +30,6 @@ public static class InfraDi
         services.AddApisToDiRegistry();
 
 
-        services.AddBlazoredLocalStorage(config =>
-        {
-            config.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-            config.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-            config.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
-            config.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-            config.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            config.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
-            config.JsonSerializerOptions.WriteIndented = false;
-        });
-
         return services;
     }
 
@@ -60,7 +49,6 @@ public static class InfraDi
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<ILocalStorage  , LocalStorage >();
 
         
 

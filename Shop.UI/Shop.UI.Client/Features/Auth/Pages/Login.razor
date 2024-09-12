@@ -1,4 +1,6 @@
 @page "/Auth/Login"
+@using Microsoft.AspNetCore.Http
+@using Shop.UI.Client.Features.Auth.Pages.Controles
 
 
 
@@ -12,7 +14,7 @@
 <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
 
 
-<EditForm Model="LoginCommand" OnValidSubmit="Submit" FormName="LoginForm" Enhance="@true"
+<EditForm Model="LoginCommand" OnValidSubmit="LoginUser" FormName="LoginForm" Enhance="@true"
           class="auth-form shadow-around">
     <DataAnnotationsValidator/>
     <div class="site-logo">
@@ -65,11 +67,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (HttpMethods.IsGet(HttpContext.Request.Method))
-        {
-            // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-        }
+        // if (HttpMethods.IsGet(HttpContext.Request.Method))
+        // {
+        //     // Clear the existing external cookie to ensure a clean login process
+        //     await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+        // }
     }
 
     public async Task LoginUser()
@@ -83,8 +85,9 @@
                 LoginCommand = new LoginCommand();
                 return;
             }
+        await Local.SetAsync("LoginResponse", result.Data);
 
-            var userInfo = await UserService.GetCurrentUser();
+        var userInfo = await UserService.GetCurrentUser();
             if (!userInfo!.IsSuccess)
             {
                 ShowSnackBar(userInfo.MetaData.Message);
@@ -93,9 +96,8 @@
             }
 
             await Local.SetAsync("UserInfo", userInfo.Data);
-            await Local.SetAsync("LoginResponse", result.Data);
 
-            var customAuth = (PersistingServerAuthenticationStateProvider)AuthenticationStateProvider;
+            // var customAuth = (PersistingServerAuthenticationStateProvider)AuthenticationStateProvider;
 
             NavigationManager.NavigateTo("/");
         }
