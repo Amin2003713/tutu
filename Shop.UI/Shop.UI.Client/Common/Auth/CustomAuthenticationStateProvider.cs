@@ -1,13 +1,14 @@
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using Application.User.Auth.Responses;
+using Application.User.Users.Interfaces;
 using Application.User.Users.Responses;
 using Infra.Utils;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BlazorProjetc.UI.Services.Auth;
 
-public class CustomAuthenticationStateProvider(ILocalStorage storage , HttpClient context) : AuthenticationStateProvider
+public class CustomAuthenticationStateProvider(ILocalStorage storage , HttpClient context , IUserService userService) : AuthenticationStateProvider
 {
     private readonly ClaimsPrincipal _anonymous = new(new ClaimsIdentity());
 
@@ -20,11 +21,14 @@ public class CustomAuthenticationStateProvider(ILocalStorage storage , HttpClien
             if (tokenResult is null)
                 return await Task.FromResult(new AuthenticationState(_anonymous));
 
-            var userInfo = await storage.GetAsync<UserDto>("UserInfo");
 
-            if (userInfo is null)
+            var userInfoResult =await userService.GetCurrentUser();
+            if(userInfoResult is null ||!userInfoResult.IsSuccess || userInfoResult.Data is null )
                 return await Task.FromResult(new AuthenticationState(_anonymous));
 
+            await storage.SetAsync("UserInfo" , userInfoResult.Data);
+
+            var userInfo = userInfoResult.Data;
             var claimIdentityList = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
@@ -39,14 +43,12 @@ public class CustomAuthenticationStateProvider(ILocalStorage storage , HttpClien
             var claims = new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "CustomAuth"));
 
 
-            await AddAuthorizationHeader();
             
 
             return await Task.FromResult(new AuthenticationState(claims));
         }
         catch 
         {
-            await RemoveAuthorizationHeader();
 
             return await Task.FromResult(new AuthenticationState(_anonymous));
         }
@@ -58,8 +60,6 @@ public class CustomAuthenticationStateProvider(ILocalStorage storage , HttpClien
 
         if (userDto is not null)
         {
-            await storage.SetAsync("UserInfo" , userDto);
-
             var claimIdentityList = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, userDto.Id.ToString()),
@@ -72,36 +72,16 @@ public class CustomAuthenticationStateProvider(ILocalStorage storage , HttpClien
             };
             claimIdentityList.AddRange(userDto.Roles.Select(a => new Claim(ClaimTypes.Role, a.RoleTitle)).ToList());
             claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "CustomAuth"));
-            await AddAuthorizationHeader();
 
         }
         else
         {
             await storage.DeleteAsync("UserInfo");
             claimsPrincipal = _anonymous;
-            await RemoveAuthorizationHeader();
         }
 
         NotifyAuthenticationStateChanged(Task.FromResult<AuthenticationState>(new AuthenticationState(claimsPrincipal)));
     }
 
-    private async Task AddAuthorizationHeader()
-    {
-        var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
-
-        if (!string.IsNullOrEmpty(tokenResult.Token))
-        {
-            context.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResult.Token);
-        }
-    }
-
-    private async Task RemoveAuthorizationHeader()
-    {
-        var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
-
-        if (!string.IsNullOrEmpty(tokenResult.Token))
-        {
-            context.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer","");
-        }
-    } 
+  
 }

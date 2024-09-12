@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using Application.Common;
+using Application.User.Auth.Responses;
 using Domain.Common.Exceptions;
 using Infra.Utils;
 using Newtonsoft.Json;
@@ -13,14 +14,14 @@ namespace Infra.Common;
 ///     A base HTTP client implementation that provides methods for making HTTP requests
 ///     with support for generic response types and multipart form data.
 /// </summary>
-public class BaseHttpClient(HttpClient client) : IBaseHttpClient
+public class BaseHttpClient(HttpClient client , ILocalStorage localStorage) : IBaseHttpClient
 {
     /// <summary>
     ///     Sends a GET request to the specified URI.
     /// </summary>
     public async Task<TResponse?> GetAsync<TResponse>(string uri)
     {
-       
+        await SetAuthHeader();
         return await GetResponse<TResponse>(await client.GetAsync(uri));
     }
 
@@ -29,6 +30,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     /// </summary>
     public async Task<TResponse?> PostAsync<TRequest, TResponse>(string uri, TRequest data)
     {
+        await SetAuthHeader();
         var response = await client.PostAsJsonAsync(uri, data);
         return await GetResponse<TResponse>(response);
     }
@@ -38,6 +40,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     /// </summary>
     public async Task<TResponse?> PutAsync<TRequest, TResponse>(string uri, TRequest data)
     {
+        await SetAuthHeader();
         var response = await client.PutAsJsonAsync(uri, data);
         return await GetResponse<TResponse>(response);
     }
@@ -47,6 +50,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     /// </summary>
     public async Task<TResponse?> PatchAsync<TRequest, TResponse>(string uri, TRequest data)
     {
+        await SetAuthHeader();
         var response = await client.PatchAsJsonAsync(uri, data);
         return await GetResponse<TResponse>(response);
     }
@@ -56,6 +60,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     /// </summary>
     public async Task<TResponse?> DeleteAsync<TResponse>(string uri)
     {
+        await SetAuthHeader();
         return await GetResponse<TResponse>(await client.DeleteAsync(uri));
     }
 
@@ -64,6 +69,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     /// </summary>
     public async Task<TResponse?> PostMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
     {
+        await SetAuthHeader();
         var response = await client.PostAsync(uri, data.CreateMultipartContent());
         return await GetResponse<TResponse>(response);
     }
@@ -73,6 +79,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     /// </summary>
     public async Task<TResponse?> PutMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
     {
+        await SetAuthHeader();
         var response = await client.PutAsync(uri, data.CreateMultipartContent());
         return await GetResponse<TResponse>(response);
     }
@@ -82,6 +89,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     /// </summary>
     public async Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
     {
+        await SetAuthHeader();
         var response = await client.PatchAsync(uri, data.CreateMultipartContent());
         return await GetResponse<TResponse>(response);
     }
@@ -96,6 +104,7 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
     /// <returns>A task representing the asynchronous operation, with a result of the expected response type.</returns>
     public async Task<TResponse?> DeleteAsync<TRequest, TResponse>(string uri, TRequest data)
     {
+        await SetAuthHeader();
         // Serialize the request data to JSON
         var json = JsonConvert.SerializeObject(data);
 
@@ -147,4 +156,18 @@ public class BaseHttpClient(HttpClient client) : IBaseHttpClient
                 $"HTTP Error: {(int)response.StatusCode} - {response.ReasonPhrase}. Details: {await response.Content.ReadAsStringAsync()}")
         };
     }
+
+
+    private async Task SetAuthHeader()
+    {
+        var result = await localStorage.GetAsync<LoginResponse>("LoginResponse");
+        if (result is null || string.IsNullOrEmpty(result.Token))
+            return;
+
+        if(client.DefaultRequestHeaders.Any(a=> a.Key == "Authorization"))
+           return;
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.Token);
+    }
+
 }

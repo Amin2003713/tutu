@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Application.Extensions;
 using Blazored.SessionStorage;
+using BlazorProjetc.UI.Services.Auth;
 using Infra.Extensions;
 using Infra.Utils;
 using Shop.UI.Client;
@@ -18,7 +19,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
 builder.Services.RegisterApplicationDependency();
 builder.Services.RegisterInfraDependency();
