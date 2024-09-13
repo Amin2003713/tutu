@@ -1,5 +1,4 @@
 using Application.Extensions;
-using BlazorProjetc.UI.Services.Auth;
 using Infra.Extensions;
 using Infra.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,6 +9,7 @@ using MudBlazor;
 using Shop.UI.Components;
 using Shop.UI.Components.Account;
 using MudBlazor.Services;
+using CustomAuthenticationStateProvider = Shop.UI.Components.Account.CustomAuthenticationStateProvider;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,26 +25,27 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
-builder.Services.AddAuthorization();
-// builder.Services.AddAuthentication(option =>
-// {
-//     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//     option.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-//     option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-// }).AddJwtBearer(jwt =>
-// {
-//     jwt.TokenValidationParameters = new TokenValidationParameters()
-//     {
-//         ValidIssuer = "Eshop.com",
-//         ValidAudience = "Eshop-api",
-//         IssuerSigningKey =
-//             new SymmetricSecurityKey("16D9BBF8-FA00-4D89-9BB5-99610E95BdsadasdasdA70-dasdsa"u8.ToArray()),
-//         ValidateLifetime = true,
-//         ValidateAudience = true,
-//         ValidateIssuer = true,
-//         ValidateIssuerSigningKey = true
-//     };
-// });
+builder.Services.AddAuthenticationCore(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddAuthentication()
+    .AddJwtBearer(jwt =>
+{
+    jwt.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidIssuer = "Eshop.com",
+        ValidAudience = "Eshop-api",
+        IssuerSigningKey =
+            new SymmetricSecurityKey("16D9BBF8-FA00-4D89-9BB5-99610E95BdsadasdasdA70-dasdsa"u8.ToArray()),
+        ValidateLifetime = true,
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidateIssuerSigningKey = true
+    };
+});
 
 
 builder.Services.AddHttpContextAccessor();

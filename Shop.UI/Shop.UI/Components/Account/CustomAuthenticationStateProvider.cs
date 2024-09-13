@@ -4,7 +4,7 @@ using Application.User.Users.Interfaces;
 using Infra.Utils;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace Shop.UI.Client.Common.Auth;
+namespace Shop.UI.Components.Account;
 
 public class CustomAuthenticationStateProvider(ILocalStorage storage, IUserService userService) : AuthenticationStateProvider
 {

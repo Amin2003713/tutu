@@ -1,5 +1,7 @@
 @page "/Auth/Login"
 @using Microsoft.AspNetCore.Http
+@using Shop.UI.Components.Account.Auth.Pages.Controles
+@using CustomAuthenticationStateProvider = Shop.UI.Components.Account.CustomAuthenticationStateProvider
 
 
 @layout AuthLayout
@@ -81,19 +83,12 @@
             }
         await Local.SetAsync("LoginResponse", result.Data);
 
-        var userInfo = await UserService.GetCurrentUser();
-            if (!userInfo!.IsSuccess)
-            {
-                ShowSnackBar(userInfo.MetaData.Message);
-                LoginCommand = new LoginCommand();
-                return;
-            }
+             var customAuth = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+             await customAuth.NotifyAuthenticationStateChanged();
 
-            await Local.SetAsync("UserInfo", userInfo.Data);
+             NavigationManager.NavigateTo("/");
 
-            // var customAuth = (PersistingServerAuthenticationStateProvider)AuthenticationStateProvider;
 
-            NavigationManager.NavigateTo("/");
         }
         catch (NotFoundException ex)
         {

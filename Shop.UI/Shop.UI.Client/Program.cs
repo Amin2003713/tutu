@@ -2,7 +2,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Application.Extensions;
 using Blazored.SessionStorage;
-using BlazorProjetc.UI.Services.Auth;
 using Infra.Extensions;
 using Infra.Utils;
 using Shop.UI.Client;
@@ -14,7 +13,7 @@ using Shop.UI.Client.Common.Auth;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 
 builder.Services.AddAuthorizationCore();
@@ -38,11 +37,5 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.ClearAfterNavigation = true;
     config.SnackbarConfiguration.BackgroundBlurred = true;
 });
-
-builder.Services.AddBlazoredSessionStorage();
-
-builder.Services.AddScoped<ILocalStorage, LocalStorage>();
-
-builder.Services.AddMudServices();
 
 await builder.Build().RunAsync();
