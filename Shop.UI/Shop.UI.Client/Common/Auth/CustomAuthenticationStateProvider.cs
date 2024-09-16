@@ -1,32 +1,28 @@
 using System.Security.Claims;
 using Application.User.Auth.Responses;
 using Application.User.Users.Interfaces;
+using Application.User.Users.Responses;
 using Infra.Utils;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Shop.UI.Client.Common.Auth;
 
-public class CustomAuthenticationStateProvider(ILocalStorage storage, IUserService userService) : AuthenticationStateProvider
+public class CustomAuthenticationStateProvider(
+    PersistentComponentState persistentState) : AuthenticationStateProvider
 {
-    private readonly ClaimsPrincipal _anonymous = new(new ClaimsIdentity());
+    private static readonly Task<AuthenticationState> _unauthenticatedTask =
+        Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
 
-    public override async Task<AuthenticationState> GetAuthenticationStateAsync()
+    public override  Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         try
         {
-            var tokenResult = await storage.GetAsync<LoginResponse>("LoginResponse");
+            if (!persistentState.TryTakeFromJson<UserDto>(nameof(UserDto), out var userInfo) || userInfo is null)
+            {
+                return _unauthenticatedTask;
+            }
 
-            if (tokenResult is null)
-                return await Task.FromResult(new AuthenticationState(_anonymous));
-
-
-            var userInfoResult =await userService.GetCurrentUser();
-            if(userInfoResult is null ||!userInfoResult.IsSuccess || userInfoResult.Data is null )
-                return await Task.FromResult(new AuthenticationState(_anonymous));
-
-            await storage.SetAsync("UserInfo" , userInfoResult.Data);
-
-            var userInfo = userInfoResult.Data;
             var claimIdentityList = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
@@ -38,23 +34,20 @@ public class CustomAuthenticationStateProvider(ILocalStorage storage, IUserServi
                 new(ClaimTypes.UserData, userInfo.AvatarName)
             };
             claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, a.RoleTitle)).ToList());
-            var claims = new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "CustomAuth"));
+            var claims =  (new ClaimsIdentity(claimIdentityList, "CustomAuth"));
 
 
-            
 
-            return await Task.FromResult(new AuthenticationState(claims));
+
+            return Task.FromResult(
+                new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims as IEnumerable<Claim>,
+                    authenticationType: nameof(CustomAuthenticationStateProvider)))));
         }
         catch 
         {
 
-            return await Task.FromResult(new AuthenticationState(_anonymous));
+            return _unauthenticatedTask;
         }
-    }
-
-    public async Task NotifyAuthenticationStateChanged()
-    {
-        NotifyAuthenticationStateChanged(Task.FromResult(await GetAuthenticationStateAsync()));
     }
 
   
