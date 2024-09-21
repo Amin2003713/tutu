@@ -1,0 +1,17 @@
+@page "/AccessDenied"
+<div class="title">
+    <span class="red">4</span><span class="white">BI</span>
+    <span class="do-not">
+      <span class="hole one"></span>
+      <hr>
+      <span class="hole two"></span>
+    </span>
+    <span class="red">3</span><span class="white">N!</span>
+</div>
+<p>You don’t have permission to access <code>@To</code> on this server.</p>
+
+@code {
+
+    [Parameter]
+    public string? To { get; set; }
+}

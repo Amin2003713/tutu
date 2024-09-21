@@ -1,0 +1,167 @@
+@page "/Auth/Login"
+@using System.Security.Claims
+@using Application.User.Auth.CommandAndQueries
+@using Application.User.Auth.Interfaces
+@using Application.User.Auth.Responses
+@using Application.User.Users.Interfaces
+@using Domain.Common.Exceptions
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using Microsoft.AspNetCore.Http 
+@using MyShopUi.Components.Pages.Controles
+@inject  IUserAuthRepository Auth
+@inject  NavigationManager NavigationManager
+@inject  ProtectedLocalStorage Local
+@inject  IUserService UserService
+
+
+
+@rendermode InteractiveServer
+
+
+
+
+
+<AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
+
+
+<EditForm Model="LoginCommand" OnValidSubmit="LoginUser" FormName="LoginForm" Enhance="@true"
+          class="auth-form shadow-around">
+    <DataAnnotationsValidator/>
+    <div class="site-logo">
+        <a href="#">
+            <img src="./assets/images/logo.png" alt="logo">
+        </a>
+    </div>
+    <div class="auth-form-title">
+        ورود به سامانه
+    </div>
+
+    <AuthInput Label="نام کاربری/شماره همراه" Icon="fad fa-mobile-alt">
+        <Control>
+            <InputText @bind-Value="LoginCommand.PhoneNumber" class="input-element"
+                       id="phone-number"/>
+        </Control>
+        <Validation>
+            <ValidationMessage For="@(() => LoginCommand.PhoneNumber)"/>
+        </Validation>
+    </AuthInput>
+
+    <AuthInput Label="کلمه عبور" Icon="fad fa-key-skeleton">
+        <Control>
+            <InputText @bind-Value="LoginCommand.Password" class="input-element" id="password"/>
+        </Control>
+        <Anchor>
+            <AuthAnchor class="link--with-border-bottom" NavigationText="رمز عبور خود را فراموش کرده‌ام"
+                        ToAddress="/Auth/ForgetPassword">
+            </AuthAnchor>
+        </Anchor>
+        <Validation>
+            <ValidationMessage For="@(() => LoginCommand.Password)"/>
+        </Validation>
+    </AuthInput>
+
+    <AuthButton ButtonText="ورود به همتا" class="btn-element btn-info-element" Icon="fad fa-sign-in-alt"/>
+
+    <AuthAnchor class="link--with-border-bottom" Label="کاربر جدید هستید" NavigationText="ثبت نام در همتا"
+                ToAddress="/Auth/Register"/>
+</EditForm>
+
+@code {
+
+    [SupplyParameterFromForm(FormName = "LoginForm")]
+    private LoginCommand LoginCommand { get; set; } = new();
+
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery] private string? ReturnUrl { get; set; }
+
+    // protected override Task OnInitializedAsync()
+    // {
+    //     avr 
+    // }
+
+    public async Task LoginUser()
+    {
+        try
+        {
+            var result = await Auth.Login(LoginCommand);
+            if (!result.IsSuccess)
+            {
+                ShowSnackBar(result.MetaData.Message);
+                LoginCommand = new LoginCommand();
+                return;
+            }
+            await Local.SetAsync("LoginResponse", result.Data);
+
+            var claims = await Claims();
+            if (claims is null )
+                Console.WriteLine();
+
+            await HttpContext.SignInAsync("Shop-Auth" , claims!);
+             NavigationManager.NavigateTo("/");
+
+
+        }
+        catch (NotFoundException ex)
+        {
+            ShowSnackBar(ex.Message);
+            LoginCommand = new LoginCommand();
+        }
+        catch (HttpRequestException ex)
+        {
+            ShowSnackBar(ex.Message);
+
+            LoginCommand = new LoginCommand();
+        }
+    }
+
+    private async Task<ClaimsPrincipal> Claims()
+    {
+        var tokenResult = await Local.GetAsync<LoginResponse>("LoginResponse");
+
+        if (tokenResult.Value is null)
+            return null!;
+
+        var userInfoResult = await UserService.GetCurrentUser();
+        if (userInfoResult is null || !userInfoResult.IsSuccess || userInfoResult.Data is null)
+            return null!;
+
+        await Local.SetAsync("UserInfo", userInfoResult.Data);
+
+        var userInfo = userInfoResult.Data;
+        var claimIdentityList = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
+            new(ClaimTypes.Name, userInfo.PhoneNumber),
+            new(ClaimTypes.Surname, userInfo.Family),
+            new(ClaimTypes.GivenName, userInfo.Name),
+            new(ClaimTypes.Email, userInfo.Email ?? "@"),
+            new(ClaimTypes.Gender, userInfo.Gender.ToString()),
+            new(ClaimTypes.UserData, userInfo.AvatarName)
+        };
+        claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, a.RoleTitle)).ToList());
+        return new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "Shop-Auth"));
+
+    }
+
+
+    private void ShowSnackBar(string message)
+    {
+        // Snackbar.Clear();
+        // Snackbar.Add($"{message}", Severity.Error, c =>
+        // {
+        //     c.SnackbarVariant = Variant.Text;
+        //     c.HideIcon = true;
+        //     c.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+        //     c.CloseAfterNavigation = true;
+        //     c.Onclick = snackbar =>
+        //     {
+        //         snackbar.Dispose();
+        //         return Task.CompletedTask;
+        //     };
+        // });
+    }
+
+}
