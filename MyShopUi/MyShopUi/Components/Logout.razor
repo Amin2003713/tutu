@@ -9,16 +9,20 @@
 @using Microsoft.AspNetCore.Http
 @using MyShopUi.Components.Pages.Controles
 @inject  IUserAuthRepository Auth
-@inject  NavigationManager NavigationManager
-@inject  ProtectedLocalStorage Local
+@inject  NavigationManager NavigationManager  
+
+@rendermode InteractiveServer
 
 @code
 {
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        var logout =await Auth.Logout();
+        if (firstRender)
+        {
+            var logout = await Auth.Logout();
 
-        if (logout is not null && logout.IsSuccess )
-            NavigationManager.NavigateTo("/");
+            if (logout is not null && logout.IsSuccess)
+                NavigationManager.NavigateTo("/");
+        }
     }
 }

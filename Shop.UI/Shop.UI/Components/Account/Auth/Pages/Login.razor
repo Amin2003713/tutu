@@ -67,7 +67,7 @@
 
     // protected override Task OnInitializedAsync()
     // {
-    //     avr 
+    //     avr
     // }
 
     public async Task LoginUser()
@@ -84,7 +84,7 @@
         await Local.SetAsync("LoginResponse", result.Data);
 
              var customAuth = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
-             await customAuth.NotifyAuthenticationStateChanged();
+             // await customAuth.NotifyAuthenticationStateChanged();
 
              NavigationManager.NavigateTo("/");
 

@@ -8,6 +8,7 @@ using Application.Common;
 using Application.Order.Interfaces;
 using Application.User.Auth.Interfaces;
 using Application.User.Users.Interfaces;
+using Blazored.LocalStorage;
 using Blazored.SessionStorage;
 using Infra.Banner.Implantations;
 using Infra.Category.Implantations;
@@ -28,7 +29,7 @@ public static class InfraDi
     public static IServiceCollection RegisterInfraDependency(this IServiceCollection services)
     {
         services.AddApisToDiRegistry();
-
+        services.AddBlazoredLocalStorage();
         services.AddTransient<ILocalStorage, LocalStorage>();
 
         return services;

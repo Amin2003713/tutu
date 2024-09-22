@@ -82,6 +82,12 @@
     //     avr 
     // }
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+            Console.WriteLine("renderd .................");
+    }
+
     public async Task LoginUser()
     {
         try
@@ -93,13 +99,13 @@
                 LoginCommand = new LoginCommand();
                 return;
             }
-            await Local.SetAsync("LoginResponse", result.Data);
+            // await Local.SetAsync("LoginResponse", result.Data);
 
-            var claims = await Claims();
+            var claims = await Claims(result.Data.Token);
             if (claims is null )
                 Console.WriteLine();
 
-            await HttpContext.SignInAsync("Shop-Auth" , claims!);
+            await HttpContext.SignInAsync("Shop-Auth" , claims! , new AuthenticationProperties(){IsPersistent = true} );
              NavigationManager.NavigateTo("/");
 
 
@@ -117,18 +123,17 @@
         }
     }
 
-    private async Task<ClaimsPrincipal> Claims()
+    private async Task<ClaimsPrincipal> Claims(string token)
     {
-        var tokenResult = await Local.GetAsync<LoginResponse>("LoginResponse");
-
-        if (tokenResult.Value is null)
-            return null!;
+        // var tokenResult = await Local.GetAsync<LoginResponse>("LoginResponse");
+        //
+        // if (tokenResult.Value is null)
+        //     return null!;
 
         var userInfoResult = await UserService.GetCurrentUser();
         if (userInfoResult is null || !userInfoResult.IsSuccess || userInfoResult.Data is null)
             return null!;
 
-        await Local.SetAsync("UserInfo", userInfoResult.Data);
 
         var userInfo = userInfoResult.Data;
         var claimIdentityList = new List<Claim>

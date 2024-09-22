@@ -1,3 +1,5 @@
+using Application.Extensions;
+using Infra.Extensions;
 using MyShopUi.Client.Pages;
 using MyShopUi.Components;
 
@@ -8,6 +10,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
+
+builder.Services.RegisterApplicationDependency();
+builder.Services.RegisterInfraDependency();
+
 const string authScheme = "Shop-Auth";
 const string cookieName = "Auth-Cookie";
 builder.Services.AddCascadingAuthenticationState(); 
@@ -17,7 +23,7 @@ builder.Services.AddAuthentication()
     {
         options.Cookie.Name = cookieName;
         options.LoginPath = "/Auth/Login";
-        options.AccessDeniedPath = "Auth/AccessDenied";
+        options.AccessDeniedPath = "/Auth/AccessDenied";
         options.LogoutPath = "/Auth/Logout";
 
         options.Cookie.HttpOnly = true;

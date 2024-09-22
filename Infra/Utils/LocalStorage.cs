@@ -1,25 +1,24 @@
 using System.Text;
 using System.Text.Json;
-using Microsoft.JSInterop;
+using Blazored.LocalStorage;
 
 namespace Infra.Utils;
 
-public class LocalStorage(IJSRuntime jsRuntime) : ILocalStorage
+public class LocalStorage(ILocalStorageService storage) : ILocalStorage
 {
+
     public async Task SetAsync<TItem>(string key, TItem data)
     {
         var itemJson = JsonSerializer.Serialize(data);
         var itemEncoded = Encoding.UTF32.GetBytes(itemJson);
         var base64 = Convert.ToBase64String(itemEncoded);
 
-        await jsRuntime.InvokeVoidAsync($"localStorage.setItem", key, base64);
+        await storage.SetItemAsync(key, base64);
     }
 
-    public async Task<TItem?> GetAsync<TItem>(string key)
+    public async Task<TItem> GetAsync<TItem>(string key)
     {
-        var resultBase64 =await jsRuntime.InvokeAsync<string?>($"localStorage.getItem" , key);
-        if (string.IsNullOrEmpty(resultBase64))
-            return default;
+        var resultBase64 = await storage.GetItemAsync<string>(key)!;
         var resultEncoded = Convert.FromBase64String(resultBase64!);
         var itemJson = Encoding.UTF32.GetString(resultEncoded);
         var item = JsonSerializer.Deserialize<TItem>(itemJson);
@@ -28,6 +27,6 @@ public class LocalStorage(IJSRuntime jsRuntime) : ILocalStorage
 
 
     public async Task DeleteAsync(string key)
-        => await jsRuntime.InvokeVoidAsync($"localStorage.removeItem", key);
-    
+        => await storage.RemoveItemAsync(key);
+
 }

@@ -91,7 +91,6 @@ public class CustomAuthenticationStateProvider : RevalidatingServerAuthenticatio
     protected override async Task<bool> ValidateAuthenticationStateAsync(
         AuthenticationState authenticationState, CancellationToken cancellationToken)
     {
-        // Get the user manager from a new scope to ensure it fetches fresh data
         await using var scope = _scopeFactory.CreateAsyncScope();
         return ValidateSecurityStampAsync(authenticationState.User);
     }
