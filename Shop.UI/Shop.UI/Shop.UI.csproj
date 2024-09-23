@@ -71,4 +71,15 @@
       <Folder Include="Services\" />
     </ItemGroup>
 
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Components\Account\Auth\Pages\Controles\AuthAnchor.razor" />
+      <UpToDateCheckInput Remove="Components\Account\Auth\Pages\Controles\AuthButton.razor" />
+      <UpToDateCheckInput Remove="Components\Account\Auth\Pages\Controles\AuthInput.razor" />
+      <UpToDateCheckInput Remove="Components\Account\Auth\Pages\ForgetPassword.razor" />
+      <UpToDateCheckInput Remove="Components\Account\Auth\Pages\Login.razor" />
+      <UpToDateCheckInput Remove="Components\Account\Auth\Pages\Register.razor" />
+      <UpToDateCheckInput Remove="Components\Account\Auth\Pages\ResetPassword.razor" />
+    </ItemGroup>
+
 </Project>

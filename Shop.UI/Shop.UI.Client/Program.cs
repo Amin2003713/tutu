@@ -7,18 +7,19 @@ using Infra.Utils;
 using Shop.UI.Client;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Http;
 using MudBlazor;
 using MudBlazor.Services;
 using Shop.UI.Client.Common.Auth;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddSingleton<AuthenticationStateProvider, PersistentClientAuthenticationStateProvider>();
+
 
 builder.Services.RegisterApplicationDependency();
 builder.Services.RegisterInfraDependency();

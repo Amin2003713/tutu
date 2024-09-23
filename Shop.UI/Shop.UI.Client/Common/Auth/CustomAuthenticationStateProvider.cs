@@ -1,10 +1,16 @@
 using System.Security.Claims;
+using Application.User.Auth.CommandAndQueries;
+using Application.User.Auth.Interfaces;
 using Application.User.Users.Responses;
+using Infra.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
+namespace Shop.UI.Client.Common.Auth;
+
 public class PersistentClientAuthenticationStateProvider : AuthenticationStateProvider
 {
+
     private static readonly Task<AuthenticationState> DefaultUnauthenticatedTask =
         Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
 
@@ -41,4 +47,5 @@ public class PersistentClientAuthenticationStateProvider : AuthenticationStatePr
     {
         return _authenticationStateTask;
     }
+
 }

@@ -11,11 +11,15 @@ using Shop.UI.Components.Account;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.RegisterInfraDependency();
+builder.Services.RegisterApplicationDependency();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents()
-    .AddInteractiveServerComponents();
+    .AddInteractiveServerComponents(config =>
+    {
+        config.DetailedErrors = true;
+    });
 
 builder.Services.AddMudServices();
 builder.Services.AddHttpContextAccessor();
@@ -71,8 +75,7 @@ builder.Services.AddAuthentication(option =>
 
 
 
-builder.Services.RegisterInfraDependency();
-builder.Services.RegisterApplicationDependency();
+
 
 
 // Add MudBlazor services

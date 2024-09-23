@@ -31,9 +31,9 @@
     <link rel="stylesheet" href="./assets/css/custom.css">
     <!-- colors: amber,blue,brown,cyan,default,green,indigo,orange,pink,purple,red,teal,yellow -->
     <link rel="stylesheet" href="./assets/css/colors/default.css" id="colorswitch">
-    @if (RenderModeForPage is not null)
+    @if (_renderModeForPage is not null)
     {
-        <HeadOutlet @rendermode="@RenderModeForPage"/>
+        <HeadOutlet @rendermode="@_renderModeForPage"/>
     }
     else
     {
@@ -42,14 +42,20 @@
 </head>
 
 <body>
-@if (RenderModeForPage is not null)
+@if (_renderModeForPage is not null)
 {
-    <Routes @rendermode="@RenderModeForPage"/>
+    <CascadingValue Value="HttpContext">
+        <Routes @rendermode="@_renderModeForPage"/>
+    </CascadingValue>
 }
 else
 {
-    <Routes/>
+    <CascadingValue Value="HttpContext">
+        <Routes/>
+    </CascadingValue>
 }
+
+
 <Scripts/>
 </body>
 
@@ -58,8 +64,6 @@ else
 @code {
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
-    private IComponentRenderMode? RenderModeForPage => HttpContext.Request.Path.StartsWithSegments("/Auth")
-        ? null
-        : InteractiveWebAssembly;
+    private IComponentRenderMode? _renderModeForPage => InteractiveAuto;
 
 }

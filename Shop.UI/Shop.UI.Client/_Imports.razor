@@ -24,9 +24,15 @@
 @using Infra.Utils
 
 
-@inject  AuthenticationStateProvider AuthenticationStateProvider
+@inject  AuthenticationStateProvider PersistentClient
 @inject  ISnackbar Snackbar
 @inject  IUserAuthRepository Auth
 @inject  IUserService UserService
 @inject  NavigationManager NavigationManager 
 @inject ILocalStorage Local
+
+
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Http
+@using Shop.UI.Client.Common.Auth
+@using Shop.UI.Client.Features.Auth.Pages.Controles

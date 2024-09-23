@@ -3,7 +3,6 @@ using System.Security.Claims;
 using Application.User.Auth.CommandAndQueries;
 using Application.User.Auth.Interfaces;
 using Application.User.Auth.Responses;
-using Application.User.Users.Interfaces;
 using Application.User.Users.Responses;
 using Domain.User.Users;
 using Infra.Utils;
@@ -23,23 +22,18 @@ public class CustomServerAuthenticationStateProvider : RevalidatingServerAuthent
     private readonly PersistentComponentState _state;
     private readonly PersistingComponentStateSubscription subscription;
     private Task<AuthenticationState>? authenticationStateTask;
-    private readonly IUserService _userService;
-    private readonly IUserAuthRepository _authRepository;
-    private readonly ILocalStorage _storage;
-    private IHttpContextAccessor _context;
+    private IHttpContextAccessor HttpContext;
+
 
 
 
 
     public CustomServerAuthenticationStateProvider(ILoggerFactory loggerFactory,
-        PersistentComponentState persistentComponentState, ILocalStorage storage, IUserService userService, IUserAuthRepository authRepository,
-        IHttpContextAccessor context) : base(loggerFactory)
+        PersistentComponentState persistentComponentState,
+         IHttpContextAccessor httpContext) : base(loggerFactory)
     {
         _state = persistentComponentState;
-        _storage = storage;
-        _userService = userService;
-        _authRepository = authRepository;
-        _context = context;
+        HttpContext = httpContext;
         AuthenticationStateChanged += OnAuthenticationStateChanged;
         subscription = _state.RegisterOnPersisting(OnPersistingAsync, RenderMode.InteractiveWebAssembly);
     }
@@ -94,53 +88,14 @@ public class CustomServerAuthenticationStateProvider : RevalidatingServerAuthent
         }
     }
 
-
-    public async Task<(bool result, string massage)> Login(LoginCommand command)
+    public async Task UpdateAuthenticationStateAsync(ClaimsPrincipal claims)
     {
-        try
-        {
-            var result = await _authRepository.Login(command);
-            if (!result.IsSuccess)
-                return (false, result.MetaData.Message);
+        var claimsPrincipal = claims ?? new ClaimsPrincipal();
 
-            await _storage.SetAsync("LoginResponse", result.Data);
+        await HttpContext.HttpContext!.SignInAsync("Shop-Auth", claims!); 
 
-            var claims = await Claims();
-            if (claims is null)
-                return (false, "توکن شما معتبر نیست.");
-
-            await _context.HttpContext!.SignInAsync("Shop-Auth", claims!, new AuthenticationProperties() { IsPersistent = true });
-
-            return (true, "شما باموفقیت وارد سایت شدید");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return (true, e.ToString());
-        }
-
-    }
-
-
-    public async Task<(bool result, string massage)> Logout()
-    {
-        try
-        {
-            var result = await _authRepository.Logout();
-            if (!result.IsSuccess)
-                return (false, result.MetaData.Message);
-
-            await _storage.DeleteAsync("LoginResponse");
-
-            await _context.HttpContext!.SignOutAsync("Shop-Auth");
-
-            return (true, "شما باموفقیت وارد سایت شدید");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return (true, e.ToString());
-        }
+        NotifyAuthenticationStateChanged(
+            Task.FromResult(new AuthenticationState(claimsPrincipal)));
     }
 
     private void OnAuthenticationStateChanged(Task<AuthenticationState> task)
@@ -166,31 +121,5 @@ public class CustomServerAuthenticationStateProvider : RevalidatingServerAuthent
 
     }
 
-    private async Task<ClaimsPrincipal> Claims()
-    {
-        // var tokenResult = await Local.GetAsync<LoginResponse>("LoginResponse");
-        //
-        // if (tokenResult.Value is null)
-        //     return null!;
-
-        var userInfoResult = await _userService.GetCurrentUser();
-        if (userInfoResult is null || !userInfoResult.IsSuccess || userInfoResult.Data is null)
-            return null!;
-
-
-        var userInfo = userInfoResult.Data;
-        var claimIdentityList = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
-            new(ClaimTypes.Name, userInfo.PhoneNumber),
-            new(ClaimTypes.Surname, userInfo.Family),
-            new(ClaimTypes.GivenName, userInfo.Name),
-            new(ClaimTypes.Email, userInfo.Email ?? "@"),
-            new(ClaimTypes.Gender, userInfo.Gender.ToString()),
-            new(ClaimTypes.UserData, userInfo.AvatarName)
-        };
-        claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, $"{a.RoleId}#{a.RoleTitle}")).ToList());
-        return new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "Shop-Auth" ));
-
-    }
+  
 }
