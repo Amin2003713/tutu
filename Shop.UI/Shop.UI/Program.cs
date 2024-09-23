@@ -9,7 +9,6 @@ using MudBlazor;
 using Shop.UI.Components;
 using Shop.UI.Components.Account;
 using MudBlazor.Services;
-using CustomAuthenticationStateProvider = Shop.UI.Components.Account.CustomAuthenticationStateProvider;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,19 +18,22 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddMudServices();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
-builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomServerAuthenticationStateProvider>();
 
-builder.Services.AddAuthenticationCore(option =>
+const string authScheme = "Shop-Auth";
+const string cookieName = "Auth-Cookie";
+
+builder.Services.AddAuthentication(option =>
 {
     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     option.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
     option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddAuthentication()
     .AddJwtBearer(jwt =>
 {
     jwt.TokenValidationParameters = new TokenValidationParameters()
@@ -45,10 +47,23 @@ builder.Services.AddAuthenticationCore(option =>
         ValidateIssuer = true,
         ValidateIssuerSigningKey = true
     };
+}).AddCookie(authScheme, options =>
+{
+    options.Cookie.Name = cookieName;
+    options.LoginPath = "/Auth/Login";
+    options.AccessDeniedPath = "/Auth/AccessDenied";
+    options.LogoutPath = "/Auth/Logout";
+
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+
+    options.ExpireTimeSpan = TimeSpan.FromDays(1);
+    options.SlidingExpiration = true;
 });
 
 
-builder.Services.AddHttpContextAccessor();
+
 
 
 
@@ -96,6 +111,9 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.UseAuthentication()
+    .UseAuthorization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
