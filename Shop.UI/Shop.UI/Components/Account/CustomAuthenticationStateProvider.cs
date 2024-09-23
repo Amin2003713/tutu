@@ -1,9 +1,13 @@
 using System.Diagnostics;
 using System.Security.Claims;
+using Application.User.Auth.CommandAndQueries;
+using Application.User.Auth.Interfaces;
 using Application.User.Auth.Responses;
 using Application.User.Users.Interfaces;
 using Application.User.Users.Responses;
 using Infra.Utils;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
@@ -14,102 +18,125 @@ using Microsoft.Extensions.Options;
 
 namespace Shop.UI.Components.Account;
 
-public class CustomAuthenticationStateProvider : RevalidatingServerAuthenticationStateProvider
+public class CustomAuthenticationServer : RevalidatingServerAuthenticationStateProvider
 {
-    private readonly IServiceScopeFactory _scopeFactory;
-    private readonly PersistentComponentState _state;
-    private readonly IdentityOptions _options;
-    private readonly IUserService userService;
-    private ProtectedLocalStorage Storage;
+    private readonly PersistentComponentState state;
+    private readonly PersistingComponentStateSubscription subscription;
+    private readonly ILocalStorage _storage;
+    private readonly IUserService UserService;
+    private readonly IUserAuthRepository Auth;
+    private Task<AuthenticationState>? authenticationStateTask;
+    private HttpContext HttpContext;
 
-    private readonly PersistingComponentStateSubscription _subscription;
-
-    private Task<AuthenticationState>? _authenticationStateTask;
-
-    public CustomAuthenticationStateProvider(
-        ILoggerFactory loggerFactory,
-        IServiceScopeFactory scopeFactory,
-        PersistentComponentState state,
-        IOptions<IdentityOptions> options,
-        IUserService userService, ProtectedLocalStorage storage)
-        : base(loggerFactory)
+    public CustomAuthenticationServer(ILoggerFactory loggerFactory,
+        PersistentComponentState persistentComponentState, IUserAuthRepository auth, ILocalStorage storage, HttpContext httpContext, IUserService userService) : base(loggerFactory)
     {
-        _scopeFactory = scopeFactory;
-        _state = state;
-        this.userService = userService;
-        Storage = storage;
-        _options = options.Value;
-
+        this.state = persistentComponentState;
+        Auth = auth;
+        _storage = storage;
+        HttpContext = httpContext;
+        UserService = userService;
         AuthenticationStateChanged += OnAuthenticationStateChanged;
-        _subscription = state.RegisterOnPersisting(OnPersistingAsync, RenderMode.InteractiveWebAssembly);
+        subscription = state.RegisterOnPersisting(OnPersistingAsync, RenderMode.InteractiveWebAssembly);
     }
 
-    public async Task OnPersistingAsync()
+    private async Task OnPersistingAsync()
     {
-        try
+        if (authenticationStateTask is null)
+            throw new UnreachableException($"Authentication state not set in {nameof(OnPersistingAsync)}().");
+
+        var authenticationState = await authenticationStateTask;
+        var principal = authenticationState.User;
+
+        if (principal.Identity?.IsAuthenticated == true)
         {
-            if (_authenticationStateTask is null)
+            var userId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+
+            if (userId != null)
             {
-                throw new UnreachableException(
-                    $"Authentication state not set in {nameof(RevalidatingServerAuthenticationStateProvider)}.{nameof(OnPersistingAsync)}().");
-            }
-
-            var authenticationState = await _authenticationStateTask;
-            var principal = authenticationState.User;
-
-            if (principal.Identity?.IsAuthenticated == true)
-            {
-
-                var userInfoResult = await userService.GetCurrentUser();
-                if (userInfoResult is null || !userInfoResult.IsSuccess || userInfoResult.Data is null)
-                    throw new UnreachableException(
-                        $"Authentication state not set in {nameof(RevalidatingServerAuthenticationStateProvider)}.{nameof(OnPersistingAsync)}().");
-
-                await Storage.SetAsync("UserInfo", userInfoResult.Data);
-
-                var userInfo = userInfoResult.Data;
-
-                if (userInfo is not null)
+                state.PersistAsJson(nameof(UserDto), new UserDto()
                 {
-                    _state.PersistAsJson(nameof(UserDto), userInfo);
-                }
+                    Id = userId,
+                    PhoneNumber = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;,
+                    
+                    new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
+                    new(ClaimTypes.Name, userInfo.PhoneNumber),
+                    new(ClaimTypes.Surname, userInfo.Family),
+                    new(ClaimTypes.GivenName, userInfo.Name),
+                    new(ClaimTypes.Email, userInfo.Email ?? "@"),
+                    new(ClaimTypes.Gender, userInfo.Gender.ToString()),
+                    new(ClaimTypes.UserData, userInfo.AvatarName)  
+                });
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
     }
 
-  
-
-    private void OnAuthenticationStateChanged(Task<AuthenticationState> authenticationStateTask)
+    private void OnAuthenticationStateChanged(Task<AuthenticationState> task)
     {
-        _authenticationStateTask = authenticationStateTask;
+        authenticationStateTask = task;
     }
 
-    protected override async Task<bool> ValidateAuthenticationStateAsync(
-        AuthenticationState authenticationState, CancellationToken cancellationToken)
+    protected override TimeSpan RevalidationInterval => TimeSpan.FromMinutes(30);
+
+    protected override Task<bool> ValidateAuthenticationStateAsync(AuthenticationState authenticationState,
+        CancellationToken cancellationToken)
     {
-        await using var scope = _scopeFactory.CreateAsyncScope();
-        return ValidateSecurityStampAsync(authenticationState.User);
+        var user = authenticationState.User;
+
+        return Task.FromResult(user is not null);
     }
 
-    private bool ValidateSecurityStampAsync(ClaimsPrincipal principal)
+
+    public async Task<bool> Login(LoginCommand command)
     {
-        if (principal.Identity?.IsAuthenticated is false)
-        {
+        var result = await Auth.Login(command);
+        if (!result.IsSuccess)
             return false;
-        }
+
+        await _storage.SetAsync("LoginResponse", result.Data);
+
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(await Claims()));
 
         return true;
     }
 
-    protected override void Dispose(bool disposing)
+
+    public async Task<bool> Logout(LoginCommand command)
     {
-        _subscription.Dispose();
-        AuthenticationStateChanged -= OnAuthenticationStateChanged;
-        base.Dispose(disposing);
+        var result = await Auth.Logout();
+        if (!result!.IsSuccess)
+            return false;
+
+        await _storage.DeleteAsync("LoginResponse");
+
+        return true;
     }
-    protected override TimeSpan RevalidationInterval => TimeSpan.FromMinutes(30);
+
+
+    private async Task<ClaimsPrincipal> Claims()
+    {
+
+        var userInfoResult = await UserService.GetCurrentUser();
+        if (userInfoResult is null || !userInfoResult.IsSuccess || userInfoResult.Data is null)
+            return null!;
+
+        await _storage.SetAsync("UserInfo", userInfoResult.Data);
+
+        var userInfo = userInfoResult.Data;
+        var claimIdentityList = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
+            new(ClaimTypes.Name, userInfo.PhoneNumber),
+            new(ClaimTypes.Surname, userInfo.Family),
+            new(ClaimTypes.GivenName, userInfo.Name),
+            new(ClaimTypes.Email, userInfo.Email ?? "@"),
+            new(ClaimTypes.Gender, userInfo.Gender.ToString()),
+            new(ClaimTypes.UserData, userInfo.AvatarName)
+        };
+        claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, a.RoleTitle)).ToList());
+        return new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "Shop-Auth"));
+
+    }
 }
