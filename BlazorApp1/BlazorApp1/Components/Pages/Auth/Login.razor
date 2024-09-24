@@ -1,9 +1,11 @@
 @page "/Auth/Login"
-@using Shop.UI.Client.Features.Auth.Pages.Controles
+@using Application.User.Auth.CommandAndQueries
+@using BlazorApp1.Client.Features.Auth.Pages.Controles
+@using Domain.Common.Exceptions
+@using MudBlazor
 
+@using Microsoft.AspNetCore.Authentication
 
-
-@layout AuthLayout
 @rendermode InteractiveServer
 
 <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>

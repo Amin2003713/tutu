@@ -29,19 +29,8 @@
 
     <ItemGroup>
       <AdditionalFiles Include="Common\Pages\Toast.razor" />
-      <AdditionalFiles Include="Features\Auth\Pages\Controles\AuthAnchor.razor" />
-      <AdditionalFiles Include="Features\Auth\Pages\Controles\AuthButton.razor" />
-      <AdditionalFiles Include="Features\Auth\Pages\Controles\AuthInput.razor" />
-      <AdditionalFiles Include="Features\Auth\Pages\ForgetPassword.razor" />
-      <AdditionalFiles Include="Features\Auth\Pages\Login.razor" />
-      <AdditionalFiles Include="Features\Auth\Pages\Register.razor" />
-      <AdditionalFiles Include="Features\Auth\Pages\ResetPassword.razor" />
       <AdditionalFiles Include="Layout\Auth\AuthLayout.razor" />
       <AdditionalFiles Include="Layout\MainLayout.razor" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Features\" />
     </ItemGroup>
 
     <ItemGroup>

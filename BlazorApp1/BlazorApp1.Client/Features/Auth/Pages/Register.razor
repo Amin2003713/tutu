@@ -1,8 +1,9 @@
 @page "/Auth/Register"
+@using Application.User.Auth.CommandAndQueries
+@using BlazorApp1.Client.Features.Auth.Pages.Controles
 
 
 @rendermode InteractiveServer
-@layout AuthLayout
 
 
 <AuthForm Model="Command" OnValidSubmit="Submit" FormName="Register" Enhance="true" class="auth-form shadow-around">

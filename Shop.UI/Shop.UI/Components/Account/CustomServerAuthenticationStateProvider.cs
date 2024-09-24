@@ -23,6 +23,7 @@ public class CustomServerAuthenticationStateProvider : RevalidatingServerAuthent
     private readonly PersistingComponentStateSubscription subscription;
     private Task<AuthenticationState>? authenticationStateTask;
     private IHttpContextAccessor HttpContext;
+    
 
 
 
