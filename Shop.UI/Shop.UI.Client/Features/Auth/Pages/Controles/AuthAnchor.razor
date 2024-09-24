@@ -1,0 +1,13 @@
+<div class="auth-form-footer">
+    <span>@Label</span>
+    <a href="@ToAddress" @attributes="Attributes!">@NavigationText</a>
+</div>
+
+@code {
+
+[Parameter]public string? Label { get; set; }
+[Parameter]public string? NavigationText { get; set; }
+[Parameter]public string? ToAddress { get; set; }
+[Parameter(CaptureUnmatchedValues = true)]
+public Dictionary<string, object>? Attributes { get; set; }
+}

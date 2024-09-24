@@ -52,11 +52,6 @@ public class UserAuthRepository(IBaseHttpClient client , IUserService userServic
 
     private async Task<ClaimsPrincipal> Claims()
     {
-        // var tokenResult = await Local.GetAsync<LoginResponse>("LoginResponse");
-        //
-        // if (tokenResult.Value is null)
-        //     return null!;
-
         var userInfoResult = await userService.GetCurrentUser();
         if (userInfoResult is null || !userInfoResult.IsSuccess || userInfoResult.Data is null)
             return null!;

@@ -1,12 +1,9 @@
 @page "/Auth/Login"
-@using Application.User.Auth.CommandAndQueries
-@using BlazorApp1.Client.Features.Auth.Pages.Controles
-@using Domain.Common.Exceptions
-@using Domain.User.Auth
-@using MudBlazor
+@using Shop.UI.Client.Features.Auth.Pages.Controles
 
-@using Microsoft.AspNetCore.Authentication
 
+
+@layout AuthLayout
 @rendermode InteractiveServer
 
 <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
@@ -85,7 +82,7 @@ public async Task LoginUser()
             
 // Sign in using the authentication scheme (e.g., Cookie Authentication)
             await HttpContext.SignInAsync(
-                AuthConfig.ShopSchema,
+                "Bearer",
                 result.Token!,
                 new AuthenticationProperties { IsPersistent = true }
             );
