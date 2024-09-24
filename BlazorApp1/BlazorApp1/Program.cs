@@ -8,6 +8,7 @@ using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddAuthentication(AuthConfig.ShopSchema)
     .AddCookie(AuthConfig.ShopSchema, options =>
     {
@@ -23,6 +24,7 @@ builder.Services.AddAuthentication(AuthConfig.ShopSchema)
         options.ExpireTimeSpan = TimeSpan.FromDays(1);
         options.SlidingExpiration = true;
     });
+builder.Services.AddAuthorization();
 
 
 builder.Services.RegisterInfraDependency();
@@ -35,7 +37,6 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudServices();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddCascadingAuthenticationState();
 
 
 builder.Services.AddMudServices(config =>
@@ -72,6 +73,9 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.UseAuthentication()
+    .UseAuthorization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
