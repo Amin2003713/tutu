@@ -12,7 +12,7 @@
 <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
 
 
-<EditForm Model="LoginCommand" OnValidSubmit="LoginUser" FormName="LoginForm" Enhance="@true"
+<EditForm Model="LoginCommand" OnValidSubmit="LoginUser" FormName="LoginForm" 
           class="auth-form shadow-around">
     <DataAnnotationsValidator/>
     <div class="site-logo">
@@ -59,8 +59,9 @@
     [SupplyParameterFromForm(FormName = "LoginForm")]
     public LoginCommand LoginCommand { get; set; } = new();
 
-[CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+    [CascadingParameter] public HttpContext HttpContext { get; set; } = default!;
 
+    [SupplyParameterFromQuery] public string ReturnUrl { get; set; } = "/";
 public async Task LoginUser()
     {
         try
@@ -91,9 +92,9 @@ public async Task LoginUser()
             );
 
 // Redirect after successful sign-in to prevent further response rendering
-            NavigationManager.NavigateTo("/Auth/ForgetPassword");
+        NavigationManager.NavigateTo(ReturnUrl);
 
-// Optionally prevent further rendering
+        // Optionally prevent further rendering
         }
         catch (NotFoundException ex)
         {

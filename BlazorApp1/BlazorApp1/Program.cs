@@ -1,8 +1,10 @@
 using Application.Extensions;
 using BlazorApp1.Client.Pages;
 using BlazorApp1.Components;
+using BlazorApp1.Services;
 using Domain.User.Auth;
 using Infra.Extensions;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Services;
 
@@ -25,6 +27,7 @@ builder.Services.AddAuthentication(AuthConfig.ShopSchema)
         options.SlidingExpiration = true;
     });
 builder.Services.AddAuthorization();
+builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthStateProvider>();
 
 
 builder.Services.RegisterInfraDependency();
