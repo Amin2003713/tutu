@@ -5,13 +5,14 @@ using Application.User.Auth.Interfaces;
 using Application.User.Auth.Responses;
 using Application.User.Users.Interfaces;
 using Domain.Common.Api;
+using Domain.User.Auth;
 using Infra.Common;
 using Infra.Utils;
 using Microsoft.AspNetCore.Http;
 
 namespace Infra.User.Auth.Implantations;
 
-public class UserAuthRepository(IBaseHttpClient client , IUserService userService , ILocalStorage storage) : IUserAuthRepository
+public class UserAuthRepository(IBaseHttpClient client , IUserService userService) : IUserAuthRepository
 {
     public async Task<(bool result, string massage, ClaimsPrincipal Token)> Login(LoginCommand command)
     {
@@ -20,9 +21,7 @@ public class UserAuthRepository(IBaseHttpClient client , IUserService userServic
         if (!result!.IsSuccess)
             return (false, result.MetaData.Message , null!);
 
-        await storage.SetAsync("LoginResponse", result.Data);
-
-        var claims = await Claims();
+        var claims = await Claims(result.Data);
         if (claims is null)
             return (false, "توکن شما معتبر نیست." , null!);
 
@@ -50,9 +49,9 @@ public class UserAuthRepository(IBaseHttpClient client , IUserService userServic
         return await client.DeleteAsync<ApiResult>(AuthRouts.Logout);
     }
 
-    private async Task<ClaimsPrincipal> Claims()
+    private async Task<ClaimsPrincipal> Claims(LoginResponse login)
     {
-        var userInfoResult = await userService.GetCurrentUser();
+        var userInfoResult = await userService.GetCurrentUser(login);
         if (userInfoResult is null || !userInfoResult.IsSuccess || userInfoResult.Data is null)
             return null!;
 
@@ -66,7 +65,9 @@ public class UserAuthRepository(IBaseHttpClient client , IUserService userServic
             new(ClaimTypes.GivenName, userInfo.Name),
             new(ClaimTypes.Email, userInfo.Email ?? "@"),
             new(ClaimTypes.Gender, userInfo.Gender.ToString()),
-            new(ClaimTypes.UserData, userInfo.AvatarName)
+            new(ClaimTypes.UserData, userInfo.AvatarName) ,
+            new(AuthConfig.Token , login.Token),
+            new(AuthConfig.RefreshToken , login.RefreshToken)
         };
         claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, $"{a.RoleId}#{a.RoleTitle}"))
             .ToList());

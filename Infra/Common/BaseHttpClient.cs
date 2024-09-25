@@ -5,7 +5,9 @@ using System.Text;
 using Application.Common;
 using Application.User.Auth.Responses;
 using Domain.Common.Exceptions;
+using Domain.User.Auth;
 using Infra.Utils;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace Infra.Common;
@@ -14,7 +16,7 @@ namespace Infra.Common;
 ///     A base HTTP client implementation that provides methods for making HTTP requests
 ///     with support for generic response types and multipart form data.
 /// </summary>
-public class BaseHttpClient(HttpClient client , ILocalStorage localStorage) : IBaseHttpClient
+public class BaseHttpClient(HttpClient client , ILocalStorage localStorage , IHttpContextAccessor context) : IBaseHttpClient
 {
     /// <summary>
     ///     Sends a GET request to the specified URI.
@@ -158,16 +160,31 @@ public class BaseHttpClient(HttpClient client , ILocalStorage localStorage) : IB
     }
 
 
-    private async Task SetAuthHeader()
+    public async Task SetAuthHeader(LoginResponse response = default!)
     {
-        var result = await localStorage.GetAsync<LoginResponse>("LoginResponse");
-        if (result is null || string.IsNullOrEmpty(result.Token))
-            return;
+        if (response is not null)
+        {
+            if (client.DefaultRequestHeaders.Any(a => a.Key == "Authorization"))
+                return;
 
-        if(client.DefaultRequestHeaders.Any(a=> a.Key == "Authorization"))
-           return;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", response.Token);
+        }
+        try
+        {
+            var a  = context.HttpContext.User.Claims.FirstOrDefault(c => c.Type == AuthConfig.Token);
+            var result = await localStorage.GetAsync<LoginResponse>("LoginResponse");
+            if (result is null || string.IsNullOrEmpty(result.Token))
+                return;
 
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.Token);
+            if (client.DefaultRequestHeaders.Any(a => a.Key == "Authorization"))
+                return;
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.Token);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 
 }

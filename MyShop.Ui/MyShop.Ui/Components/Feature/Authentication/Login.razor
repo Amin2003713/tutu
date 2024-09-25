@@ -1,0 +1,65 @@
+@page "/Auth/Login"
+@using Application.User.Auth.CommandAndQueries
+@using Domain.User.Auth
+@using Microsoft.AspNetCore.Authentication
+@using MyShop.Ui.Client.Commen.Notifications
+@inject  IHttpContextAccessor Accessor
+
+<h3>Login Page</h3>
+
+<div class="row">
+    <div class="col-sm-5 mx-auto">
+        <EditForm Model="Model" method="Post" OnValidSubmit="LoginUserAsync" FormName="@LoginForm">
+            <DataAnnotationsValidator/>
+            <div class="mb-3">
+                <label>PhoneNumber</label>
+                <InputText @bind-Value="Model.PhoneNumber" class="form-control"/>
+                <ValidationMessage For="() => Model.PhoneNumber"/>
+            </div>
+            <div class="mb-3">
+                <label>Password</label>
+                <InputText type="password" @bind-Value="Model.Password" class="form-control"/>
+                <ValidationMessage For="() => Model.Password"/>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary btn-sm">Login</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+<SnackBar @ref="SnackBar"/>
+
+@code {
+    private const string LoginForm = "login-form";
+
+    [SupplyParameterFromForm(FormName = LoginForm)]
+    private LoginCommand Model { get; set; } = new();
+
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery] private string ReturnUrl { get; set; } = "/";
+
+    private SnackBar? SnackBar { get; set; }
+
+
+    private async Task LoginUserAsync()
+    {
+        var result = await Auth.Login(Model);
+
+        if (!result.result || result.Token == null)
+            await SnackBar!.ShowSnackBar("خطا", result.massage, BitSnackBarType.Error);
+
+
+        try
+        {
+            await HttpContext.SignInAsync(AuthConfig.ShopSchema, result.Token);
+            await SnackBar!.ShowSnackBar("موفقیت", result.massage, BitSnackBarType.Success);
+            NavigationManager.NavigateTo(ReturnUrl);
+        }
+        catch (Exception e)
+        {
+            await SnackBar!.ShowSnackBar("خطا", e.ToString(), BitSnackBarType.Error);
+        }
+    }
+
+}

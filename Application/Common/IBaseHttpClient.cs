@@ -1,4 +1,6 @@
-﻿namespace Application.Common;
+﻿using Application.User.Auth.Responses;
+
+namespace Application.Common;
 
 /// <summary>
 ///     Provides an interface for making HTTP requests with support for generic response types.
@@ -80,4 +82,8 @@ public interface IBaseHttpClient
     /// <typeparam name="TRequest">The type of the request content.</typeparam>
     /// <returns>A task representing the asynchronous operation, with a result of the expected response type.</returns>
     Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, TRequest data);
+
+
+
+    Task SetAuthHeader(LoginResponse response = default!);
 }

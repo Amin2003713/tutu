@@ -8,6 +8,12 @@
 
     <ItemGroup>
         <ProjectReference Include="..\MyShop.Ui.Client\MyShop.Ui.Client.csproj"/>
+        <PackageReference Include="Bit.BlazorUI" Version="8.11.0" />
+        <PackageReference Include="Bit.BlazorUI.Assets" Version="8.11.0" />
+        <PackageReference Include="Bit.BlazorUI.Charts" Version="4.9.9" />
+        <PackageReference Include="Bit.BlazorUI.Extras" Version="8.11.0" />
+        <PackageReference Include="Bit.BlazorUI.Icons" Version="8.11.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.8"/>
     </ItemGroup>
 

@@ -1,4 +1,5 @@
-﻿using Application.User.Users.CommandAndQueries;
+﻿using Application.User.Auth.Responses;
+using Application.User.Users.CommandAndQueries;
 using Application.User.Users.Responses;
 using Domain.User.Users;
 
@@ -12,6 +13,6 @@ public interface IUserService
     Task<ApiResult?> ChangePassword(ChangePasswordCommand command);
 
     Task<ApiResult<UserDto>?> GetUserById(long userId);
-    Task<ApiResult<UserDto>?> GetCurrentUser();
+    Task<ApiResult<UserDto>?> GetCurrentUser(LoginResponse login);
     Task<ApiResult<UserDto>?> GetUsersByFilter(UserFilterParams filterParams);
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Application.User.Auth.Responses;
 using Application.User.Users.CommandAndQueries;
 using Application.User.Users.Interfaces;
 using Application.User.Users.Responses;
@@ -40,8 +41,9 @@ public class UserService(IBaseHttpClient client ) : IUserService
             UsersRoutes.UpdateUser.BuildRequestUrl([userId])!);
     }
 
-    public async Task<ApiResult<UserDto>?> GetCurrentUser()
+    public async Task<ApiResult<UserDto>?> GetCurrentUser(LoginResponse login)
     {
+        await client.SetAuthHeader(login);
         return await client.GetAsync<ApiResult<UserDto>>(
             UsersRoutes.UpdateCurrentUser);
     }
