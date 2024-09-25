@@ -1,0 +1,82 @@
+@page "/Auth/Register"
+@using Application.User.Auth.CommandAndQueries
+@using BlazorApp1.Client.Features.Auth.Pages.Controles
+
+
+@rendermode InteractiveServer
+
+
+<AuthForm Model="Command" OnValidSubmit="Submit" FormName="Register" Enhance="true" class="auth-form shadow-around">
+    <div class="site-logo">
+        <a href="#">
+            <img src="./assets/images/logo.png" alt="logo">
+        </a>
+    </div>
+    <div class="auth-form-title">
+        ثبت نام در همتا
+    </div>
+
+
+    <AuthInput Icon="fad fa-mobile-alt" Label="شماره موبایل">
+
+        <Control>
+            <InputText type="text" @bind-Value="Command.PhoneNumber" class="input-element" id="phone-number"/>
+        </Control>
+
+        <Validation>
+            <ValidationMessage For="@(() => Command.PhoneNumber)"></ValidationMessage>
+        </Validation>
+    </AuthInput>
+
+
+    <AuthInput Icon="fad fa-key-skeleton" Label="کلمه عبور">
+        <Control>
+            <InputText type="password" class="input-element" id="password" @bind-Value="Command.Password"/>
+        </Control>
+
+        <Validation>
+            <ValidationMessage For="@(() => Command.Password)"></ValidationMessage>
+        </Validation>
+    </AuthInput>
+
+    <AuthInput Icon="fad fa-key-skeleton" Label="تکرار کلمه عبور">
+        <Control>
+            <InputText type="password" class="input-element" id="ConfirmPassword" @bind-Value="Command.ConfirmPassword"/>
+        </Control>
+
+        <Validation>
+            <ValidationMessage For="@(() => Command.ConfirmPassword)"></ValidationMessage>
+        </Validation>
+    </AuthInput>
+
+    <AuthButton ButtonText="ثبت نام در همتا" class="btn-element btn-info-element" type="submit"></AuthButton>
+
+
+    <AuthAnchor ToAddress="/auth/login" NavigationText="وارد شوید" Label="قبلا در همتا ثبت‌نام کرده‌اید؟" class="link--with-border-bottom"></AuthAnchor>
+
+</AuthForm>
+
+
+@code {
+    private RegisterCommand Command { get; } = new();
+    public bool IsToastVisible { get; private set; }
+    
+    private async Task Submit()
+    {
+        try
+        {
+            var result = await Auth.Register(Command);
+            if (!result.IsSuccess)
+            {
+                // ToastService.ShowToast(result.MetaData.Message, ToastType.Info);
+            }
+            NavigationManager.NavigateTo("auth/login");
+        }
+        catch (Exception ex)
+        {
+            // ToastService.ShowToast("went wrong", ToastType.Danger);
+
+
+        }
+    }
+}
