@@ -19,7 +19,7 @@ public class ClientAuthStateProvider : AuthenticationStateProvider
         if (componentState.TryTakeFromJson<UserDto>(nameof(UserDto), out var loggedInUser) &&
             loggedInUser is not null && loggedInUser.Id > 0)
         {
-            
+              var cliams = Accessor.HttpContext.User.Claims;
             var claims = loggedInUser.Claims();
             var identity = new ClaimsIdentity(claims, AuthConfig.ShopSchema);
             principal = new ClaimsPrincipal(identity);

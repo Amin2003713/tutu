@@ -1,21 +1,25 @@
-﻿@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase    
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+<BitLayout HideNavMenu="hideNavMenu" Class="page">
+    <NavMenu>
+        <div class="sidebar">
+            <NavMenu/>
+            </div>
+    </NavMenu>
+    <Main>
+        <div class="">
             @Body
-        </article>
-    </main>
-</div>
+        </div>
+    </Main>
+    <Footer>
+        <div class="card-footer">Footer</div>
+    </Footer>
+</BitLayout>
 
+@code {
+private bool hideNavMenu;
+}
 <div id="blazor-error-ui">
     An unhandled error has occurred.
     <a href="" class="reload">Reload</a>
