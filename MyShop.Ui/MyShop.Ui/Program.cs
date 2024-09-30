@@ -2,6 +2,7 @@ using Application.Extensions;
 using Domain.User.Auth;
 using Infra.Extensions;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor.Services;
 using MyShop.Ui.AuthenticationProvider;
 using MyShop.Ui.Client.Pages;
 using MyShop.Ui.Components;
@@ -13,6 +14,8 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddMudServices();
 
 builder.Services.AddAuthentication(AuthConfig.ShopSchema)
     .AddCookie(AuthConfig.ShopSchema, options =>

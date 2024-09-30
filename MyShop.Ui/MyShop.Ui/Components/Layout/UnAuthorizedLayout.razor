@@ -1,0 +1,31 @@
+
+@using Microsoft.AspNetCore.Authorization
+@using MyShop.Ui.Client.Commen.Footers
+@inherits LayoutComponentBase
+ @attribute [AllowAnonymous]
+
+<MudRTLProvider>
+    @* Required *@
+    <MudThemeProvider/>
+    <MudPopoverProvider/>
+
+    @* Needed for dialogs *@
+    <MudDialogProvider/>
+
+    @* Needed for snackbars *@
+    <MudSnackbarProvider/>
+
+
+    <MudLayout class="page-wrapper auth-page-wrapper">
+        <MudMainContent class="page-content">
+            <MudMainContent class="auth-wrapper">
+                @Body
+            </MudMainContent>
+            <BitFooter Class="align-content-center">
+                <MiniFooter/>
+            </BitFooter>
+        </MudMainContent>
+    </MudLayout>   
+
+</MudRTLProvider>
+

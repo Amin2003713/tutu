@@ -17,7 +17,7 @@ public class UserAuthRepository(IBaseHttpClient client , IUserService userServic
     public async Task<(bool result, string massage, ClaimsPrincipal Token)> Login(LoginCommand command)
     {
         var result = await client.PostAsync<LoginCommand, ApiResult<LoginResponse>>(AuthRouts.Login, command);
-
+            
         if (!result!.IsSuccess)
             return (false, result.MetaData.Message , null!);
 

@@ -11,7 +11,7 @@
     [Parameter] public string Title { get; set; } = "This is title";
     [Parameter] public string Body { get; set; } = "This is body";
     [Parameter] public BitSnackBarType SnackBarType { get; set; } = BitSnackBarType.Info;
-    [Parameter] public BitSnackBarPosition SnackBarPosition { get; set; } = BitSnackBarPosition.BottomRight;
+    [Parameter] public BitSnackBarPosition SnackBarPosition { get; set; } = BitSnackBarPosition.TopLeft;
     [Parameter] public TimeSpan AutoDismissTime { get; set; } = TimeSpan.FromSeconds(3);
 
     public async Task ShowSnackBar(string? title = null, string? body = null, BitSnackBarType? type = null, BitSnackBarPosition? position = null, TimeSpan? dismissTime = null)

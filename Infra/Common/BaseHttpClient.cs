@@ -171,15 +171,15 @@ public class BaseHttpClient(HttpClient client , ILocalStorage localStorage , IHt
         }
         try
         {
-            var a  = context.HttpContext.User.Claims.FirstOrDefault(c => c.Type == AuthConfig.Token);
-            var result = await localStorage.GetAsync<LoginResponse>("LoginResponse");
-            if (result is null || string.IsNullOrEmpty(result.Token))
+            var a  = context.HttpContext.User.Claims.FirstOrDefault(c => c.Type == AuthConfig.Token)?.Value;
+            // var result = await localStorage.GetAsync<LoginResponse>("LoginResponse");
+            if (a is null || string.IsNullOrEmpty(a))
                 return;
 
             if (client.DefaultRequestHeaders.Any(a => a.Key == "Authorization"))
                 return;
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.Token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", a);
         }
         catch (Exception e)
         {

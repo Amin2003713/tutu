@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MudBlazor;
 
 namespace Application.User.Auth.CommandAndQueries
 {
@@ -6,13 +7,13 @@ namespace Application.User.Auth.CommandAndQueries
     {
         [Required(ErrorMessage = "شماره تلفن الزامی است.")]
         [Phone(ErrorMessage = "لطفاً یک شماره تلفن معتبر وارد کنید.")]
-        [Display(Name = "شماره تلفن")]
+        [Label( "شماره همراه")]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "رمز عبور الزامی است.")]
         [StringLength(100, ErrorMessage = "رمز عبور باید حداقل {2} و حداکثر {1} کاراکتر باشد.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "رمز عبور")]
+        [Label( "کلمه عبور")]
         public string Password { get; set; }
     }
 }
