@@ -13,6 +13,6 @@ public interface IUserService
     Task<ApiResult?> ChangePassword(ChangePasswordCommand command);
 
     Task<ApiResult<UserDto>?> GetUserById(long userId);
-    Task<ApiResult<UserDto>?> GetCurrentUser(LoginResponse login);
+    Task<ApiResult<UserDto>?> GetCurrentUser(LoginResponse login = default!);
     Task<ApiResult<UserDto>?> GetUsersByFilter(UserFilterParams filterParams);
 }

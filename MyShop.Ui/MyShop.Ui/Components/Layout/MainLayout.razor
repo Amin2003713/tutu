@@ -2,25 +2,21 @@
 @inherits LayoutComponentBase
 
 
-
-<MudRTLProvider>
+<MudRTLProvider RightToLeft="true">
     @* Required *@
     <MudThemeProvider/>
     <MudPopoverProvider/>
-
     @* Needed for dialogs *@
     <MudDialogProvider/>
 
     @* Needed for snackbars *@
     <MudSnackbarProvider/>
-
-
     <MudLayout class="page-wrapper">
-        <HeadContent>
+        <MudMainContent class="page-content">
+
             <PageHeader/>
             <HeaderResponsive/>
-        </HeadContent>
-        <MudMainContent class="page-content">
+
             @Body
         </MudMainContent>
     </MudLayout>

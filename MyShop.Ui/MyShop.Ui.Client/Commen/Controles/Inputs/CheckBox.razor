@@ -1,0 +1,20 @@
+
+
+
+
+<MudCheckBox 
+    @bind-Value="Value"
+    Label="@Lable"
+    Color="Color"
+    For="() => Value"
+    LabelPosition="LabelPosition.Start"
+/> 
+
+
+
+@code
+{
+    [Parameter] public string? Lable { get; set; }
+    [Parameter] public bool Value { get; set; }
+    [Parameter] public Color Color { get; set; } = Color.Success;
+}
