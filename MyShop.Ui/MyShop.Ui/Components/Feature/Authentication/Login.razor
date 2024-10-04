@@ -76,15 +76,27 @@
 
     private string PasswordInput = "password";
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        {
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync();
+        }
+    } 
+
     private async Task OnValidSubmit()
     {
-        var result = await Auth.Login(Model);
-
-        if (!result.result || result.Token == null)
-            await SnackBar
-                !.ShowSnackBar("خطا", result.massage, BitSnackBarType.Error);
         try
         {
+            var result = await Auth.Login(Model);
+
+            if (!result.result || result.Token == null)
+                await SnackBar
+                    !.ShowSnackBar("خطا", result.massage, BitSnackBarType.Error);
+
+
+
             await HttpContext.SignInAsync(AuthConfig.ShopSchema, result.Token);
             await SnackBar!.ShowSnackBar("موفقیت", result.massage, BitSnackBarType.Success);
             NavigationManager.NavigateTo(ReturnUrl);
@@ -103,6 +115,5 @@
 
         IsVisible = !IsVisible;
     }
-
 
 }

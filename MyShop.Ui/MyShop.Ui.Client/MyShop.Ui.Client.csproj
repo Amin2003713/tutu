@@ -23,7 +23,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Features\" />
+      <Folder Include="Features\Profile\Addresses\" />
+      <Folder Include="Features\Profile\Orders\" />
+      <Folder Include="Pages\NewDirectory1\" />
     </ItemGroup>
 
 </Project>

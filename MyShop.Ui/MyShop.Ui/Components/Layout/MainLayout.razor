@@ -1,27 +1,27 @@
-﻿@inherits LayoutComponentBase    
+﻿@using MyShop.Ui.Client.Commen.Headers
+@inherits LayoutComponentBase
 
 
-<BitLayout HideNavMenu="hideNavMenu" Class="page">
-    <NavMenu>
-        <div class="sidebar">
-            <NavMenu/>
-            </div>
-    </NavMenu>
-    <Main>
-        <div class="">
+
+<MudRTLProvider>
+    @* Required *@
+    <MudThemeProvider/>
+    <MudPopoverProvider/>
+
+    @* Needed for dialogs *@
+    <MudDialogProvider/>
+
+    @* Needed for snackbars *@
+    <MudSnackbarProvider/>
+
+
+    <MudLayout class="page-wrapper">
+        <HeadContent>
+            <PageHeader/>
+            <HeaderResponsive/>
+        </HeadContent>
+        <MudMainContent class="page-content">
             @Body
-        </div>
-    </Main>
-    <Footer>
-        <div class="card-footer">Footer</div>
-    </Footer>
-</BitLayout>
-
-@code {
-private bool hideNavMenu;
-}
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
+        </MudMainContent>
+    </MudLayout>
+</MudRTLProvider>
