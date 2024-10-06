@@ -1,4 +1,5 @@
 ﻿@using MyShop.Ui.Client.Commen.Headers
+@using MyShop.Ui.Client.Commen.Footers
 @inherits LayoutComponentBase
 
 
@@ -11,13 +12,14 @@
 
     @* Needed for snackbars *@
     <MudSnackbarProvider/>
-    <MudLayout class="page-wrapper">
-        <MudMainContent class="page-content">
-
-            <PageHeader/>
-            <HeaderResponsive/>
-
-            @Body
-        </MudMainContent>
+    <MudLayout class="page-wrapper">\
+        <PageHeader/>
+        <HeaderResponsive/>
+        <MudContainer>
+            <MudMainContent class="page-content">
+                @Body
+            </MudMainContent>
+        </MudContainer>
+        <MiniFooter/>
     </MudLayout>
 </MudRTLProvider>

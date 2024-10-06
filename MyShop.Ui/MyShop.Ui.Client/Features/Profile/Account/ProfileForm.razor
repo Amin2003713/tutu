@@ -109,7 +109,7 @@
  
     protected override async Task OnParametersSetAsync()
     {
-        var id = Context.HttpContext.User.FindFirst(type: ClaimTypes.NameIdentifier)!.Value;
+        // var id = Context.HttpContext.User.FindFirst(type: ClaimTypes.NameIdentifier)!.Value;
 
         var result = await UserService.GetUserById(2);
 

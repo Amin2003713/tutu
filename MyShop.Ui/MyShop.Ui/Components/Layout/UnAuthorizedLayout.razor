@@ -1,25 +1,27 @@
 
 @using Microsoft.AspNetCore.Authorization
 @using MyShop.Ui.Client.Commen.Footers
+@using MyShop.Ui.Client.Commen.Headers
 @inherits LayoutComponentBase
  @attribute [AllowAnonymous]
 
-<MudRTLProvider>
+<MudRTLProvider RightToLeft="true">
     @* Required *@
     <MudThemeProvider/>
     <MudPopoverProvider/>
-
     @* Needed for dialogs *@
     <MudDialogProvider/>
 
     @* Needed for snackbars *@
     <MudSnackbarProvider/>
-
-
     <MudLayout class="page-wrapper auth-page-wrapper">
-        <MudMainContent class="auth-wrapper page-content">
-            @Body
-        </MudMainContent>
+        <PageHeader/>
+        <HeaderResponsive/>
+        <MudContainer>
+            <MudMainContent class="auth-wrapper page-content">
+                @Body
+            </MudMainContent>
+        </MudContainer>
         <MiniFooter/>
     </MudLayout>
 </MudRTLProvider>

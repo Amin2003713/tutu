@@ -8,9 +8,13 @@
 @using Microsoft.AspNetCore.Components.Web
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
 @using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Http
 @using Microsoft.JSInterop
 @using MyShop.Ui.Client
-
+@using Microsoft.AspNetCore.Authorization
+@using MyShop.Ui.Client.Commen.Headers
+@using MyShop.Ui.Client.Commen.Footers
+@using MyShop.Ui.Client.Features.Profile.Shared
 @using MudBlazor
 
 @inject NavigationManager NavigationManager
@@ -19,3 +23,5 @@
 @inject  ILocalStorage Local
 @inject  IUserAuthRepository Auth
 @inject  IUserService UserService
+@inject  IHttpContextAccessor Accessor
+@inject IDialogService DialogService 
