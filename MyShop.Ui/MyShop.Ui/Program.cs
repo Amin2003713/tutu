@@ -15,7 +15,16 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
+ 
 builder.Services.AddMudServices();
+
+builder.Services.AddAntiforgery(options =>
+{
+    // Set Cookie properties using CookieBuilder properties†.
+
+    options.Cookie.Expiration = TimeSpan.Zero;
+
+});
 
 builder.Services.AddAuthentication(AuthConfig.ShopSchema)
     .AddCookie(AuthConfig.ShopSchema, options =>

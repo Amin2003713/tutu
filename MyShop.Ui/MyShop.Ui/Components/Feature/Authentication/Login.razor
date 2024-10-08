@@ -16,7 +16,7 @@
         <div class="form-element-row">
             <label for="phone-number" class="label-element">شماره موبایل</label>
             <div class="form-element-with-icon">
-                <InputText @bind-Value="Model.PhoneNumber" type="text" class="input-element" id="phone-number"/> 
+                <InputText @bind-Value="Model.PhoneNumber" type="text" class="input-element" id="phone-number"/>
                 <ValidationMessage For="@(() => Model.PhoneNumber)"/>
                 <i class="fad fa-mobile-alt"></i>
             </div>
@@ -80,10 +80,13 @@
     {
         if (HttpMethods.IsGet(HttpContext.Request.Method))
         {
-            // Clear the existing external cookie to ensure a clean login process
+            var auth = await AuthState.GetAuthenticationStateAsync();
+            if (auth.User.FindFirstValue(AuthConfig.Token) != null)
+                NavigationManager.NavigateTo(ReturnUrl);
+
             await HttpContext.SignOutAsync();
         }
-    } 
+    }
 
     private async Task OnValidSubmit()
     {
@@ -94,7 +97,6 @@
             if (!result.result || result.Token == null)
                 await SnackBar
                     !.ShowSnackBar("خطا", result.massage, BitSnackBarType.Error);
-
 
 
             await HttpContext.SignInAsync(AuthConfig.ShopSchema, result.Token);
@@ -110,7 +112,6 @@
 
     void ShowPassword()
     {
-
         PasswordInput = IsVisible ? "text" : "password";
 
         IsVisible = !IsVisible;

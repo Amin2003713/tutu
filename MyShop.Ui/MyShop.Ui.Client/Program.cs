@@ -15,5 +15,6 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<AuthenticationStateProvider, ClientAuthStateProvider>();
 builder.Services.AddHttpContextAccessor();
 
+
     
 await builder.Build().RunAsync();
