@@ -1,5 +1,4 @@
 @page "/Auth/Login"
-<SnackBar @ref="SnackBar"/>
 @layout UnAuthorizedLayout
 
 
@@ -69,6 +68,7 @@
 
     [SupplyParameterFromQuery] public string ReturnUrl { get; set; } = "/";
 
+    [CascadingParameter(Name = "SnackBar")]
     private SnackBar? SnackBar { get; set; }
 
     private bool IsVisible { get; set; }
