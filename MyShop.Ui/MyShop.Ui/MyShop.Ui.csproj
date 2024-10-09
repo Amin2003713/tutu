@@ -24,7 +24,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\" />
+      <Content Remove="wwwroot\assets\images\gallery\06.png" />
+      <Content Remove="wwwroot\assets\images\blog\MacBook-Pro-2-Side-284x180.jpg" />
+      <Content Remove="wwwroot\assets\images\banner\banner-sm-03.jpg" />
+      <Content Remove="wwwroot\assets\images\banner\banner-sm-02.jpg" />
+      <Content Remove="wwwroot\assets\fonts\shabnam\Shabnam-Medium.eot" />
+      <Content Remove="wwwroot\assets\fonts\shabnam\Shabnam-Light.woff2" />
+      <Content Remove="wwwroot\assets\fonts\shabnam\Shabnam-Light.woff" />
     </ItemGroup>
 
 </Project>
