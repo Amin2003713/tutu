@@ -5,6 +5,8 @@
 
 <MudRTLProvider RightToLeft="true">
     @* Required *@
+    <SnackBar @ref="SnackBar"/>
+
     <MudThemeProvider/>
     <MudPopoverProvider/>
     @* Needed for dialogs *@
@@ -17,9 +19,16 @@
         <HeaderResponsive/>
         <MudContainer>
             <MudMainContent class="page-content">
-                @Body
+                <CascadingValue Value="SnackBar" Name="SnackBar">
+                    @Body
+                </CascadingValue>
             </MudMainContent>
         </MudContainer>
         <MiniFooter/>
     </MudLayout>
 </MudRTLProvider>
+
+@code
+{
+    public SnackBar SnackBar { get; set; }
+}

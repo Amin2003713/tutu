@@ -31,7 +31,7 @@ public class UserService(IBaseHttpClient client ) : IUserService
 
     public async Task<ApiResult?> ChangePassword(ChangePasswordCommand command)
     {
-        return await client.PutMultipartAsync<ChangePasswordCommand, ApiResult>(
+        return await client.PutAsync<ChangePasswordCommand, ApiResult>(
             UsersRoutes.UpdateUserPassword, command);
     }
 

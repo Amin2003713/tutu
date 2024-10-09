@@ -16,6 +16,8 @@
         <PackageReference Include="Bit.BlazorUI.Icons" Version="8.11.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.8"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer"/>
+
     </ItemGroup>
 
     <ItemGroup>
@@ -24,7 +26,6 @@
 
     <ItemGroup>
       <Folder Include="Features\Profile\Addresses\" />
-      <Folder Include="Pages\NewDirectory1\" />
     </ItemGroup>
 
 </Project>

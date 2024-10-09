@@ -18,13 +18,6 @@ builder.Services.AddRazorComponents()
  
 builder.Services.AddMudServices();
 
-builder.Services.AddAntiforgery(options =>
-{
-    // Set Cookie properties using CookieBuilder properties†.
-
-    options.Cookie.Expiration = TimeSpan.Zero;
-
-});
 
 builder.Services.AddAuthentication(AuthConfig.ShopSchema)
     .AddCookie(AuthConfig.ShopSchema, options =>
@@ -44,6 +37,7 @@ builder.Services.AddAuthentication(AuthConfig.ShopSchema)
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthStateProvider>();
+builder.Services.AddMudBlazorDialog();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -67,12 +61,12 @@ else
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-app.UseAntiforgery();
 
 app.UseAuthentication()
     .UseAuthorization();
 
 app.MapRazorComponents<App>()
+    .DisableAntiforgery()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(MyShop.Ui.Client._Imports).Assembly);

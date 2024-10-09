@@ -1,7 +1,7 @@
 @using MyShop.Ui.Client.Commen.Notifications
 @inherits LayoutComponentBase
 @attribute [Authorize]
-
+<SnackBar @ref="SnackBar"/>
 <MudRTLProvider RightToLeft="true">
     @* Enable Right-To-Left layout for languages like Persian/Arabic *@
 
@@ -20,8 +20,8 @@
     <MudLayout class="page-wrapper">
         @* Main page wrapper layout *@
 
-        <PageHeader/> @* Custom page header component *@
-        <HeaderResponsive/> @* Responsive header based on screen size *@
+        <PageHeader @rendermode="InteractiveWebAssembly"/> @* Custom page header component *@
+        <HeaderResponsive @rendermode="InteractiveWebAssembly"/> @* Responsive header based on screen size *@
 
         <MudMainContent class="page-content">
 

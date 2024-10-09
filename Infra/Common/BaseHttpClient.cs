@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Text;
 using Application.Common;
 using Application.User.Auth.Responses;
+using Domain.Common.Api;
 using Domain.Common.Exceptions;
 using Domain.User.Auth;
 using Infra.Utils;
@@ -133,39 +134,39 @@ public class BaseHttpClient(HttpClient client , ILocalStorage localStorage , IHt
     private async Task<TResponse?> GetResponse<TResponse>(HttpResponseMessage response)
     {
         // Handle based on status code
-        return response.StatusCode switch
+        switch (response.StatusCode)
         {
-            HttpStatusCode.OK or HttpStatusCode.Created =>
+            case HttpStatusCode.OK or HttpStatusCode.Created:
                 // Deserialize the response if the status code is 200 OK or 201 Created
-                await response.Content.ReadFromJsonAsync<TResponse>(),
-            HttpStatusCode.BadRequest =>
-                // Throw an exception for 400 Bad Request
-                throw new HttpRequestException("Bad Request: The server could not understand the request."),
-            HttpStatusCode.Unauthorized =>
+                return await response.Content.ReadFromJsonAsync<TResponse>();
+            case HttpStatusCode.BadRequest:
+               var a = await response.Content.ReadFromJsonAsync<TResponse>();
+                throw new HttpRequestException(a is null ? "Bad Request: The server could not understand the request." : $"{(a as ApiResult)?.MetaData.Message}");
+            case HttpStatusCode.Unauthorized:
                 // Throw an exception for 401 Unauthorized
-                throw new HttpRequestException("Unauthorized: Access is denied due to invalid credentials."),
-            HttpStatusCode.Forbidden =>
+                throw new HttpRequestException("Unauthorized: Access is denied due to invalid credentials.");
+            case HttpStatusCode.Forbidden:
                 // Throw an exception for 403 Forbidden
-                throw new HttpRequestException("Forbidden: You do not have permission to access this resource."),
-            HttpStatusCode.NotFound =>
+                throw new HttpRequestException("Forbidden: You do not have permission to access this resource.");
+            case HttpStatusCode.NotFound:
                 // Throw a custom NotFoundException for 404 Not Found
-                throw new NotFoundException("Not Found: The requested resource could not be found."),
-            HttpStatusCode.InternalServerError =>
+                throw new NotFoundException("Not Found: The requested resource could not be found.");
+            case HttpStatusCode.InternalServerError:
                 // Throw an exception for 500 Internal Server Error
-                throw new HttpRequestException("Internal Server Error: The server encountered an error."),
-
-            _ => throw new HttpRequestException(
-                $"HTTP Error: {(int)response.StatusCode} - {response.ReasonPhrase}. Details: {await response.Content.ReadAsStringAsync()}")
-        };
+                throw new HttpRequestException("Internal Server Error: The server encountered an error.");
+            default:
+                throw new HttpRequestException(
+                    $"HTTP Error: {(int)response.StatusCode} - {response.ReasonPhrase}. Details: {await response.Content.ReadAsStringAsync()}");
+        }
     }
 
 
-    public async Task SetAuthHeader(LoginResponse response = default!)
+    public Task SetAuthHeader(LoginResponse response = default!)
     {
         if (response is not null)
         {
             if (client.DefaultRequestHeaders.Any(a => a.Key == "Authorization"))
-                return;
+                return Task.CompletedTask;
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", response.Token);
         }
@@ -174,10 +175,10 @@ public class BaseHttpClient(HttpClient client , ILocalStorage localStorage , IHt
             var a  = context.HttpContext.User.Claims.FirstOrDefault(c => c.Type == AuthConfig.Token)?.Value;
             // var result = await localStorage.GetAsync<LoginResponse>("LoginResponse");
             if (a is null || string.IsNullOrEmpty(a))
-                return;
+                return Task.CompletedTask;
 
             if (client.DefaultRequestHeaders.Any(a => a.Key == "Authorization"))
-                return;
+                return Task.CompletedTask;
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", a);
         }
@@ -185,6 +186,8 @@ public class BaseHttpClient(HttpClient client , ILocalStorage localStorage , IHt
         {
             Console.WriteLine(e);
         }
+
+        return Task.CompletedTask;
     }
 
 }
