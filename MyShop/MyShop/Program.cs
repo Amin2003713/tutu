@@ -74,6 +74,6 @@ app.UseAuthentication()
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(ClientAuthStateProvider).Assembly);
+    .AddAdditionalAssemblies(typeof(MyShop.Client._Imports).Assembly);
 
 app.Run();

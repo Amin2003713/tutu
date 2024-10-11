@@ -1,49 +1,59 @@
+using System.Diagnostics;
 using Application.User.Users.Responses;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Components.Web;
-using MyShop.Components.Account;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace MyShop.Ui.AuthenticationProvider;
 
 public class ServerAuthStateProvider : ServerAuthenticationStateProvider, IDisposable
 {
-    private readonly PersistingComponentStateSubscription _subscription;
-    private readonly PersistentComponentState _componentState;
-    private readonly IdentityRedirectManager _redirectManager;
+    private readonly PersistentComponentState state;
+    private readonly IdentityOptions options;
 
-    private Task<AuthenticationState> _authenticationStateTask;
+    private readonly PersistingComponentStateSubscription subscription;
 
-    public ServerAuthStateProvider(PersistentComponentState componentState, IdentityRedirectManager redirectManager)
+    private Task<AuthenticationState>? authenticationStateTask;
+
+    public ServerAuthStateProvider(
+        PersistentComponentState persistentComponentState,
+        IOptions<IdentityOptions> optionsAccessor)
     {
-        _componentState = componentState;
-        _redirectManager = redirectManager;
+        state = persistentComponentState;
+        options = optionsAccessor.Value;
 
-        AuthenticationStateChanged += ServerAuthStateProvider_AuthenticationStateChanged;
-
-        _subscription =
-            _componentState.RegisterOnPersisting(PersistComponentStateAsync, RenderMode.InteractiveWebAssembly);
+        AuthenticationStateChanged += OnAuthenticationStateChanged;
+        subscription = state.RegisterOnPersisting(PersistComponentStateAsync, RenderMode.InteractiveWebAssembly);
     }
 
-    private void ServerAuthStateProvider_AuthenticationStateChanged(Task<AuthenticationState> task) =>
-        _authenticationStateTask = task;
+    private void OnAuthenticationStateChanged(Task<AuthenticationState> task)
+    {
+        authenticationStateTask = task;
+    }
 
     private async Task PersistComponentStateAsync()
     {
-        var authState = await _authenticationStateTask;
+        if (authenticationStateTask is null)
+        {
+            throw new UnreachableException($"Authentication state not set in {nameof(PersistComponentStateAsync)}().");
+        }
+
+        var authState = await authenticationStateTask;
 
         if (authState.User.Identity?.IsAuthenticated == true)
         {
             var loggedInUser = UserDto.FromPrincipal(authState.User);
 
-            _componentState.PersistAsJson(nameof(UserDto), loggedInUser);
+            state.PersistAsJson(nameof(UserDto), loggedInUser);
         } 
     }
 
     public void Dispose()
     {
-        _subscription.Dispose();
-        AuthenticationStateChanged -= ServerAuthStateProvider_AuthenticationStateChanged;
+        subscription.Dispose();
+        AuthenticationStateChanged -= OnAuthenticationStateChanged;
     }
 }
