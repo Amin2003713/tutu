@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Components.Web;
+using MyShop.Components.Account;
 
 namespace MyShop.Ui.AuthenticationProvider;
 
@@ -10,12 +11,14 @@ public class ServerAuthStateProvider : ServerAuthenticationStateProvider, IDispo
 {
     private readonly PersistingComponentStateSubscription _subscription;
     private readonly PersistentComponentState _componentState;
+    private readonly IdentityRedirectManager _redirectManager;
 
     private Task<AuthenticationState> _authenticationStateTask;
 
-    public ServerAuthStateProvider(PersistentComponentState componentState)
+    public ServerAuthStateProvider(PersistentComponentState componentState, IdentityRedirectManager redirectManager)
     {
         _componentState = componentState;
+        _redirectManager = redirectManager;
 
         AuthenticationStateChanged += ServerAuthStateProvider_AuthenticationStateChanged;
 
@@ -35,7 +38,7 @@ public class ServerAuthStateProvider : ServerAuthenticationStateProvider, IDispo
             var loggedInUser = UserDto.FromPrincipal(authState.User);
 
             _componentState.PersistAsJson(nameof(UserDto), loggedInUser);
-        }
+        } 
     }
 
     public void Dispose()

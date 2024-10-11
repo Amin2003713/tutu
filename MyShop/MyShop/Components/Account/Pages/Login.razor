@@ -1,5 +1,10 @@
 ﻿@page "/Auth/Login"
 @using System.Security.Claims
+@using System.Security.Cryptography
+@using Application.User.Auth.CommandAndQueries
+@using System.Text
+@using Domain.User.Auth
+@using Microsoft.AspNetCore.Authentication
 
 
 <div class="auth-form shadow-around">
@@ -66,7 +71,7 @@
     [CascadingParameter] public HttpContext HttpContext { get; set; }
 
 
-    [SupplyParameterFromQuery] public string ReturnUrl { get; set; } = "/";
+    [SupplyParameterFromQuery] private string ReturnUrl { get; set; } = "/";
 
 
     private bool IsVisible { get; set; }
@@ -76,6 +81,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Snackbar.Add((Hash()), Severity.Info);
+
         if (HttpMethods.IsGet(HttpContext.Request.Method))
         {
             var auth = await AuthState.GetAuthenticationStateAsync();
@@ -93,20 +100,30 @@
             var result = await Auth.Login(Model);
 
             if (!result.result || result.Token == null)
-                // await Snackbar.ShownSnackbars("خطا", result.massage, );
+            {
+                Snackbar.Add(result.massage, Severity.Error);
+                NavigationManager.Refresh();
+            }
 
 
             await HttpContext.SignInAsync(AuthConfig.ShopSchema, result.Token);
-            // await SnackBar!.ShowSnackBar("موفقیت", result.massage, BitSnackBarType.Success);
-            NavigationManager.NavigateTo(ReturnUrl);
+            Snackbar.Add(result.massage, Severity.Success);
+            NavigationManager.NavigateTo("/Profile");
         }
         catch (Exception e)
         {
-            // await SnackBar!.ShowSnackBar("خطا", e.ToString(), BitSnackBarType.Error);
+        Snackbar.Add(e.Message, Severity.Error);
         }
     }
 
-
+    public static string Hash(string inputValue = "amin1382")
+    {
+        using var sha256 = SHA256.Create();
+        var originalBytes = Encoding.Default.GetBytes(inputValue);
+        var encodedBytes = sha256.ComputeHash(originalBytes);
+        var a =  Convert.ToBase64String(encodedBytes);
+        return a;
+    }
     void ShowPassword()
     {
         PasswordInput = IsVisible ? "text" : "password";

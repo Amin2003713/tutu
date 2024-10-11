@@ -2,12 +2,11 @@ using Application.Extensions;
 using Domain.User.Auth;
 using Infra.Extensions;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using MyShop.Client.Pages;
+
 using MyShop.Components;
 using MyShop.Components.Account;
 using MudBlazor.Services;
+using MyShop.Client.AuthenticationProvider;
 using MyShop.Ui.AuthenticationProvider;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +19,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddMudServices();
 builder.Services.AddMudBlazorDialog();
+builder.Services.AddMudBlazorSnackbar();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -55,7 +55,6 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
-    app.UseMigrationsEndPoint();
 }
 else
 {
@@ -69,9 +68,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
+app.UseAuthentication()
+    .UseAuthorization();
+
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(Counter).Assembly);
+    .AddAdditionalAssemblies(typeof(ClientAuthStateProvider).Assembly);
 
 app.Run();

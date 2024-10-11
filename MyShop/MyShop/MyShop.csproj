@@ -10,11 +10,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\MyShop.Client\MyShop.Client.csproj"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.8"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.*"/>
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.*"/>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.*"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.*"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.*"/>
     </ItemGroup>
 
 

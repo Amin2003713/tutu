@@ -1,5 +1,8 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using Application.User.Auth.Interfaces
+@using Application.User.Users.Interfaces
+@using Infra.Utils
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
@@ -12,4 +15,12 @@
 @using MyShop.Components
 @using MudBlazor
 @using MudBlazor.Services
+@using MyShop.Components.Account.Shared
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthState
+@inject  ILocalStorage Local
+@inject  IUserAuthRepository Auth
+@inject  IUserService UserService
+@inject  ISnackbar Snackbar
+
+@layout UnAuthorizedLayout

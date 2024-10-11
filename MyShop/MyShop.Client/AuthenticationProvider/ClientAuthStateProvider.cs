@@ -3,9 +3,8 @@ using Application.User.Users.Responses;
 using Domain.User.Auth;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Http;
 
-namespace MyShop.Ui.Client.AuthenticationProvider;
+namespace MyShop.Client.AuthenticationProvider;
 
 public class ClientAuthStateProvider : AuthenticationStateProvider
 {
