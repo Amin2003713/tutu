@@ -1,0 +1,36 @@
+﻿
+@using MyShop.Client.Commen.Headers
+@using MyShop.Client.Commen.Footers
+@using MyShop.Client.Commen.Notifications
+@inherits LayoutComponentBase
+
+
+<MudRTLProvider RightToLeft="true">
+    @* Required *@
+    <SnackBar @ref="SnackBar"/>
+
+    <MudThemeProvider/>
+    <MudPopoverProvider/>
+    @* Needed for dialogs *@
+    <MudDialogProvider/>
+
+    @* Needed for snackbars *@
+    <MudSnackbarProvider/>
+    <MudLayout class="page-wrapper">\
+        <PageHeader/>
+        <HeaderResponsive/>
+        <MudContainer>
+            <MudMainContent class="page-content">
+                <CascadingValue Value="SnackBar" Name="SnackBar">
+                    @Body
+                </CascadingValue>
+            </MudMainContent>
+        </MudContainer>
+        <MiniFooter/>
+    </MudLayout>
+</MudRTLProvider>
+
+@code
+{
+    public SnackBar SnackBar { get; set; }
+}

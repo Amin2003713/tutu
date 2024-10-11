@@ -1,0 +1,68 @@
+@using Microsoft.AspNetCore.Authorization
+@using MyShop.Client.Commen.Footers
+@inherits LayoutComponentBase
+@attribute [AllowAnonymous]
+
+<MudRTLProvider RightToLeft="true">
+
+
+    @if (HttpContext is null)
+    {
+        <MudLayout class="page-wrapper auth-page-wrapper">
+            <MudContainer>
+                <MudMainContent class="auth-wrapper page-content">
+                    <CascadingValue>
+                        <p>locaddinggg ....</p>
+                    </CascadingValue>
+                </MudMainContent>
+            </MudContainer>
+            <MiniFooter/>
+        </MudLayout>
+
+        @* Required *@
+
+        <MudThemeProvider/>
+        <MudPopoverProvider/>
+        @* Needed for dialogs *@
+        <MudDialogProvider/>
+        @* Needed for snackbars *@
+        <MudSnackbarProvider/>
+    }
+    else
+    {
+        <MudLayout class="page-wrapper auth-page-wrapper">
+            <MudContainer>
+                <MudMainContent class="auth-wrapper page-content">
+                    <CascadingValue>
+                        @Body
+                    </CascadingValue>
+                </MudMainContent>
+            </MudContainer>
+            <MiniFooter/>
+        </MudLayout>
+
+        @* Required *@
+
+        <MudThemeProvider/>
+        <MudPopoverProvider/>
+        @* Needed for dialogs *@
+        <MudDialogProvider/>
+        @* Needed for snackbars *@
+        <MudSnackbarProvider/>
+    }
+
+</MudRTLProvider>
+
+
+@code {
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (HttpContext is null)
+        {
+            NavigationManager.Refresh(true);
+        }
+    }
+
+}

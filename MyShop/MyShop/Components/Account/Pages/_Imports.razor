@@ -1,0 +1,18 @@
+﻿@using MyShop.Components.Account.Shared
+@using Application.User.Auth.CommandAndQueries
+@using Application.User.Auth.Interfaces
+@using Application.User.Users.Interfaces
+@using Domain.User.Auth
+@using Infra.Utils
+@using Microsoft.AspNetCore.Authentication
+@using MyShop.Client.Commen.Notifications
+@using MyShop.Client.Layout
+@using MyShop.Client.Pages
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthState
+@inject  ILocalStorage Local
+@inject  IUserAuthRepository Auth
+@inject  IUserService UserService
+@inject  ISnackbar Snackbar 
+
+@layout UnAuthorizedLayout

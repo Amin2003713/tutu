@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+        <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.*"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.*"/>
+        <PackageReference Include="MudBlazor" Version="7.9.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Commen\Controles\Inputs\CheckBox.razor" />
+      <AdditionalFiles Include="Commen\Controles\Inputs\TextInput.razor" />
+      <AdditionalFiles Include="Commen\Dialogs\NotificationDialog.razor" />
+      <AdditionalFiles Include="Commen\Footers\MiniFooter.razor" />
+      <AdditionalFiles Include="Commen\Headers\HeaderResponsive.razor" />
+      <AdditionalFiles Include="Commen\Headers\PageHeader.razor" />
+      <AdditionalFiles Include="Commen\Notifications\SnackBar.razor" />
+      <AdditionalFiles Include="Commen\StatusCodes\NotFound404.razor" />
+      <AdditionalFiles Include="Features\Profile\Account\ChangePassword.razor" />
+      <AdditionalFiles Include="Features\Profile\Account\ProfileForm.razor" />
+      <AdditionalFiles Include="Features\Profile\EditProfile.razor" />
+      <AdditionalFiles Include="Features\Profile\Orders\LatestOrders.razor" />
+      <AdditionalFiles Include="Features\Profile\Profile.razor" />
+      <AdditionalFiles Include="Features\Profile\ProfileLayout.razor" />
+      <AdditionalFiles Include="Features\Profile\Shared\LatestFavorites.razor" />
+      <AdditionalFiles Include="Features\Profile\Shared\ProfileBanner.razor" />
+      <AdditionalFiles Include="Features\Profile\Shared\ProfileFooter.razor" />
+      <AdditionalFiles Include="Features\Profile\Shared\ProfileSideBar.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Infra\Infra.csproj" />
+    </ItemGroup>
+
+</Project>
