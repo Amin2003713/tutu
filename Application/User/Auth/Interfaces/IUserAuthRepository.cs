@@ -6,7 +6,8 @@ namespace Application.User.Auth.Interfaces;
 
 public interface IUserAuthRepository
 {
-    Task<(bool result, string massage, ClaimsPrincipal Token)> Login(LoginCommand command);
+    Task<ClaimsPrincipal> CurrentUser();
+    Task<ApiResult<LoginResponse>> Login(LoginCommand command);
     Task<ApiResult> Register(RegisterCommand command);
     Task<ApiResult<LoginResponse>> RefreshToken(RefreshTokenCommand command);
     Task<ApiResult?> Logout();

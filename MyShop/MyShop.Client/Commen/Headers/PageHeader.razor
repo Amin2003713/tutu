@@ -1171,12 +1171,12 @@
     {
         if (firstRender)
         {
-            var result = await UserService.GetCurrentUser();
-            if (!result!.IsSuccess)
-                // await SnackBar!.ShowSnackBar("خطا", result.MetaData.Message, BitSnack?Type.Error, BitSnackBarPosition.TopLeft, TimeSpan.FromSeconds(3));
-
-            await Local.SetAsync(AuthConfig.UserInfo, result.Data);
-            User = result.Data;
+            // var result = await UserService.GetCurrentUser();
+            // if (!result!.IsSuccess)
+            //     // await SnackBar!.ShowSnackBar("خطا", result.MetaData.Message, BitSnack?Type.Error, BitSnackBarPosition.TopLeft, TimeSpan.FromSeconds(3));
+            //
+            // await Local.SetAsync(AuthConfig.UserInfo, result.Data);
+            // User = result.Data;
         }
     }
 

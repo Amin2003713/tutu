@@ -10,11 +10,13 @@ using Application.User.Auth.Interfaces;
 using Application.User.Users.Interfaces;
 using Blazored.LocalStorage;
 using Blazored.SessionStorage;
+using BlazorHero.CleanArchitecture2.Client.Infrastructure.Authentication;
 using Infra.Banner.Implantations;
 using Infra.Category.Implantations;
 using Infra.Comment.Implantations;
 using Infra.Common;
 using Infra.Orders.Implantations;
+using Infra.User.Auth;
 using Infra.User.Auth.Implantations;
 using Infra.User.Users.Implantations;
 using Infra.Utils;
@@ -30,7 +32,6 @@ public static class InfraDi
     {
         services.AddApisToDiRegistry();
         services.AddBlazoredLocalStorage();
-        services.AddTransient<ILocalStorage, LocalStorage>();
 
         return services;
     }
@@ -43,7 +44,8 @@ public static class InfraDi
         services.AddHttpClient<IBaseHttpClient, BaseHttpClient>(client =>
         {
             client.BaseAddress = new Uri(baseAddress);
-        });
+            client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin" , "ShopApi");
+        }).AddHttpMessageHandler<AuthenticationHeaderHandler>();
 
         services.AddScoped<IUserAuthRepository, UserAuthRepository>();
         services.AddScoped<IBannerRepository, BannerRepository>();
