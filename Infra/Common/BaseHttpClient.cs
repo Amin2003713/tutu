@@ -8,6 +8,7 @@ using Domain.Common.Api;
 using Domain.Common.Exceptions;
 using Domain.User.Auth;
 using Infra.Utils;
+using Infra.Utils.Constants.Storage;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -17,7 +18,8 @@ namespace Infra.Common;
 ///     A base HTTP client implementation that provides methods for making HTTP requests
 ///     with support for generic response types and multipart form data.
 /// </summary>
-public class BaseHttpClient(HttpClient client , ILocalStorage localStorage , IHttpContextAccessor context) : IBaseHttpClient
+public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttpContextAccessor context)
+    : IBaseHttpClient
 {
     /// <summary>
     ///     Sends a GET request to the specified URI.
@@ -97,6 +99,36 @@ public class BaseHttpClient(HttpClient client , ILocalStorage localStorage , IHt
         return await GetResponse<TResponse>(response);
     }
 
+
+    public async Task SetAuthHeader(LoginResponse response = default!)
+    {
+        if (response is not null)
+        {
+            if (client.DefaultRequestHeaders.Any(a => a.Key == "Authorization"))
+                return ;
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", response.Token);
+        }
+
+        try
+        {
+           var a = await localStorage.GetAsync<string>(StorageConstants.Local.AuthToken);
+            if (a is null || string.IsNullOrEmpty(a))
+                return ;
+
+            if (client.DefaultRequestHeaders.Any(a => a.Key == "Authorization"))
+                return ;
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", a);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+        return ;
+    }
+
     /// <summary>
     ///     Sends a DELETE request with a JSON body to the specified URI.
     /// </summary>
@@ -140,8 +172,10 @@ public class BaseHttpClient(HttpClient client , ILocalStorage localStorage , IHt
                 // Deserialize the response if the status code is 200 OK or 201 Created
                 return await response.Content.ReadFromJsonAsync<TResponse>();
             case HttpStatusCode.BadRequest:
-               var a = await response.Content.ReadFromJsonAsync<TResponse>();
-                throw new HttpRequestException(a is null ? "Bad Request: The server could not understand the request." : $"{(a as ApiResult)?.MetaData.Message}");
+                var a = await response.Content.ReadFromJsonAsync<TResponse>();
+                throw new HttpRequestException(a is null
+                    ? "Bad Request: The server could not understand the request."
+                    : $"{(a as ApiResult)?.MetaData.Message}");
             case HttpStatusCode.Unauthorized:
                 // Throw an exception for 401 Unauthorized
                 throw new HttpRequestException("Unauthorized: Access is denied due to invalid credentials.");
@@ -159,35 +193,4 @@ public class BaseHttpClient(HttpClient client , ILocalStorage localStorage , IHt
                     $"HTTP Error: {(int)response.StatusCode} - {response.ReasonPhrase}. Details: {await response.Content.ReadAsStringAsync()}");
         }
     }
-
-
-    public Task SetAuthHeader(LoginResponse response = default!)
-    {
-        if (response is not null)
-        {
-            if (client.DefaultRequestHeaders.Any(a => a.Key == "Authorization"))
-                return Task.CompletedTask;
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", response.Token);
-        }
-        try
-        {
-            var a  = context.HttpContext.User.Claims.FirstOrDefault(c => c.Type == AuthConfig.Token)?.Value;
-            // var result = await localStorage.GetAsync<LoginResponse>("LoginResponse");
-            if (a is null || string.IsNullOrEmpty(a))
-                return Task.CompletedTask;
-
-            if (client.DefaultRequestHeaders.Any(a => a.Key == "Authorization"))
-                return Task.CompletedTask;
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", a);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-
-        return Task.CompletedTask;
-    }
-
 }

@@ -84,6 +84,5 @@ public interface IBaseHttpClient
     Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, TRequest data);
 
 
-
     Task SetAuthHeader(LoginResponse response = default!);
 }

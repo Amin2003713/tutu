@@ -1,5 +1,3 @@
-@using Microsoft.AspNetCore.Authorization
-@using MyShop.Client.Commen.Footers
 @inherits LayoutComponentBase
 @attribute [AllowAnonymous]
 
@@ -11,7 +9,7 @@
         <MudLayout class="page-wrapper auth-page-wrapper">
             <MudContainer>
                 <MudMainContent class="auth-wrapper page-content">
-                        <p>locaddinggg ....</p>
+                    <p>locaddinggg ....</p>
                 </MudMainContent>
             </MudContainer>
             <MiniFooter/>
@@ -31,7 +29,7 @@
         <MudLayout class="page-wrapper auth-page-wrapper">
             <MudContainer>
                 <MudMainContent class="auth-wrapper page-content">
-                        @Body
+                    @Body
                 </MudMainContent>
             </MudContainer>
             <MiniFooter/>

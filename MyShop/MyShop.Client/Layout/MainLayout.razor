@@ -1,9 +1,4 @@
-﻿
-@using Microsoft.AspNetCore.Authorization
-@using MyShop.Client.Commen.Headers
-@using MyShop.Client.Commen.Footers
-@using MyShop.Client.Commen.Notifications
-@inherits LayoutComponentBase 
+﻿@inherits LayoutComponentBase 
 @attribute [Authorize]
 
 
@@ -21,7 +16,7 @@
         <HeaderResponsive/>
         <MudContainer>
             <MudMainContent class="page-content">
-                    @Body
+                @Body
             </MudMainContent>
         </MudContainer>
         <MiniFooter/>

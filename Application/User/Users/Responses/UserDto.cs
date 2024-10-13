@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using Domain.User.Auth;
 using Domain.User.Users;
 
 namespace Application.User.Users.Responses;
@@ -17,10 +16,8 @@ public class UserDto : BaseDto
     public List<UserRoleDto> Roles { get; set; }
 
 
-
     public List<Claim> Claims()
     {
-
         var userInfo = this;
         var claimIdentityList = new List<Claim>
         {
@@ -35,7 +32,6 @@ public class UserDto : BaseDto
         claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, $"{a.RoleId}#{a.RoleTitle}"))
             .ToList());
         return claimIdentityList;
-
     }
 
     public static UserDto FromPrincipal(ClaimsPrincipal principal)
@@ -53,15 +49,14 @@ public class UserDto : BaseDto
             // You might need to adjust these to map the correct claims.
 
             // Assuming roles are stored in claims
-            var roles = principal.FindAll(ClaimTypes.Role).Select(r => r.Value).Select(a => new UserRoleDto()
+            var roles = principal.FindAll(ClaimTypes.Role).Select(r => r.Value).Select(a => new UserRoleDto
             {
                 RoleId = Convert.ToInt64(a.Split("#").First()),
-                RoleTitle = a.Split("#").Last(),
+                RoleTitle = a.Split("#").Last()
             }).ToList();
 
             // Now you can populate the UserDto
             if (userId != null)
-            {
                 return new UserDto
                 {
                     Id = Convert.ToInt64(userId),
@@ -74,9 +69,8 @@ public class UserDto : BaseDto
                     PhoneNumber = phoneNumber,
                     Password = string.Empty, // Not available from claims
                     CreationDate = DateTime.Now, // Adjust if creation date needs to come from elsewhere
-                    IsActive = true, // Adjust based on your application logic
+                    IsActive = true // Adjust based on your application logic
                 };
-            }
         }
 
         return new UserDto();

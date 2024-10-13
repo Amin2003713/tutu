@@ -4,7 +4,7 @@
         .then(response => response.blob())
         .then(blob => {
             var link = window.document.createElement("a");
-            link.href = window.URL.createObjectURL(blob, { type: options.mimeType });
+            link.href = window.URL.createObjectURL(blob, {type: options.mimeType});
             link.download = options.fileName;
             document.body.appendChild(link);
             link.click();

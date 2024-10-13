@@ -1,9 +1,9 @@
 ﻿@page "/register"
 @using Application.User.Auth.CommandAndQueries
-@using MyShop.Client.Layout
+@using Microsoft.Extensions.Localization
 @layout AuthenticationLayout
 
-@inject Microsoft.Extensions.Localization.IStringLocalizer<Register> _localizer
+@inject IStringLocalizer<Register> _localizer
 
 <EditForm Model="@_registerUserModel" OnValidSubmit="SubmitAsync">
     <MudGrid>
@@ -34,10 +34,10 @@
             <MudTextField For="@(() => _registerUserModel.ConfirmPassword)" InputType="InputType.Password" @bind-Value="_registerUserModel.ConfirmPassword" Label="@_localizer["Confirm Password"]"/>
         </MudItem>
         <MudItem xs="12" Class="d-flex justify-center">
-            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"  Color="Color.Primary" Size="Size.Large" Style="width: 100%;">@_localizer["Register"]</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width: 100%;">@_localizer["Register"]</MudButton>
         </MudItem>
     </MudGrid>
-</EditForm>     
+</EditForm>
 
 
 @code
@@ -55,8 +55,8 @@
         }
         else
         {
-                _snackBar.Add(response.MetaData.Message, Severity.Error);
-                 }
+            _snackBar.Add(response.MetaData.Message, Severity.Error);
+        }
     }
 
     private bool _passwordVisibility;

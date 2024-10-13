@@ -31,15 +31,18 @@
 @using Microsoft.JSInterop
 @using MudBlazor
 @using Blazored.LocalStorage;
-@using BlazorHero.CleanArchitecture2.Client.Infrastructure.Authentication
-@using BlazorHero.CleanArchitecture2.Client.Infrastructure.Managers.Preferences
-
+@using Infra.Extensions.Preferences
+@using Infra.User.Auth
+@using Microsoft.AspNetCore.Authorization
+@using MyShop.Client.Commen.Headers
+@using MyShop.Client.Commen.Footers
+@using MyShop.Client.Commen.Notifications
 
 
 @attribute [Authorize]
 
 @inject NavigationManager _navigationManager
-@inject BlazorHeroStateProvider _stateProvider
+@inject ClientStateProvider _stateProvider
 @inject IAuthorizationService _authorizationService
 @inject ISnackbar _snackBar
 @inject IDialogService _dialogService

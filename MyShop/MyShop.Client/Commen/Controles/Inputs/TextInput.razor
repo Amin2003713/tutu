@@ -1,20 +1,17 @@
 @typeparam Type
 
 
-
-    <MudTextField
-        Disabled="@IsDisabled"
-        @bind-Value="Value"
-        Class="input-element"
-        For="@(() => Value)"
-        Validation="Value"
-        HelperText="@HelperText"
-        Variant="Variant"
-        Label="@Label"
-        HelperTextOnFocus="true"
-        Adornment="Adornment.Start"
-        />
-    
+<MudTextField
+    Disabled="@IsDisabled"
+    @bind-Value="Value"
+    Class="input-element"
+    For="@(() => Value)"
+    Validation="Value"
+    HelperText="@HelperText"
+    Variant="Variant"
+    Label="@Label"
+    HelperTextOnFocus="true"
+    Adornment="Adornment.Start"/>
 
 
 @code{

@@ -1,5 +1,5 @@
+@using MyShop.Client.Extensions
 @using System.Security.Claims
-@using Microsoft.AspNetCore.Components.Authorization
 <div class="sidebar-widget">
     <div class="banner mb-3">
         <a href="#">
@@ -18,18 +18,18 @@
                         <div class="d-block">
                             <h6>
                                 <strong>
-                                     @context.User.FindFirst(ClaimTypes.GivenName)!.Value  @context.User.FindFirst(ClaimTypes.Surname)!.Value
+                                    @Context.HttpContext.User.FullName() 
                                 </strong>
                             </h6>
                         </div>
                         <div class="d-block">
                             <strong class="text-muted">
-                                @context.User.FindFirst(ClaimTypes.Name)!.Value
+                                @Context.HttpContext.User.FirstName()
                             </strong>
                         </div>
                     </div>
                 </Authorized>
-            </AuthorizeView> 
+            </AuthorizeView>
         </div>
         <div class="user-options">
             <ul>

@@ -1,103 +1,98 @@
-﻿using System.Collections.Generic;
-using Blazored.LocalStorage;
-using BlazorHero.CleanArchitecture2.Client.Infrastructure.Settings;
-using MudBlazor;
-using System.Threading.Tasks;
-using BlazorHero.CleanArchitecture2.Shared.Constants.Storage;
+﻿using Blazored.LocalStorage;
 using Domain.Common.Api;
+using Infra.Extensions.Settings;
+using Infra.Utils.Constants.Storage;
 using Microsoft.Extensions.Localization;
+using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture2.Client.Infrastructure.Managers.Preferences
+namespace Infra.Extensions.Preferences;
+
+public class ClientPreferenceManager : IClientPreferenceManager
 {
-    public class ClientPreferenceManager : IClientPreferenceManager
+    private readonly IStringLocalizer<ClientPreferenceManager> _localizer;
+    private readonly ILocalStorageService _localStorageService;
+
+    public ClientPreferenceManager(
+        ILocalStorageService localStorageService,
+        IStringLocalizer<ClientPreferenceManager> localizer)
     {
-        private readonly ILocalStorageService _localStorageService;
-        private readonly IStringLocalizer<ClientPreferenceManager> _localizer;
+        _localStorageService = localStorageService;
+        _localizer = localizer;
+    }
 
-        public ClientPreferenceManager(
-            ILocalStorageService localStorageService,
-            IStringLocalizer<ClientPreferenceManager> localizer)
+    public async Task<bool> ToggleDarkModeAsync()
+    {
+        var preference = await GetPreference() as ClientPreference;
+        if (preference != null)
         {
-            _localStorageService = localStorageService;
-            _localizer = localizer;
+            preference.IsDarkMode = !preference.IsDarkMode;
+            await SetPreference(preference);
+            return !preference.IsDarkMode;
         }
 
-        public async Task<bool> ToggleDarkModeAsync()
+        return false;
+    }
+
+    public async Task<ApiResult> ChangeLanguageAsync(string languageCode)
+    {
+        var preference = await GetPreference() as ClientPreference;
+        if (preference != null)
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
+            preference.LanguageCode = languageCode;
+            await SetPreference(preference);
+            return new ApiResult
             {
-                preference.IsDarkMode = !preference.IsDarkMode;
-                await SetPreference(preference);
-                return !preference.IsDarkMode;
-            }
-
-            return false;
-        }
-
-        public async Task<bool> ToggleLayoutDirection()
-        {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
-            {
-                preference.IsRTL = !preference.IsRTL;
-                await SetPreference(preference);
-                return preference.IsRTL;
-            }
-
-            return false;
-        }
-
-        public async Task<ApiResult> ChangeLanguageAsync(string languageCode)
-        {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
-            {
-                preference.LanguageCode = languageCode;
-                await SetPreference(preference);
-                return new ApiResult()
-                {
-                    IsSuccess = true,
-                };
-            }
-
-            return new ApiResult()
-            {
-                IsSuccess = false,
+                IsSuccess = true
             };
         }
 
-        public async Task<MudTheme> GetCurrentThemeAsync()
+        return new ApiResult
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
-            {
-                if (preference.IsDarkMode == true) return BlazorHeroTheme.DarkTheme;
-            }
+            IsSuccess = false
+        };
+    }
 
-            return BlazorHeroTheme.DefaultTheme;
-        }
+    public async Task<MudTheme> GetCurrentThemeAsync()
+    {
+        var preference = await GetPreference() as ClientPreference;
+        if (preference != null)
+            if (preference.IsDarkMode)
+                return BlazorHeroTheme.DarkTheme;
 
-        public async Task<bool> IsRTL()
+        return BlazorHeroTheme.DefaultTheme;
+    }
+
+    public async Task<IPreference> GetPreference()
+    {
+        return await _localStorageService.GetItemAsync<ClientPreference>(StorageConstants.Local.Preference) ??
+               new ClientPreference();
+    }
+
+    public async Task SetPreference(IPreference preference)
+    {
+        await _localStorageService.SetItemAsync(StorageConstants.Local.Preference, preference as ClientPreference);
+    }
+
+    public async Task<bool> ToggleLayoutDirection()
+    {
+        var preference = await GetPreference() as ClientPreference;
+        if (preference != null)
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
-            {
-                if (preference.IsDarkMode == true) return false;
-            }
-
+            preference.IsRTL = !preference.IsRTL;
+            await SetPreference(preference);
             return preference.IsRTL;
         }
 
-        public async Task<IPreference> GetPreference()
-        {
-            return await _localStorageService.GetItemAsync<ClientPreference>(StorageConstants.Local.Preference) ??
-                   new ClientPreference();
-        }
+        return false;
+    }
 
-        public async Task SetPreference(IPreference preference)
-        {
-            await _localStorageService.SetItemAsync(StorageConstants.Local.Preference, preference as ClientPreference);
-        }
+    public async Task<bool> IsRTL()
+    {
+        var preference = await GetPreference() as ClientPreference;
+        if (preference != null)
+            if (preference.IsDarkMode)
+                return false;
+
+        return preference.IsRTL;
     }
 }

@@ -1,14 +1,10 @@
 using System.Globalization;
 using Application.Extensions;
-using BlazorHero.CleanArchitecture2.Client.Infrastructure.Managers.Preferences;
-using BlazorHero.CleanArchitecture2.Client.Infrastructure.Settings;
-using BlazorHero.CleanArchitecture2.Shared.Constants.Localization;
 using Infra.Extensions;
-using MyShop.Client;
-using Microsoft.AspNetCore.Components.Authorization;
+using Infra.Extensions.Preferences;
+using Infra.Extensions.Settings;
+using Infra.Utils.Constants.Localization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using MudBlazor.Services;
-using MyShop.Client.AuthenticationProvider;
 using MyShop.Client.Extensions;
 
 var builder = WebAssemblyHostBuilder

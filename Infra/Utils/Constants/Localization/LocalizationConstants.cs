@@ -1,54 +1,53 @@
-﻿namespace BlazorHero.CleanArchitecture2.Shared.Constants.Localization
+﻿namespace Infra.Utils.Constants.Localization;
+
+public static class LocalizationConstants
 {
-    public static class LocalizationConstants
+    public static readonly LanguageCode[] SupportedLanguages =
     {
-        public static readonly LanguageCode[] SupportedLanguages =
+        new()
         {
-            new LanguageCode
-            {
-                Code = "en-US",
-                DisplayName = "English"
-            },
-            new LanguageCode
-            {
-                Code = "fr-FR",
-                DisplayName = "French"
-            },
-            new LanguageCode
-            {
-                Code = "km_KH",
-                DisplayName = "Khmer"
-            },
-            new LanguageCode
-            {
-                Code = "de-DE",
-                DisplayName = "German"
-            },
-            new LanguageCode
-            {
-                Code = "es-ES",
-                DisplayName = "Español"
-            },
-            new LanguageCode
-            {
-                Code = "ru-RU",
-                DisplayName = "Русский"
-            },
-            new LanguageCode
-            {
-                Code = "sv-SE",
-                DisplayName = "Swedish"
-            },
-            new LanguageCode
-            {
-                Code = "id-ID",
-                DisplayName = "Indonesia"
-            },
-            new LanguageCode
-            {
-                Code = "it-IT",
-                DisplayName = "Italian"
-            }
-        };
-    }
+            Code = "en-US",
+            DisplayName = "English"
+        },
+        new()
+        {
+            Code = "fr-FR",
+            DisplayName = "French"
+        },
+        new()
+        {
+            Code = "km_KH",
+            DisplayName = "Khmer"
+        },
+        new()
+        {
+            Code = "de-DE",
+            DisplayName = "German"
+        },
+        new()
+        {
+            Code = "es-ES",
+            DisplayName = "Español"
+        },
+        new()
+        {
+            Code = "ru-RU",
+            DisplayName = "Русский"
+        },
+        new()
+        {
+            Code = "sv-SE",
+            DisplayName = "Swedish"
+        },
+        new()
+        {
+            Code = "id-ID",
+            DisplayName = "Indonesia"
+        },
+        new()
+        {
+            Code = "it-IT",
+            DisplayName = "Italian"
+        }
+    };
 }

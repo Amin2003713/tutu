@@ -1,6 +1,7 @@
-﻿@using BlazorHero.CleanArchitecture2.Client.Infrastructure.Settings
+﻿@using Infra.Extensions.Settings
+@using Microsoft.Extensions.Localization
 @inherits LayoutComponentBase
-@inject Microsoft.Extensions.Localization.IStringLocalizer<NotFoundLayout> _localizer
+@inject IStringLocalizer<NotFoundLayout> _localizer
 
 <MudThemeProvider Theme="BlazorHeroTheme.DefaultTheme"/>
 <MudSnackbarProvider/>

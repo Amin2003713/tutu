@@ -1,9 +1,5 @@
-﻿using System.Globalization;
-using System.Reflection;
-using Blazored.LocalStorage;
-using BlazorHero.CleanArchitecture2.Client.Infrastructure.Authentication;
-using BlazorHero.CleanArchitecture2.Client.Infrastructure.Managers.Preferences;
-using BlazorHero.CleanArchitecture2.Shared.Constants.Permission;
+﻿using Blazored.LocalStorage;
+using Infra.Extensions.Preferences;
 using Infra.User.Auth;
 using Infra.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -41,14 +37,13 @@ public static class WebAssemblyHostBuilderExtensions
                 configuration.SnackbarConfiguration.ShowCloseIcon = false;
             })
             .AddScoped<ClientPreferenceManager>()
-            .AddScoped<BlazorHeroStateProvider>()
-            .AddScoped<AuthenticationStateProvider, BlazorHeroStateProvider>()
+            .AddScoped<ClientStateProvider>()
+            .AddScoped<AuthenticationStateProvider, ClientStateProvider>()
             .AddScoped<ILocalStorage, LocalStorage>()
             .AddTransient<AuthenticationHeaderHandler>()
             .AddHttpContextAccessor();
         return builder;
     }
-
 
 
     private static void RegisterPermissionClaims(AuthorizationOptions options)

@@ -49,15 +49,15 @@ header.page-header .bottom-page-header .search-box .search-result .search-result
     background-color: #009688;
 }
 
-header.page-header .bottom-page-header .user-items .user-item>a span.bag-items-number {
+header.page-header .bottom-page-header .user-items .user-item > a span.bag-items-number {
     background-color: #009688;
 }
 
-header.page-header .bottom-page-header .user-items .user-item.cart-list>ul li.cart-footer .btn-cart {
+header.page-header .bottom-page-header .user-items .user-item.cart-list > ul li.cart-footer .btn-cart {
     background-color: #009688;
 }
 
-header.page-header .bottom-page-header .user-items .user-item.cart-list>ul li.cart-footer .btn-cart:hover {
+header.page-header .bottom-page-header .user-items .user-item.cart-list > ul li.cart-footer .btn-cart:hover {
     -webkit-box-shadow: 0 0.5rem 1.125rem -0.5rem #009688;
     box-shadow: 0 0.5rem 1.125rem -0.5rem #009688;
 }
@@ -67,25 +67,25 @@ header.page-header .bottom-page-header .user-items .user-item.account ul li a:ho
     color: #009688;
 }
 
-header.page-header .nav-wrapper>ul>li>a:hover {
+header.page-header .nav-wrapper > ul > li > a:hover {
     color: #009688;
 }
 
-header.page-header .nav-wrapper>ul>li.category-list>ul>li>ul>li a:hover {
+header.page-header .nav-wrapper > ul > li.category-list > ul > li > ul > li a:hover {
     color: #009688;
     padding-right: 4px;
 }
 
-header.page-header .nav-wrapper>ul>li.mega-menu>ul li a:hover {
+header.page-header .nav-wrapper > ul > li.mega-menu > ul li a:hover {
     color: #009688 !important;
 }
 
-header.page-header .nav-wrapper>ul>li.mega-menu>ul li a i {
+header.page-header .nav-wrapper > ul > li.mega-menu > ul li a i {
     color: #009688;
     margin-left: 5px;
 }
 
-header.page-header .nav-wrapper>ul>li.dropdown--list ul li a:hover {
+header.page-header .nav-wrapper > ul > li.dropdown--list ul li a:hover {
     color: #009688;
 }
 
@@ -110,7 +110,7 @@ header.page-header .nav-wrapper>ul>li.dropdown--list ul li a:hover {
     color: #009688;
 }
 
-.product-detail .product-colors .list-radio-color input[type="radio"]:checked+label {
+.product-detail .product-colors .list-radio-color input[type="radio"]:checked + label {
     border-color: #009688;
 }
 

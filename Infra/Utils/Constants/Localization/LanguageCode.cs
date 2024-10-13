@@ -1,8 +1,7 @@
-﻿namespace BlazorHero.CleanArchitecture2.Shared.Constants.Localization
+﻿namespace Infra.Utils.Constants.Localization;
+
+public class LanguageCode
 {
-    public class LanguageCode
-    {
-        public string DisplayName { get; set; }
-        public string Code { get; set; }
-    }
+    public string DisplayName { get; set; }
+    public string Code { get; set; }
 }

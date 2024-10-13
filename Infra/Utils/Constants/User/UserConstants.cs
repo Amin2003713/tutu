@@ -1,7 +1,6 @@
-﻿namespace BlazorHero.CleanArchitecture2.Shared.Constants.User
+﻿namespace Infra.Utils.Constants.User;
+
+public static class UserConstants
 {
-    public static class UserConstants
-    {
-        public const string DefaultPassword = "123Pa$$word!";
-    }
+    public const string DefaultPassword = "123Pa$$word!";
 }

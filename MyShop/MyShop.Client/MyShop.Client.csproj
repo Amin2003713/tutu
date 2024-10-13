@@ -12,45 +12,45 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.10" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.10"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.10"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.10" PrivateAssets="all"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0"/>
-        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.10" />
-        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.10" />
-        <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.10" />
-        <PackageReference Include="MudBlazor" Version="7.10.0" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.10"/>
+        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.10"/>
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.10"/>
+        <PackageReference Include="MudBlazor" Version="7.10.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Commen\Controles\Inputs\CheckBox.razor" />
-      <AdditionalFiles Include="Commen\Controles\Inputs\TextInput.razor" />
-      <AdditionalFiles Include="Commen\Dialogs\NotificationDialog.razor" />
-      <AdditionalFiles Include="Commen\Footers\MiniFooter.razor" />
-      <AdditionalFiles Include="Commen\Headers\HeaderResponsive.razor" />
-      <AdditionalFiles Include="Commen\Headers\PageHeader.razor" />
-      <AdditionalFiles Include="Commen\Notifications\SnackBar.razor" />
-      <AdditionalFiles Include="Commen\StatusCodes\NotFound404.razor" />
-      <AdditionalFiles Include="Features\Profile\Account\ChangePassword.razor" />
-      <AdditionalFiles Include="Features\Profile\Account\ProfileForm.razor" />
-      <AdditionalFiles Include="Features\Profile\EditProfile.razor" />
-      <AdditionalFiles Include="Features\Profile\Orders\LatestOrders.razor" />
-      <AdditionalFiles Include="Features\Profile\Profile.razor" />
-      <AdditionalFiles Include="Features\Profile\ProfileLayout.razor" />
-      <AdditionalFiles Include="Features\Profile\Shared\LatestFavorites.razor" />
-      <AdditionalFiles Include="Features\Profile\Shared\ProfileBanner.razor" />
-      <AdditionalFiles Include="Features\Profile\Shared\ProfileFooter.razor" />
-      <AdditionalFiles Include="Features\Profile\Shared\ProfileSideBar.razor" />
+        <AdditionalFiles Include="Commen\Controles\Inputs\CheckBox.razor"/>
+        <AdditionalFiles Include="Commen\Controles\Inputs\TextInput.razor"/>
+        <AdditionalFiles Include="Commen\Dialogs\NotificationDialog.razor"/>
+        <AdditionalFiles Include="Commen\Footers\MiniFooter.razor"/>
+        <AdditionalFiles Include="Commen\Headers\HeaderResponsive.razor"/>
+        <AdditionalFiles Include="Commen\Headers\PageHeader.razor"/>
+        <AdditionalFiles Include="Commen\Notifications\SnackBar.razor"/>
+        <AdditionalFiles Include="Commen\StatusCodes\NotFound404.razor"/>
+        <AdditionalFiles Include="Features\Profile\Account\ChangePassword.razor"/>
+        <AdditionalFiles Include="Features\Profile\Account\ProfileForm.razor"/>
+        <AdditionalFiles Include="Features\Profile\EditProfile.razor"/>
+        <AdditionalFiles Include="Features\Profile\Orders\LatestOrders.razor"/>
+        <AdditionalFiles Include="Features\Profile\Profile.razor"/>
+        <AdditionalFiles Include="Features\Profile\ProfileLayout.razor"/>
+        <AdditionalFiles Include="Features\Profile\Shared\LatestFavorites.razor"/>
+        <AdditionalFiles Include="Features\Profile\Shared\ProfileBanner.razor"/>
+        <AdditionalFiles Include="Features\Profile\Shared\ProfileFooter.razor"/>
+        <AdditionalFiles Include="Features\Profile\Shared\ProfileSideBar.razor"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Infra\Infra.csproj" />
+        <ProjectReference Include="..\..\Infra\Infra.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\appsettings.Development.json" />
-      <_ContentIncludedByDefault Remove="wwwroot\appsettings.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\appsettings.Development.json"/>
+        <_ContentIncludedByDefault Remove="wwwroot\appsettings.json"/>
     </ItemGroup>
 
 </Project>

@@ -1,9 +1,7 @@
 @using Application.User.Users.Responses
 @using MyShop.Client.Commen.Controles.Inputs
- 
-   
-   @rendermode InteractiveWebAssembly
-   <div class="col-lg-9 col-md-8">
+@rendermode InteractiveWebAssembly
+<div class="col-lg-9 col-md-8">
     <div class="row mb-4">
         <div class="col-12">
             <div class="section-title mb-2">
@@ -13,83 +11,77 @@
             <AntiforgeryToken>@(new AntiforgeryToken())</AntiforgeryToken>
 
             <section class="shadow-around p-3">
-                           <EditForm Model="UserDto" Enhance="true" FormName="UserEdit" OnValidSubmit="OnValidSubmit">
+                <EditForm Model="UserDto" Enhance="true" FormName="UserEdit" OnValidSubmit="OnValidSubmit">
 
-                               <div class="row">
-                                            <div class="col-lg-6 mb-5">
-                                                <div class="text-dark font-weight-bold">
-                                                   
-                                                        <TextInput 
-                                                            Type="string"
-                                                            Label="نام و نام خانوادگی:"   
-                                                            Value="UserDto.Name"
-                                                            Variant="Variant.Outlined"
-                                                            HelperText="علی احمدی"
-                                                            IsDisabled="IsEdit"
-                                                        />  
-                                                   
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 mb-5">
-                                                <div class="text-dark font-weight-bold">
-                                                    
-                                                        <TextInput
-                                                            Type="string"
-                                                            Label="پست الکترونیک:"
-                                                            Value="UserDto.Name"
-                                                            Variant="Variant.Outlined"
-                                                            HelperText="Ali@gmial.com"
-                                                            IsDisabled="IsEdit"
-                                                        />
-                                                  
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 mb-5">
-                                                <div class="text-dark font-weight-bold">
-                                                    <TextInput
-                                                        Type="string"
-                                                        Label="شماره تلفن همراه:"
-                                                        Value="UserDto.Name"
-                                                        Variant="Variant.Outlined"
-                                                        HelperText="علی احمدی"
-                                                        IsDisabled="IsEdit"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 mb-5">
-                                                <div class="text-dark font-weight-bold">
-                                                    <TextInput
-                                                        Type="string"
-                                                        Label="کد ملی:"
-                                                        Value="UserDto.Name"
-                                                        Variant="Variant.Outlined"
-                                                        HelperText="1274040407"
-                                                        IsDisabled="IsEdit"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 mb-5">
-                                                <div class="text-dark font-weight-bold">
-                                                    <CheckBox
-                                                        Lable="دریافت خبرنامه:"
-                                                        Value="@ReceiveNews"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-element-row text-left">
-                                                    <MudFab 
-                                                        EndIcon="@Icons.Material.Filled.Edit"
-                                                        Label="ذخیره تغییرات"
-                                                        ButtonType="ButtonType.Submit"
-                                                        ClickPropagation="true"
-                                                        Disabled="IsEdit"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </EditForm>
-                                </section>
+                    <div class="row">
+                        <div class="col-lg-6 mb-5">
+                            <div class="text-dark font-weight-bold">
+
+                                <TextInput
+                                    Type="string"
+                                    Label="نام و نام خانوادگی:"
+                                    Value="UserDto.Name"
+                                    Variant="Variant.Outlined"
+                                    HelperText="علی احمدی"
+                                    IsDisabled="IsEdit"/>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-5">
+                            <div class="text-dark font-weight-bold">
+
+                                <TextInput
+                                    Type="string"
+                                    Label="پست الکترونیک:"
+                                    Value="UserDto.Name"
+                                    Variant="Variant.Outlined"
+                                    HelperText="Ali@gmial.com"
+                                    IsDisabled="IsEdit"/>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-5">
+                            <div class="text-dark font-weight-bold">
+                                <TextInput
+                                    Type="string"
+                                    Label="شماره تلفن همراه:"
+                                    Value="UserDto.Name"
+                                    Variant="Variant.Outlined"
+                                    HelperText="علی احمدی"
+                                    IsDisabled="IsEdit"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-5">
+                            <div class="text-dark font-weight-bold">
+                                <TextInput
+                                    Type="string"
+                                    Label="کد ملی:"
+                                    Value="UserDto.Name"
+                                    Variant="Variant.Outlined"
+                                    HelperText="1274040407"
+                                    IsDisabled="IsEdit"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-5">
+                            <div class="text-dark font-weight-bold">
+                                <CheckBox
+                                    Lable="دریافت خبرنامه:"
+                                    Value="@ReceiveNews"/>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-element-row text-left">
+                                <MudFab
+                                    EndIcon="@Icons.Material.Filled.Edit"
+                                    Label="ذخیره تغییرات"
+                                    ButtonType="ButtonType.Submit"
+                                    ClickPropagation="true"
+                                    Disabled="IsEdit"/>
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+            </section>
         </div>
     </div>
 </div>
@@ -100,10 +92,10 @@
     [SupplyParameterFromForm(FormName = "UserEdit")]
     private UserDto UserDto { get; set; } = new();
 
-    [SupplyParameterFromQuery] private bool IsEdit { get; set; } = false;
+    [SupplyParameterFromQuery] private bool IsEdit { get; } = false;
     public bool ReceiveNews { get; set; }
 
- 
+
     protected override async Task OnParametersSetAsync()
     {
         // var id = Context.HttpContext.User.FindFirst(type: ClaimTypes.NameIdentifier)!.Value;
@@ -114,7 +106,6 @@
             UserDto = result.Data;
     }
 
-   
 
     private void OnValidSubmit(EditContext obj)
     {

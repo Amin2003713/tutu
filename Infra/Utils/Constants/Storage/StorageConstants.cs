@@ -1,21 +1,20 @@
-﻿namespace BlazorHero.CleanArchitecture2.Shared.Constants.Storage
+﻿namespace Infra.Utils.Constants.Storage;
+
+public static class StorageConstants
 {
-    public static class StorageConstants
+    public static class Local
     {
-        public static class Local
-        {
-            public static string Preference = "clientPreference";
+        public static string Preference = "clientPreference";
 
-            public static string AuthToken = "authToken";
-            public static string RefreshToken = "refreshToken";
-            public static string UserImageURL = "userImageURL";
-        }
+        public static string AuthToken = "authToken";
+        public static string RefreshToken = "refreshToken";
+        public static string UserImageURL = "userImageURL";
+    }
 
-        public static class Server
-        {
-            public static string Preference = "serverPreference";
+    public static class Server
+    {
+        public static string Preference = "serverPreference";
 
-            //TODO - add
-        }
+        //TODO - add
     }
 }
