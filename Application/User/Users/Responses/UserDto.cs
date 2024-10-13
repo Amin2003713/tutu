@@ -75,4 +75,6 @@ public class UserDto : BaseDto
 
         return new UserDto();
     }
+
+    public string FullName() => $"{Name} {Family}";
 }

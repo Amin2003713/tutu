@@ -1,10 +1,11 @@
 ﻿using System.Net.Http.Headers;
 using Blazored.LocalStorage;
+using Infra.Utils;
 using Infra.Utils.Constants.Storage;
 
 namespace Infra.User.Auth;
 
-public class AuthenticationHeaderHandler(ILocalStorageService localStorage) : DelegatingHandler
+public class AuthenticationHeaderHandler(ILocalStorage localStorage) : DelegatingHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request,
@@ -13,7 +14,7 @@ public class AuthenticationHeaderHandler(ILocalStorageService localStorage) : De
         if (request.Headers.Authorization?.Scheme == "Bearer")
             return await base.SendAsync(request, cancellationToken);
 
-        var savedToken = await localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken, cancellationToken);
+        var savedToken = await localStorage.GetAsync<string>(StorageConstants.Local.AuthToken);
 
         if (!string.IsNullOrWhiteSpace(savedToken))
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);

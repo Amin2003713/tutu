@@ -30,7 +30,7 @@ public class UserAuthRepository(
         {
             var result = await client.PostAsync<LoginCommand, ApiResult<LoginResponse>>(AuthRouts.Login, model);
             if (!result!.IsSuccess)
-                return null!;
+                return result;
 
             var token = result.Data.Token;
             var refreshToken = result.Data.RefreshToken;

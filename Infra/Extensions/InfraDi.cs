@@ -37,7 +37,7 @@ public static class InfraDi
         {
             client.BaseAddress = new Uri(baseAddress);
             client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "ShopApi");
-        }).AddHttpMessageHandler<AuthenticationHeaderHandler>();
+        });
 
         services.AddScoped<IUserAuthRepository, UserAuthRepository>();
         services.AddScoped<IBannerRepository, BannerRepository>();

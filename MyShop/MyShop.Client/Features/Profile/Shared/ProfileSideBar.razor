@@ -1,5 +1,9 @@
 @using MyShop.Client.Extensions
-@using System.Security.Claims
+@using Application.User.Users.Responses
+@using Infra.Utils.Constants.User
+    @rendermode InteractiveWebAssembly
+
+
 <div class="sidebar-widget">
     <div class="banner mb-3">
         <a href="#">
@@ -18,13 +22,13 @@
                         <div class="d-block">
                             <h6>
                                 <strong>
-                                    @Context.HttpContext.User.FullName() 
+                                    @User!.FullName() 
                                 </strong>
                             </h6>
                         </div>
                         <div class="d-block">
                             <strong class="text-muted">
-                                @Context.HttpContext.User.FirstName()
+                                @User.PhoneNumber
                             </strong>
                         </div>
                     </div>
@@ -88,4 +92,22 @@
             </ul>
         </div>
     </div>
-</div>
+</div>            
+
+
+@code
+{
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var user =await Local.GetAsync<UserDto>(UserConstants.UserLocation);
+
+        if(user is null)
+            _navigationManager.NavigateTo("/login" , true);
+
+        User = user;
+        StateHasChanged();
+    }
+
+    private UserDto? User { get; set; }
+}

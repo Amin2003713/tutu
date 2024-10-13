@@ -40,7 +40,7 @@ public static class WebAssemblyHostBuilderExtensions
             .AddScoped<ClientStateProvider>()
             .AddScoped<AuthenticationStateProvider, ClientStateProvider>()
             .AddScoped<ILocalStorage, LocalStorage>()
-            .AddTransient<AuthenticationHeaderHandler>()
+            // .AddTransient<AuthenticationHeaderHandler>()
             .AddHttpContextAccessor();
         return builder;
     }

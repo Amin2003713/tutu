@@ -1,10 +1,9 @@
 @using MyShop.Client.Features.Profile.Shared
 @inherits LayoutComponentBase
-@attribute [Authorize]  
+@attribute [Authorize]
 
-<SnackBar @ref="SnackBar"/>
+
 <MudRTLProvider RightToLeft="true">
-
     @* Enable Right-To-Left layout for languages like Persian/Arabic *@
 
     @* Global theme settings for the MudBlazor components *@
@@ -19,34 +18,29 @@
     @* Provides snackbar notifications across the app *@
     <MudSnackbarProvider/>
 
-    <MudLayout class="page-wrapper">
-        @* Main page wrapper layout *@
+    @* Flex container to ensure headers and content are dynamically spaced *@
+    <MudLayout class="page-wrapper" style="display: flex; flex-direction: column; min-height: 100vh;">
 
-        <PageHeader/> @* Custom page header component *@
-        <HeaderResponsive/> @* Responsive header based on screen size *@
+        @* Custom page header component *@
+        <PageHeader/>
 
-        <MudMainContent class="page-content">
+        @* Responsive header based on screen size *@
+        <HeaderResponsive/>
 
+        @* Main content with flex-grow to push footer down *@
+        <MudMainContent class="page-content" style="flex-grow: 1;">
             <MudContainer Class="container">
-                @* Replaces <div class="container"> with MudContainer *@
-
                 <MudGrid Class="mb-5" Gutter="true">
-                    @* Replaces <div class="row mb-5"> with MudGrid *@
 
                     @* Sidebar containing profile navigation options *@
-                    <MudItem xs="12" md="4" lg="3"
-                             Class="mb-md-0 mb-3 sticky-sidebar">
-                        @* Replaces <div class="col-lg-3 col-md-4"> with MudItem *@
+                    <MudItem xs="12" md="4" lg="3" Class="mb-md-0 mb-3 sticky-sidebar">
                         <ProfileSideBar/>
                     </MudItem>
 
                     @* Main content area for profile-related content *@
                     <MudItem xs="12" md="8" lg="9">
                         <MudGrid Class="mb-4">
-                            @* Replaces <div class="row mb-4"> with MudGrid *@
-                            <CascadingValue Value="SnackBar" Name="SnackBar">
-                                @Body
-                            </CascadingValue>
+                            @Body
                         </MudGrid>
                     </MudItem>
 
@@ -54,7 +48,6 @@
 
                 @* Profile banner area (e.g., profile picture, name, etc.) *@
                 <MudGrid Class="mb-5">
-                    @* Replaces <div class="row mb-5"> with MudGrid *@
                     <ProfileBanner/>
                 </MudGrid>
 
@@ -65,11 +58,4 @@
         <ProfileFooter/>
 
     </MudLayout>
-
 </MudRTLProvider>
-
-@code
-{
-    public SnackBar SnackBar { get; set; }
-
-}

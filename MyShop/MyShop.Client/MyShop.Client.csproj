@@ -51,6 +51,7 @@
     <ItemGroup>
         <_ContentIncludedByDefault Remove="wwwroot\appsettings.Development.json"/>
         <_ContentIncludedByDefault Remove="wwwroot\appsettings.json"/>
+        <_ContentIncludedByDefault Remove="wwwroot\media\notification.mp3" />
     </ItemGroup>
 
 </Project>
