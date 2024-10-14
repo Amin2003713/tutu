@@ -1,24 +1,8 @@
-﻿@inherits LayoutComponentBase 
+﻿@using MyShop.Client.Commen
+@layout BaseLayout
+@inherits LayoutComponentBase
 @attribute [Authorize]
 
 
-<MudRTLProvider RightToLeft="true">
-    @* Required *@
-    <MudThemeProvider/>
-    <MudPopoverProvider/>
-    @* Needed for dialogs *@
-    <MudDialogProvider/>
 
-    @* Needed for snackbars *@
-    <MudSnackbarProvider/>
-    <MudLayout class="page-wrapper">
-        <PageHeader/>
-        <HeaderResponsive/>
-        <MudContainer>
-            <MudMainContent class="page-content">
-                @Body
-            </MudMainContent>
-        </MudContainer>
-        <MiniFooter/>
-    </MudLayout>
-</MudRTLProvider>
+    @Body
