@@ -2,7 +2,7 @@
 @using MyShop.Ui.Commen.Footers
 @inherits LayoutComponentBase
 
-<div class="page">
+
 
     <MudRTLProvider RightToLeft="true">
         <MudThemeProvider/>
@@ -42,12 +42,11 @@
         </MudLayout>
 
     </MudRTLProvider>
-</div>
 
 
 @code
 {
-    private string? PageWrapper { get; set; }
+        private string? PageWrapper { get; set; }
 
 
     protected override async Task OnInitializedAsync()

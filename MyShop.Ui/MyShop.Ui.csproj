@@ -3,7 +3,6 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
         <ImplicitUsings>enable</ImplicitUsings>
         <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
     </PropertyGroup>
@@ -11,6 +10,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.4"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.4" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.4"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -26,19 +26,26 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="AuthenticationProvider\RedirectToLogin.razor" />
-      <AdditionalFiles Include="Commen\Dialogs\DeleteConfirmation.razor" />
-      <AdditionalFiles Include="Commen\Dialogs\Logout.razor" />
-      <AdditionalFiles Include="Commen\Error.razor" />
-      <AdditionalFiles Include="Features\Authentication\AuthenticationLayout.razor" />
-      <AdditionalFiles Include="Features\Authentication\Login.razor" />
-      <AdditionalFiles Include="Features\Authentication\Register.razor" />
-      <AdditionalFiles Include="Layout\MainLayout.razor" />
-      <AdditionalFiles Include="Layout\NavMenu.razor" />
-      <AdditionalFiles Include="Layout\NotFoundLayout.razor" />
-      <AdditionalFiles Include="Pages\Counter.razor" />
-      <AdditionalFiles Include="Pages\Home.razor" />
-      <AdditionalFiles Include="Pages\Weather.razor" />
+      <AdditionalFiles Include="Commen\BaseLayout.razor" />
+      <AdditionalFiles Include="Commen\Controles\Inputs\CheckBox.razor" />
+      <AdditionalFiles Include="Commen\Controles\Inputs\TextInput.razor" />
+      <AdditionalFiles Include="Commen\Dialogs\NotificationDialog.razor" />
+      <AdditionalFiles Include="Commen\Footers\MainFooter.razor" />
+      <AdditionalFiles Include="Commen\Footers\MiniFooter.razor" />
+      <AdditionalFiles Include="Commen\Headers\HeaderResponsive.razor" />
+      <AdditionalFiles Include="Commen\Headers\PageHeader.razor" />
+      <AdditionalFiles Include="Commen\Notifications\SnackBar.razor" />
+      <AdditionalFiles Include="Commen\StatusCodes\NotFound404.razor" />
+      <AdditionalFiles Include="Features\Profile\Account\ChangePassword.razor" />
+      <AdditionalFiles Include="Features\Profile\Account\ProfileForm.razor" />
+      <AdditionalFiles Include="Features\Profile\EditProfile.razor" />
+      <AdditionalFiles Include="Features\Profile\Orders\LatestOrders.razor" />
+      <AdditionalFiles Include="Features\Profile\Profile.razor" />
+      <AdditionalFiles Include="Features\Profile\ProfileLayout.razor" />
+      <AdditionalFiles Include="Features\Profile\Shared\LatestFavorites.razor" />
+      <AdditionalFiles Include="Features\Profile\Shared\ProfileBanner.razor" />
+      <AdditionalFiles Include="Features\Profile\Shared\ProfileFooter.razor" />
+      <AdditionalFiles Include="Features\Profile\Shared\ProfileSideBar.razor" />
     </ItemGroup>
 
     <ItemGroup>

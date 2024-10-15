@@ -1,4 +1,3 @@
-<div @attributes="Attributes">
 <footer class="main-footer">
 <div class="back-to-top">
     <div class="back-btn">
@@ -225,12 +224,3 @@
 </div>
 </div>
 </footer>
-
-</div>
-
-@code{
-
-    [Parameter(CaptureUnmatchedValues = true)]
-    public Dictionary<string, object> Attributes { get; set; } = null!;
-
-}
