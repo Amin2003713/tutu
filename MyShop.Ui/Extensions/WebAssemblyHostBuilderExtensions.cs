@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
 
-namespace MyShop.Client.Extensions;
+namespace MyShop.Ui.Extensions;
 
 public static class WebAssemblyHostBuilderExtensions
 {
@@ -26,7 +26,7 @@ public static class WebAssemblyHostBuilderExtensions
         builder
             .Services
             .AddLocalization(options => { options.ResourcesPath = "Resources"; })
-            .AddAuthorizationCore(options => { RegisterPermissionClaims(options); })
+            .AddAuthorizationCore(RegisterPermissionClaims)
             .AddBlazoredLocalStorage()
             .AddMudServices(configuration =>
             {

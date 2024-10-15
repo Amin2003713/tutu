@@ -5,7 +5,7 @@ using Infra.Extensions.Preferences;
 using Infra.Extensions.Settings;
 using Infra.Utils.Constants.Localization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using MyShop.Client.Extensions;
+using MyShop.Ui.Extensions;
 
 var builder = WebAssemblyHostBuilder
     .CreateDefault(args)

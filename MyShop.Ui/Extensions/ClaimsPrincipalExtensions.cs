@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace MyShop.Client.Extensions;
+namespace MyShop.Ui.Extensions;
 
 internal static class ClaimsPrincipalExtensions
 {
