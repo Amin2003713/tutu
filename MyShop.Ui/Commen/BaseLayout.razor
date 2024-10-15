@@ -1,44 +1,48 @@
+@using MyShop.Ui.Commen.Headers
+@using MyShop.Ui.Commen.Footers
 @inherits LayoutComponentBase
 
+<div class="page">
 
-<MudRTLProvider RightToLeft="true">
-    <MudThemeProvider/>
+    <MudRTLProvider RightToLeft="true">
+        <MudThemeProvider/>
 
-    @* Provides popover functionality throughout the page *@
-    <MudPopoverProvider/>
+        @* Provides popover functionality throughout the page *@
+        <MudPopoverProvider/>
 
-    @* Needed for handling dialog components across the app *@
-    <MudDialogProvider/>
+        @* Needed for handling dialog components across the app *@
+        <MudDialogProvider/>
 
-    @* Provides snackbar notifications across the app *@
-    <MudSnackbarProvider/>
-    <MudLayout class="@PageWrapper">
+        @* Provides snackbar notifications across the app *@
+        <MudSnackbarProvider/>
+        <MudLayout class="@PageWrapper">
 
-        <AuthorizeView>
-            <Authorized>
-                <PageHeader/>
-                <HeaderResponsive/>
-            </Authorized>
-        </AuthorizeView>
+            <AuthorizeView>
+                <Authorized>
+                    <PageHeader/>
+                    <HeaderResponsive/>
+                </Authorized>
+            </AuthorizeView>
 
-        <MudMainContent class="page-content">
-            <MudContainer>
-                @Body
-            </MudContainer>
-        </MudMainContent>
+            <MudMainContent class="page-content">
+                <MudContainer>
+                    @Body
+                </MudContainer>
+            </MudMainContent>
 
 
-        <AuthorizeView>
-            <Authorized>
-                <MainFooter/>
-            </Authorized>
-            <NotAuthorized>
-                <MiniFooter/>
-            </NotAuthorized>
-        </AuthorizeView>
-    </MudLayout>
+            <AuthorizeView>
+                <Authorized>
+                    <MainFooter/>
+                </Authorized>
+                <NotAuthorized>
+                    <MiniFooter/>
+                </NotAuthorized>
+            </AuthorizeView>
+        </MudLayout>
 
-</MudRTLProvider>
+    </MudRTLProvider>
+</div>
 
 
 @code

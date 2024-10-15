@@ -1,0 +1,36 @@
+@using MyShop.Ui.Commen.Footers
+@inherits LayoutComponentBase
+@attribute [AllowAnonymous]
+
+<MudRTLProvider RightToLeft="true">
+    <MudLayout class="page-wrapper auth-page-wrapper">
+
+        <MudThemeProvider/>
+        <MudPopoverProvider/>
+        <MudDialogProvider/>
+        <MudSnackbarProvider/>
+
+        <MudContainer>
+            <MudMainContent class="auth-wrapper page-content">
+                @Body
+            </MudMainContent>
+        </MudContainer>
+
+        <MiniFooter/>
+
+    </MudLayout>
+</MudRTLProvider>
+
+
+@code {
+    [CascadingParameter] private HttpContext? HttpContext { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (HttpContext is null)
+        {
+            NavigationManager.Refresh(true);
+        }
+    }
+
+}
