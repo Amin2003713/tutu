@@ -1,61 +1,8 @@
-@using MyShop.Client.Features.Profile.Shared
+@using MyShop.Client.Commen
+@layout BaseLayout
 @inherits LayoutComponentBase
 @attribute [Authorize]
 
 
-<MudRTLProvider RightToLeft="true">
-    @* Enable Right-To-Left layout for languages like Persian/Arabic *@
 
-    @* Global theme settings for the MudBlazor components *@
-    <MudThemeProvider/>
-
-    @* Provides popover functionality throughout the page *@
-    <MudPopoverProvider/>
-
-    @* Needed for handling dialog components across the app *@
-    <MudDialogProvider/>
-
-    @* Provides snackbar notifications across the app *@
-    <MudSnackbarProvider/>
-
-    @* Flex container to ensure headers and content are dynamically spaced *@
-    <MudLayout class="page-wrapper" style="display: flex; flex-direction: column; min-height: 100vh;">
-
-        @* Custom page header component *@
-        <PageHeader/>
-
-        @* Responsive header based on screen size *@
-        <HeaderResponsive/>
-
-        @* Main content with flex-grow to push footer down *@
-        <MudMainContent class="page-content" style="flex-grow: 1;">
-            <MudContainer Class="container">
-                <MudGrid Class="mb-5" Gutter="true">
-
-                    @* Sidebar containing profile navigation options *@
-                    <MudItem xs="12" md="4" lg="3" Class="mb-md-0 mb-3 sticky-sidebar">
-                        <ProfileSideBar/>
-                    </MudItem>
-
-                    @* Main content area for profile-related content *@
-                    <MudItem xs="12" md="8" lg="9">
-                        <MudGrid Class="mb-4">
-                            @Body
-                        </MudGrid>
-                    </MudItem>
-
-                </MudGrid>
-
-                @* Profile banner area (e.g., profile picture, name, etc.) *@
-                <MudGrid Class="mb-5">
-                    <ProfileBanner/>
-                </MudGrid>
-
-            </MudContainer>
-        </MudMainContent>
-
-        @* Footer section for the profile page *@
-        <ProfileFooter/>
-
-    </MudLayout>
-</MudRTLProvider>
+@Body

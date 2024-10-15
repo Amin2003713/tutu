@@ -29,8 +29,8 @@
 
 <body>
 
-<div class="page">
-    <div id="app">
+<div>
+    <div id="app" class="page">
     </div>
 </div>
 
@@ -66,5 +66,15 @@
 <script src="./assets/js/theme.js"></script>
 <!-- Here goes your custom.js -->
 <script src="./assets/js/custom.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#countdown--offer-slider').ClassyCountdown({
+            theme: "black",
+            end: $.now() + 645600,
+            labels: false,
+        });
+    });
+</script>
 </body>
 </html>
