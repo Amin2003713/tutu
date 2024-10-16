@@ -28,10 +28,14 @@
 @using Infra.User.Auth
 @using Infra.Extensions.Preferences
 @using Infra.Utils.Constants.User
+@using MyShop.Ui.Extensions
+@using MyShop.Ui.Features.Profile.Orders
+@using MyShop.Ui.Features.Profile.Shared
 
 @* Custom Components *@
 @using MyShop.Ui.Commen
-@using MyShop.Ui.Layout
+@using MyShop.Ui.Layout 
+
 
 @* Dependency Injection *@
 @inject ClientStateProvider StateProvider
@@ -42,6 +46,7 @@
 @inject ClientPreferenceManager ClientPreferenceManager
 @inject ILocalStorage Local
 @inject IJSRuntime JsRuntime
+@inject UserInfo UserInfo
 
 @* User Authentication & Services *@
 @inject IUserAuthRepository AuthenticationManager

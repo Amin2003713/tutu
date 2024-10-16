@@ -62,7 +62,9 @@ public class UserAuthRepository(
         await _localStorage.DeleteAsync(StorageConstants.Local.AuthToken);
         await _localStorage.DeleteAsync(StorageConstants.Local.RefreshToken);
         await _localStorage.DeleteAsync(StorageConstants.Local.UserImageURL);
+
         ((ClientStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
+
         await client.SetAuthHeader();
         return new ApiResult
         {
@@ -78,10 +80,12 @@ public class UserAuthRepository(
 
         var result = await client.PostAsync<RefreshTokenCommand, ApiResult<LoginResponse>>(AuthRouts.Refresh, command);
 
-        if (!result.IsSuccess) throw new ApplicationException("Something went wrong during the refresh token action");
+        if (!result.IsSuccess) 
+            throw new ApplicationException("Something went wrong during the refresh token action");
 
         token = result.Data.Token;
         refreshToken = result.Data.RefreshToken;
+
         await _localStorage.SetAsync(StorageConstants.Local.AuthToken, token);
         await _localStorage.SetAsync(StorageConstants.Local.RefreshToken, refreshToken);
         await client.SetAuthHeader(result.Data);
@@ -123,12 +127,12 @@ public class UserAuthRepository(
         var claimIdentityList = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
-            new(ClaimTypes.Name, userInfo.PhoneNumber),
-            new(ClaimTypes.Surname, userInfo.Family),
-            new(ClaimTypes.GivenName, userInfo.Name),
+            new(ClaimTypes.Name, userInfo.PhoneNumber ?? string.Empty),
+            new(ClaimTypes.Surname, userInfo.Family ?? string.Empty),
+            new(ClaimTypes.GivenName, userInfo.Name ?? string.Empty),
             new(ClaimTypes.Email, userInfo.Email ?? "@"),
             new(ClaimTypes.Gender, userInfo.Gender.ToString()),
-            new(ClaimTypes.UserData, userInfo.AvatarName),
+            new(ClaimTypes.UserData, userInfo.AvatarName ?? string.Empty),
             new(AuthConfig.Token, login.Token),
             new(AuthConfig.RefreshToken, login.RefreshToken)
         };

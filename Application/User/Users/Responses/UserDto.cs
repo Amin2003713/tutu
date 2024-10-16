@@ -22,12 +22,12 @@ public class UserDto : BaseDto
         var claimIdentityList = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
-            new(ClaimTypes.MobilePhone, userInfo.PhoneNumber),
-            new(ClaimTypes.Surname, userInfo.Family),
-            new(ClaimTypes.Name, userInfo.Name),
+            new(ClaimTypes.MobilePhone, userInfo.PhoneNumber ?? string.Empty),
+            new(ClaimTypes.Surname, userInfo.Family ?? string.Empty),
+            new(ClaimTypes.Name, userInfo.Name ?? string.Empty),
             new(ClaimTypes.Email, userInfo.Email ?? "@"),
-            new(ClaimTypes.Gender, userInfo.Gender.ToString()),
-            new(ClaimTypes.UserData, userInfo.AvatarName)
+            new(ClaimTypes.Gender, userInfo.Gender.ToString() ?? string.Empty),
+            new(ClaimTypes.UserData, userInfo.AvatarName ?? string.Empty)
         };
         claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, $"{a.RoleId}#{a.RoleTitle}"))
             .ToList());

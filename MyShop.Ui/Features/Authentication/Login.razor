@@ -60,7 +60,7 @@
 
         if (state.User.Identity!.IsAuthenticated)
         {
-            NavigationManager.NavigateTo("/");
+            await AuthenticationManager.Logout();
         }
     }
 

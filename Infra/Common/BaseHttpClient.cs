@@ -7,8 +7,10 @@ using Application.User.Auth.Responses;
 using Domain.Common.Api;
 using Domain.Common.Exceptions;
 using Domain.User.Auth;
+using Infra.User.Auth;
 using Infra.Utils;
 using Infra.Utils.Constants.Storage;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -18,7 +20,8 @@ namespace Infra.Common;
 ///     A base HTTP client implementation that provides methods for making HTTP requests
 ///     with support for generic response types and multipart form data.
 /// </summary>
-public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttpContextAccessor context)
+public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
+    AuthenticationStateProvider _authenticationStateProvider)
     : IBaseHttpClient
 {
     /// <summary>
@@ -27,7 +30,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
     public async Task<TResponse?> GetAsync<TResponse>(string uri)
     {
         await SetAuthHeader();
-        return await GetResponse<TResponse>(await client.GetAsync(uri));
+        return await Response<TResponse>(await client.GetAsync(uri));
     }
 
     /// <summary>
@@ -37,7 +40,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
     {
         await SetAuthHeader();
         var response = await client.PostAsJsonAsync(uri, data);
-        return await GetResponse<TResponse>(response);
+        return await Response<TResponse>(response);
     }
 
     /// <summary>
@@ -47,7 +50,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
     {
         await SetAuthHeader();
         var response = await client.PutAsJsonAsync(uri, data);
-        return await GetResponse<TResponse>(response);
+        return await Response<TResponse>(response);
     }
 
     /// <summary>
@@ -57,7 +60,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
     {
         await SetAuthHeader();
         var response = await client.PatchAsJsonAsync(uri, data);
-        return await GetResponse<TResponse>(response);
+        return await Response<TResponse>(response);
     }
 
     /// <summary>
@@ -66,7 +69,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
     public async Task<TResponse?> DeleteAsync<TResponse>(string uri)
     {
         await SetAuthHeader();
-        return await GetResponse<TResponse>(await client.DeleteAsync(uri));
+        return await Response<TResponse>(await client.DeleteAsync(uri));
     }
 
     /// <summary>
@@ -76,7 +79,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
     {
         await SetAuthHeader();
         var response = await client.PostAsync(uri, data.CreateMultipartContent());
-        return await GetResponse<TResponse>(response);
+        return await Response<TResponse>(response);
     }
 
     /// <summary>
@@ -86,7 +89,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
     {
         await SetAuthHeader();
         var response = await client.PutAsync(uri, data.CreateMultipartContent());
-        return await GetResponse<TResponse>(response);
+        return await Response<TResponse>(response);
     }
 
     /// <summary>
@@ -96,7 +99,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
     {
         await SetAuthHeader();
         var response = await client.PatchAsync(uri, data.CreateMultipartContent());
-        return await GetResponse<TResponse>(response);
+        return await Response<TResponse>(response);
     }
 
 
@@ -125,8 +128,6 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
         {
             Console.WriteLine(e);
         }
-
-        return ;
     }
 
     /// <summary>
@@ -153,7 +154,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
         var response = await client.SendAsync(request);
 
         // Handle the response
-        return await GetResponse<TResponse>(response);
+        return await Response<TResponse>(response);
     }
 
     /// <summary>
@@ -163,7 +164,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
     /// <param name="response">The HTTP response message.</param>
     /// <returns>The deserialized response if successful; otherwise, throws an exception.</returns>
     /// <exception cref="HttpRequestException">Thrown when the response indicates an error.</exception>
-    private async Task<TResponse?> GetResponse<TResponse>(HttpResponseMessage response)
+    private async Task<TResponse?> Response<TResponse>(HttpResponseMessage response)
     {
         // Handle based on status code
         switch (response.StatusCode)
@@ -177,8 +178,10 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage, IHttp
                     ? "Bad Request: The server could not understand the request."
                     : $"{(a as ApiResult)?.MetaData.Message}");
             case HttpStatusCode.Unauthorized:
-                // Throw an exception for 401 Unauthorized
+            {
+                ((ClientStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
                 throw new HttpRequestException("Unauthorized: Access is denied due to invalid credentials.");
+            }
             case HttpStatusCode.Forbidden:
                 // Throw an exception for 403 Forbidden
                 throw new HttpRequestException("Forbidden: You do not have permission to access this resource.");

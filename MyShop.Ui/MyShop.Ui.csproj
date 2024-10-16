@@ -38,7 +38,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Commen\BaseLayout.razor" />
       <AdditionalFiles Include="Commen\Controles\Inputs\CheckBox.razor" />
       <AdditionalFiles Include="Commen\Controles\Inputs\TextInput.razor" />
       <AdditionalFiles Include="Commen\Dialogs\NotificationDialog.razor" />
@@ -62,6 +61,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Infra\Infra.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Commen\Notifications\" />
     </ItemGroup>
 
 </Project>

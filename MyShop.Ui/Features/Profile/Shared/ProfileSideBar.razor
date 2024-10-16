@@ -1,3 +1,5 @@
+@using System.Security.Claims
+@using MyShop.Ui.Extensions
 
 
 
@@ -19,13 +21,13 @@
                         <div class="d-block">
                             <h6>
                                 <strong>
-                                    @User!.FullName() 
+                                      @(async () => await UserInfo.FullName())
                                 </strong>
                             </h6>
                         </div>
                         <div class="d-block">
                             <strong class="text-muted">
-                                @User.PhoneNumber
+                                @(async () => await UserInfo.PhoneNumber())
                             </strong>
                         </div>
                     </div>
@@ -80,7 +82,7 @@
                         ویرایش حساب
                     </a>
                 </li>
-                <li>
+                <li>       
                     <a href="#">
                         <i class="far fa-sign-in-alt"></i>
                         خروج
@@ -89,22 +91,6 @@
             </ul>
         </div>
     </div>
-</div>            
+</div>     
+     
 
-
-@code
-{
-
-    protected override async Task OnParametersSetAsync()
-    {
-        var user =await Local.GetAsync<UserDto>(UserConstants.UserLocation);
-
-        if(user is null)
-            NavigationManager.NavigateTo("/login" , true);
-
-        User = user;
-        StateHasChanged();
-    }
-
-    private UserDto? User { get; set; }
-}

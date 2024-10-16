@@ -15,6 +15,7 @@ using Infra.User.Auth;
 using Infra.User.Auth.Implantations;
 using Infra.User.Users.Implantations;
 using Microsoft.Extensions.DependencyInjection;
+using MyShop.Ui.Extensions;
 
 namespace Infra.Extensions;
 
@@ -45,6 +46,7 @@ public static class InfraDi
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<UserInfo>();
 
 
         return services;
