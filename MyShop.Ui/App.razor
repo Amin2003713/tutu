@@ -6,7 +6,7 @@
     <Error>
         <Router AppAssembly="@typeof(Program).Assembly">
             <Found Context="routeData">
-                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="typeof(BaseLayout)">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="typeof(MainLayout)">
                     <NotAuthorized>
                         <Login/>
                     </NotAuthorized>

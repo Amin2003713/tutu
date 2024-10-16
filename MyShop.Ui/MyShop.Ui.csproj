@@ -4,6 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
         <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
     </PropertyGroup>
 
@@ -23,6 +24,17 @@
       <_ContentIncludedByDefault Remove="Pages\Counter.razor" />
       <_ContentIncludedByDefault Remove="Pages\Home.razor" />
       <_ContentIncludedByDefault Remove="Pages\Weather.razor" />
+      <_ContentIncludedByDefault Remove="MyShop.Ui.Client\bin\Debug\net8.0\MyShop.Ui.Client.staticwebassets.runtime.json" />
+      <_ContentIncludedByDefault Remove="MyShop.Ui.Client\bin\Debug\net8.0\wwwroot\_framework\blazor.boot.json" />
+      <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\Debug\net8.0\blazor.boot.json" />
+      <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\Debug\net8.0\blazor.build.boot-extension.json" />
+      <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\Debug\net8.0\MyShop.Ui.Client.sourcelink.json" />
+      <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\Debug\net8.0\staticwebassets.build.json" />
+      <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\Debug\net8.0\staticwebassets.development.json" />
+      <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\Debug\net8.0\staticwebassets.pack.json" />
+      <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\MyShop.Ui.Client.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\project.packagespec.json" />
     </ItemGroup>
 
     <ItemGroup>

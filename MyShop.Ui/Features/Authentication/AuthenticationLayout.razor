@@ -1,9 +1,36 @@
 @using MyShop.Ui.Commen.Footers
-@inherits MyShop.Ui.Commen.BaseLayout 
-@attribute [AllowAnonymous]
+@inherits LayoutComponentBase
 
-            <MudMainContent class="auth-wrapper">
+
+<MudRTLProvider RightToLeft="true">
+    <MudThemeProvider/>
+
+    @* Provides popover functionality throughout the page *@
+    <MudPopoverProvider/>
+
+    @* Needed for handling dialog components across the app *@
+    <MudDialogProvider/>
+
+    @* Provides snackbar notifications across the app *@
+    <MudSnackbarProvider/>
+    <MudLayout class="@PageWrapper">
+
+        <MudMainContent class="page-content">
+            <MudContainer Class="@AuhPageWrapper">
                 @Body
-            </MudMainContent>
+            </MudContainer>
+        </MudMainContent>
+
+        <MiniFooter/>
+
+    </MudLayout>
+
+</MudRTLProvider>
 
 
+@code
+{
+private string? PageWrapper { get; set; } = "auth-page-wrapper page-wrapper";
+private string? AuhPageWrapper { get; set; } = " auth-wrapper";
+
+}

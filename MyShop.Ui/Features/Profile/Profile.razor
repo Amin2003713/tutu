@@ -1,4 +1,16 @@
 @page "/Profile"
+@using MyShop.Ui.Features.Profile.Orders
+@using MyShop.Ui.Features.Profile.Shared
 
 @layout ProfileLayout
 @rendermode InteractiveWebAssembly
+<MudContainer class="row mb-4">
+    <MudContainer class="col-lg-6 mb-lg-0 mb-3">
+
+    </MudContainer>    
+    <MudContainer class="col-lg-6 mb-lg-0 mb-3">
+        <LatestFavorites/>
+    </MudContainer>
+</MudContainer>
+
+<LatestOrders/>
