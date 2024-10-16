@@ -1,62 +1,54 @@
-﻿@using System.Net.Http
+﻿@* System Libraries *@
+@using System.Net.Http
 @using System.Net.Http.Json
-@using Application.User.Auth.Interfaces
-@using Application.User.Users.Interfaces
-@using Infra.Utils
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@* ASP.NET Core and Blazor *@
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
-@using static Microsoft.AspNetCore.Components.Web.RenderMode
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.AspNetCore.Http
 @using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+
+@* MudBlazor *@
 @using MudBlazor
 @using MudBlazor.Services
 
+@* Blazored LocalStorage *@
+@using Blazored.LocalStorage
 
-
-
-@*Libraries*@
-@using System.Net.Http
-@using System.Net.Http.Json
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Components.Forms
-@using Microsoft.AspNetCore.Components.Routing
-@using Microsoft.AspNetCore.Components.Web
-@using Microsoft.AspNetCore.Components.Web.Virtualization
-@using Microsoft.AspNetCore.Components.WebAssembly.Http
-@using Microsoft.JSInterop
-@using MudBlazor
-@using Blazored.LocalStorage;
-@using Infra.Extensions.Preferences
+@* Application & Infrastructure *@
+@using Application.User.Auth.Interfaces
+@using Application.User.Users.Interfaces
+@using Application.User.Users.Responses
+@using Infra.Utils
 @using Infra.User.Auth
-@using Microsoft.AspNetCore.Authorization
+@using Infra.Extensions.Preferences
+@using Infra.Utils.Constants.User
 
-
-
+@* Custom Components *@
 @using MyShop.Ui.Commen
 @using MyShop.Ui.Layout
-@inject NavigationManager _navigationManager
-@inject ClientStateProvider _stateProvider
-@inject IAuthorizationService _authorizationService
-@inject ISnackbar _snackBar
-@inject IDialogService _dialogService
-@inject HttpClient _httpClient
-@inject ClientPreferenceManager _clientPreferenceManager
-@inject ILocalStorageService _localStorage;
-@inject IJSRuntime _jsRuntime;
 
-
-
-
-@inject  ILocalStorage Local
-@inject  IUserAuthRepository _authenticationManager
-@inject  IUserService UserService
-@inject  IHttpContextAccessor Accessor
+@* Dependency Injection *@
+@inject ClientStateProvider StateProvider
+@inject IAuthorizationService AuthorizationService
+@inject ISnackbar SnackBar
 @inject IDialogService DialogService
-@inject IHttpContextAccessor Context
+@inject HttpClient HttpClient
+@inject ClientPreferenceManager ClientPreferenceManager
+@inject ILocalStorage Local
+@inject IJSRuntime JsRuntime
 
+@* User Authentication & Services *@
+@inject IUserAuthRepository AuthenticationManager
+@inject IUserService UserService
 
+@* HTTP Context Access *@
+@inject IHttpContextAccessor Accessor
+
+@* Navigation Manager and Dialog Service *@
 @inject NavigationManager NavigationManager

@@ -56,26 +56,26 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var state = await _stateProvider.GetAuthenticationStateAsync();
+        var state = await StateProvider.GetAuthenticationStateAsync();
 
         if (state.User.Identity!.IsAuthenticated)
         {
-            _navigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/");
         }
     }
 
     private async Task SubmitAsync()
     {
-        var result = await _authenticationManager.Login(_model);
+        var result = await AuthenticationManager.Login(_model);
         if (result.IsSuccess)
         {
-            _snackBar.Add( _model.PhoneNumber, Severity.Success);
-            _navigationManager.NavigateTo("/", true);
+            SnackBar.Add( _model.PhoneNumber, Severity.Success);
+            NavigationManager.NavigateTo("/", true);
         }
         else
         {
             
-                _snackBar.Add(result.MetaData.Message, Severity.Error);
+                SnackBar.Add(result.MetaData.Message, Severity.Error);
             
         }
     }

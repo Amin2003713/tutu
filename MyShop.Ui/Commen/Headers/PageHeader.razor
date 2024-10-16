@@ -1175,7 +1175,7 @@
 
             var result = await UserService.GetCurrentUser();
             if (!result!.IsSuccess)
-                _snackBar.Add( result.MetaData.Message , Severity.Error);
+                SnackBar.Add( result.MetaData.Message , Severity.Error);
             
             await Local.SetAsync(UserConstants.UserLocation, result.Data);
             User = result.Data;

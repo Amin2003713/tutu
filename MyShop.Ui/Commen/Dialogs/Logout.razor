@@ -27,8 +27,8 @@
 
     async Task Submit()
     {
-        await _authenticationManager.Logout();
-        _navigationManager.NavigateTo("/login");
+        await AuthenticationManager.Logout();
+        NavigationManager.NavigateTo("/login");
         MudDialog.Close(DialogResult.Ok(true));
     }
 

@@ -46,16 +46,16 @@
 
     private async Task SubmitAsync()
     {
-        var response = await _authenticationManager.Register(_registerUserModel);
+        var response = await AuthenticationManager.Register(_registerUserModel);
         if (response.IsSuccess)
         {
-            _snackBar.Add(response.MetaData.Message, Severity.Success);
-            _navigationManager.NavigateTo("/login");
+            SnackBar.Add(response.MetaData.Message, Severity.Success);
+            NavigationManager.NavigateTo("/login");
             _registerUserModel = new RegisterCommand();
         }
         else
         {
-            _snackBar.Add(response.MetaData.Message, Severity.Error);
+            SnackBar.Add(response.MetaData.Message, Severity.Error);
         }
     }
 

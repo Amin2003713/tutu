@@ -1,6 +1,4 @@
-@using Application.User.Users.Responses
-@using Infra.Utils.Constants.User
-    @rendermode InteractiveWebAssembly
+
 
 
 <div class="sidebar-widget">
@@ -102,7 +100,7 @@
         var user =await Local.GetAsync<UserDto>(UserConstants.UserLocation);
 
         if(user is null)
-            _navigationManager.NavigateTo("/login" , true);
+            NavigationManager.NavigateTo("/login" , true);
 
         User = user;
         StateHasChanged();
