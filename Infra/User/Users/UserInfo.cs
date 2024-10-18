@@ -1,10 +1,9 @@
-﻿using System.Security.Claims;
-using Application.User.Users.Responses;
+﻿using Application.User.Users.Responses;
 using Domain.User.Users;
 using Infra.Utils;
 using Infra.Utils.Constants.User;
 
-namespace MyShop.Ui.Extensions;
+namespace Infra.User.Users;
 
 public class UserInfo(ILocalStorage localStorage)
 {
@@ -21,7 +20,6 @@ public class UserInfo(ILocalStorage localStorage)
     public async  Task<string> FullName()
     {
         return (await localStorage.GetAsync<UserDto>(UserConstants.UserLocation))?.FullName() ?? string.Empty;
-
     }
 
     public async  Task<string> LastName()

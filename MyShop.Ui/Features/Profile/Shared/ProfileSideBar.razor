@@ -21,13 +21,13 @@
                         <div class="d-block">
                             <h6>
                                 <strong>
-                                      @(async () => await UserInfo.FullName())
+                                      @(UserDto.FullName())
                                 </strong>
                             </h6>
                         </div>
                         <div class="d-block">
                             <strong class="text-muted">
-                                @(async () => await UserInfo.PhoneNumber())
+                                @(UserDto.PhoneNumber)
                             </strong>
                         </div>
                     </div>
@@ -92,5 +92,13 @@
         </div>
     </div>
 </div>     
-     
+              @code{
+
+                  public UserDto UserDto { get; set; } = new();
+
+
+                  protected override async Task OnParametersSetAsync() 
+                      => UserDto = (await Local.GetAsync<UserDto>(UserConstants.UserLocation))!;
+
+              }
 

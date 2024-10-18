@@ -12,6 +12,7 @@ using Infra.Utils;
 using Infra.Utils.Constants.Storage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
+using MudBlazor;
 using Newtonsoft.Json;
 
 namespace Infra.Common;
@@ -21,7 +22,7 @@ namespace Infra.Common;
 ///     with support for generic response types and multipart form data.
 /// </summary>
 public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
-    AuthenticationStateProvider _authenticationStateProvider)
+    AuthenticationStateProvider authenticationStateProvider , ISnackbar snackbar)
     : IBaseHttpClient
 {
     /// <summary>
@@ -173,27 +174,45 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
                 // Deserialize the response if the status code is 200 OK or 201 Created
                 return await response.Content.ReadFromJsonAsync<TResponse>();
             case HttpStatusCode.BadRequest:
-                var a = await response.Content.ReadFromJsonAsync<TResponse>();
-                throw new HttpRequestException(a is null
-                    ? "Bad Request: The server could not understand the request."
-                    : $"{(a as ApiResult)?.MetaData.Message}");
+                snackbar.Add($"""
+                              خطایی در ارسال درخواست شما رخ داده است.
+                              لطفا درستی درخواست خود را برسی کنید. 
+                              {((await response.Content.ReadFromJsonAsync<ApiResult>())!).MetaData.Message}
+                              """, Severity.Info);
+                break;
             case HttpStatusCode.Unauthorized:
             {
-                ((ClientStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
-                throw new HttpRequestException("Unauthorized: Access is denied due to invalid credentials.");
+                ((ClientStateProvider)authenticationStateProvider).MarkUserAsLoggedOut();
+                snackbar.Add($"""
+                              نسبت به اهراز هویت اقدام نمایید. 
+                              {((await response.Content.ReadFromJsonAsync<ApiResult>())!).MetaData.Message}
+                              """, Severity.Info);
+                break;
             }
             case HttpStatusCode.Forbidden:
-                // Throw an exception for 403 Forbidden
-                throw new HttpRequestException("Forbidden: You do not have permission to access this resource.");
+                snackbar.Add($"""
+                              شما دسترسی استفاده از این بخش را ندارید. 
+                              {((await response.Content.ReadFromJsonAsync<ApiResult>())!).MetaData.Message}
+                              """, Severity.Info);
+                break;
             case HttpStatusCode.NotFound:
-                // Throw a custom NotFoundException for 404 Not Found
-                throw new NotFoundException("Not Found: The requested resource could not be found.");
+                snackbar.Add($"""
+                              {((await response.Content.ReadFromJsonAsync<ApiResult>())!).MetaData.Message}
+                              """, Severity.Info);
+                break;
             case HttpStatusCode.InternalServerError:
-                // Throw an exception for 500 Internal Server Error
-                throw new HttpRequestException("Internal Server Error: The server encountered an error.");
+                snackbar.Add($"""
+                             مشکلی در سرور رخ داده است.
+                             لطفا با پشتیبانی تماس بگیرد. 
+                             {((await response.Content.ReadFromJsonAsync<ApiResult>())!).MetaData.Message}
+                             """ , Severity.Error);
+                break;
             default:
                 throw new HttpRequestException(
                     $"HTTP Error: {(int)response.StatusCode} - {response.ReasonPhrase}. Details: {await response.Content.ReadAsStringAsync()}");
         }
+
+        // Return default if the response does not match the successful cases
+        return default!;
     }
 }

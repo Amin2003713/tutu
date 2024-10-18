@@ -13,9 +13,9 @@ using Infra.Common;
 using Infra.Orders.Implantations;
 using Infra.User.Auth;
 using Infra.User.Auth.Implantations;
+using Infra.User.Users;
 using Infra.User.Users.Implantations;
 using Microsoft.Extensions.DependencyInjection;
-using MyShop.Ui.Extensions;
 
 namespace Infra.Extensions;
 

@@ -8,6 +8,7 @@ using Domain.Common.Api;
 using Domain.User.Auth;
 using Infra.Utils;
 using Infra.Utils.Constants.Storage;
+using Infra.Utils.Constants.User;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Infra.User.Auth.Implantations;
@@ -127,9 +128,9 @@ public class UserAuthRepository(
         var claimIdentityList = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
-            new(ClaimTypes.Name, userInfo.PhoneNumber ?? string.Empty),
+            new(ClaimTypes.MobilePhone, userInfo.PhoneNumber ?? string.Empty),
             new(ClaimTypes.Surname, userInfo.Family ?? string.Empty),
-            new(ClaimTypes.GivenName, userInfo.Name ?? string.Empty),
+            new(ClaimTypes.Name, userInfo.Name ?? string.Empty),
             new(ClaimTypes.Email, userInfo.Email ?? "@"),
             new(ClaimTypes.Gender, userInfo.Gender.ToString()),
             new(ClaimTypes.UserData, userInfo.AvatarName ?? string.Empty),
@@ -138,6 +139,10 @@ public class UserAuthRepository(
         };
         claimIdentityList.AddRange(userInfo.Roles.Select(a => new Claim(ClaimTypes.Role, $"{a.RoleId}#{a.RoleTitle}"))
             .ToList());
+
+        await _localStorage.SetAsync(UserConstants.UserLocation, userInfo);
+
+
         return new ClaimsPrincipal(new ClaimsIdentity(claimIdentityList, "apiauth"));
     }
 }

@@ -30,11 +30,12 @@ public static class WebAssemblyHostBuilderExtensions
             .AddBlazoredLocalStorage()
             .AddMudServices(configuration =>
             {
-                configuration.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
-                configuration.SnackbarConfiguration.HideTransitionDuration = 100;
-                configuration.SnackbarConfiguration.ShowTransitionDuration = 100;
-                configuration.SnackbarConfiguration.VisibleStateDuration = 3000;
-                configuration.SnackbarConfiguration.ShowCloseIcon = false;
+                configuration.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.TopLeft;
+                configuration.SnackbarConfiguration.HideTransitionDuration = 200;
+                configuration.SnackbarConfiguration.ShowTransitionDuration = 200;
+                configuration.SnackbarConfiguration.VisibleStateDuration = 5000;
+                configuration.SnackbarConfiguration.ShowCloseIcon = true;
+                configuration.SnackbarConfiguration.PreventDuplicates = true;
             })
             .AddScoped<ClientPreferenceManager>()
             .AddScoped<ClientStateProvider>()
