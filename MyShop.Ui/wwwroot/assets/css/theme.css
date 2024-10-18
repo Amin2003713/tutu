@@ -219,9 +219,10 @@ hr {
 }
 
 .page-content {
-    margin-top: 35px;
     margin-bottom: 35px;
     width: 100%;
+    margin-top: 210.5px;
+    transform: none;
 }
 
 .w-120 {
@@ -2617,6 +2618,13 @@ header.page-header.fixed {
     text-align: center;
 }
 
+
+.sticky-sidebar {
+    overflow: auto;
+    position: -ms-device-fixed;
+    position: sticky;
+    top: 5%;
+}
 /*------------------------------------
     Banner
 ------------------------------------*/

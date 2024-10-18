@@ -35,6 +35,7 @@
       <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\MyShop.Ui.Client.csproj.nuget.dgspec.json" />
       <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\project.assets.json" />
       <_ContentIncludedByDefault Remove="MyShop.Ui.Client\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="wwwroot\sample-data\weather.json" />
     </ItemGroup>
 
     <ItemGroup>
