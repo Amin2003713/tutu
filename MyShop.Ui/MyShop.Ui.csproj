@@ -50,7 +50,6 @@
       <AdditionalFiles Include="Commen\StatusCodes\NotFound404.razor" />
       <AdditionalFiles Include="Features\Profile\Account\ChangePassword.razor" />
       <AdditionalFiles Include="Features\Profile\Account\ProfileForm.razor" />
-      <AdditionalFiles Include="Features\Profile\EditProfile.razor" />
       <AdditionalFiles Include="Features\Profile\Orders\LatestOrders.razor" />
       <AdditionalFiles Include="Features\Profile\Profile.razor" />
       <AdditionalFiles Include="Features\Profile\ProfileLayout.razor" />

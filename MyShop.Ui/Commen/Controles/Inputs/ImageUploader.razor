@@ -1,0 +1,85 @@
+@using Microsoft.AspNetCore.Http.Internal
+<MudFileUpload T="IBrowserFile"
+               @bind-File="FormFile"
+               For="@(() => FormFile!)"
+               Hidden="false"
+               InputClass="absolute mud-width-full mud-height-full overflow-hidden z-10"
+               InputStyle="opacity:0"
+               ErrorText="@string.Empty"/>
+
+@if (FormFile != null)
+{
+    <MudPaper Class="mt-4 file-preview" style="position: relative;">
+        <!-- Show remove icon for clearing the file -->
+        <MudIconButton Icon="Icons.Material.Filled.Clear" Color="Color.Error" Class="clear-button" @onclick="ClearFile"/>
+
+        <MudText Typo="Typo.body1">
+            <strong>File Name:</strong> @FormFile.Name <br/>
+            <strong>Size:</strong> @FormFile.Size bytes
+        </MudText>
+
+        <!-- Image preview for image files -->
+        @if (FormFile.ContentType.StartsWith("image"))
+        {
+            <MudImage Src="@_previewImageUrl" Alt="Preview" Class="preview-image mt-2"/>
+        }
+    </MudPaper>
+}
+
+@code { 
+
+    public IBrowserFile? FormFile = null!;
+    private string? _previewImageUrl;
+
+// Clear the uploaded file
+    private void ClearFile()
+    {
+        FormFile = null;
+        _previewImageUrl = null;
+    }
+
+    private async Task LoadPreviewAsync()
+    {
+        if (FormFile != null &&  FormFile.ContentType.StartsWith("image"))
+        {
+            var imageStream = FormFile.OpenReadStream();
+            using var memoryStream = new MemoryStream();
+            await imageStream.CopyToAsync(memoryStream);
+            var imageBytes = memoryStream.ToArray();
+            var base64 = Convert.ToBase64String(imageBytes);
+            _previewImageUrl = $"data:{FormFile.ContentType};base64,{base64}";
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (FormFile != null)
+        {
+            await LoadPreviewAsync();
+        }
+    }
+
+    public async Task<IFormFile> ConvertBrowserFileToFormFile()
+    {
+        if (FormFile is null)
+            return null!;
+        // Prepare a memory stream to store the file data
+        var memoryStream = new MemoryStream();
+
+        // Copy the file content into the memory stream
+        await FormFile.OpenReadStream().CopyToAsync(memoryStream);
+
+        // Reset the position of the memory stream to the beginning
+        memoryStream.Position = 0;
+
+        // Create a new FormFile instance using the memory stream
+        var formFile = new FormFile(memoryStream, 0, FormFile.Size, FormFile.Name, FormFile.Name)
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = FormFile.ContentType
+        };
+
+        return formFile;
+    }
+
+}

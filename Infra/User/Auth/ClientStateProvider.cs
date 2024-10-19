@@ -13,6 +13,7 @@ public class ClientStateProvider(
     ILocalStorage localStorage)
     : AuthenticationStateProvider
 {
+
     public ClaimsPrincipal AuthenticationStateUser { get; set; }
 
     public void MarkUserAsAuthenticated(ClaimsPrincipal authenticatedUser)

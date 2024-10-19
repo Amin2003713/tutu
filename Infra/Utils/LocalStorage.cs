@@ -28,6 +28,16 @@ public class LocalStorage(ILocalStorageService storage) : ILocalStorage
     }
 
 
+    public async Task UpdateAsync<TItem>(string key, TItem data)
+    {
+        var result = await GetAsync<TItem>(key);
+
+        if (result is not null) await DeleteAsync(key);
+
+        await SetAsync(key, data);
+
+    }
+
     public async Task DeleteAsync(string key)
     {
         await storage.RemoveItemAsync(key);

@@ -1,0 +1,64 @@
+@using Domain.User.Users
+<MudText Class=" section-title mb-2">
+    اطلاعات شخصی
+</MudText>
+
+<MudPaper Class="shadow-around p-3">
+    <MudGrid>
+        <MudItem xs="12" lg="6">
+            <MudText Typo="Typo.caption" Class="text-muted">نام و نام خانوادگی:</MudText>
+            <MudText Typo="Typo.body1" Class="font-weight-bold">@UserDto.FullName()</MudText>
+        </MudItem>
+
+        <MudItem xs="12" lg="6">
+            <MudText Typo="Typo.caption" Class="text-muted">پست الکترونیک:</MudText>
+            <MudText Typo="Typo.body1" Class="font-weight-bold">@UserDto.Email</MudText>
+        </MudItem>
+
+        <MudItem xs="12" lg="6">
+            <MudText Typo="Typo.caption" Class="text-muted">شماره تلفن همراه:</MudText>
+            <MudText Typo="Typo.body1" Class="font-weight-bold">@UserDto.PhoneNumber</MudText>
+        </MudItem>
+
+        <MudItem xs="12" lg="6">
+            <MudText Typo="Typo.caption" Class="text-muted">جنسیت:</MudText>
+            <MudText Typo="Typo.body1" Class="font-weight-bold">
+                @(UserDto.Gender switch
+                {
+                    Gender.Famele => "زن",
+                    Gender.Male => "مرد",
+                    _ => "-"
+                })
+            </MudText>
+        </MudItem>
+
+        <MudItem xs="12" lg="6">
+            <MudText Typo="Typo.caption" Class="text-muted">دریافت خبرنامه:</MudText>
+            <MudText Typo="Typo.body1" Class="font-weight-bold">-</MudText>
+        </MudItem>
+
+        <MudItem xs="12" lg="6">
+            <MudText Typo="Typo.caption" Class="text-muted">روش بازگشت وجه:</MudText>
+            <MudText Typo="Typo.body1" Class="font-weight-bold">-</MudText>
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudText Align="Align.Center">
+                    <MudLink
+                        OnClick="@(async () => await EditUser.InvokeAsync(true))"
+                        Class="link--with-border-bottom">
+                        <MudIcon Icon="@Icons.Material.Rounded.Edit" Size="Size.Small"/>
+                        ویرایش اطلاعات شخصی
+                    </MudLink>
+            </MudText>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+
+
+@code
+{
+     [Parameter] public required UserDto UserDto { get; set; }
+     [Parameter] public EventCallback<bool> EditUser { get; set; }
+
+}
