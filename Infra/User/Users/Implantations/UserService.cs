@@ -43,7 +43,6 @@ public class UserService(IBaseHttpClient client) : IUserService
 
     public async Task<ApiResult<UserDto>?> GetCurrentUser(LoginResponse login = default!)
     {
-        await client.SetAuthHeader(login);
         return await client.GetAsync<ApiResult<UserDto>>(
             UsersRoutes.UpdateCurrentUser);
     }

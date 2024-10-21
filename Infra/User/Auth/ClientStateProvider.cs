@@ -4,13 +4,16 @@ using System.Text.Json;
 using Infra.Utils;
 using Infra.Utils.Constants.Permission;
 using Infra.Utils.Constants.Storage;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Infra.User.Auth;
 
 public class ClientStateProvider(
     HttpClient httpClient,
-    ILocalStorage localStorage)
+    ILocalStorage localStorage ,
+    NavigationManager navigationManager , IHttpContextAccessor accessor)
     : AuthenticationStateProvider
 {
 
@@ -21,6 +24,7 @@ public class ClientStateProvider(
         var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
 
         NotifyAuthenticationStateChanged(authState);
+
     }
 
     public void MarkUserAsLoggedOut()
@@ -29,6 +33,7 @@ public class ClientStateProvider(
         var authState = Task.FromResult(new AuthenticationState(anonymousUser));
 
         NotifyAuthenticationStateChanged(authState);
+
     }
 
     public async Task<ClaimsPrincipal> GetAuthenticationStateProviderUserAsync()
@@ -38,11 +43,16 @@ public class ClientStateProvider(
         return authenticationStateProviderUser;
     }
 
+
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var savedToken = await localStorage.GetAsync<string>(StorageConstants.Local.AuthToken);
         if (string.IsNullOrWhiteSpace(savedToken))
+        {
+            if (!navigationManager.Uri.Contains("/login"))
+                navigationManager.NavigateTo("/login", true);
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+        }
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
         var state = new AuthenticationState(

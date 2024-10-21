@@ -12,7 +12,7 @@ public class RegisterCommand
     [StringLength(100, ErrorMessage = "رمز عبور باید حداقل {2} و حداکثر {1} کاراکتر باشد.", MinimumLength = 6)]
     public string Password { get; set; }
 
-    [Required(ErrorMessage = "تکرار رمز عبور ضروری است.")]
-    [Compare("Password", ErrorMessage = "رمز عبور و تکرار آن مطابقت ندارند.")]
-    public string ConfirmPassword { get; set; }
+    [Required(ErrorMessage = "پذیرش قوانین و مقررات ضروری است.")]
+    [Range(typeof(bool), "true", "true", ErrorMessage = "باید قوانین و مقررات را بپذیرید.")]
+    public bool AcceptedTerms { get; set; }
 }

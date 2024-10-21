@@ -3,55 +3,81 @@
 @using Microsoft.Extensions.Localization
 @layout AuthenticationLayout
 
-@inject IStringLocalizer<Register> _localizer
 
-<EditForm Model="@_registerUserModel" OnValidSubmit="SubmitAsync">
-    <MudGrid>
-        <MudItem xs="12">
-            <div class="d-flex justify-center">
-                <MudIcon Color="Color.Primary" Size="Size.Large" ViewBox="0 0 500 500" Style="width: 100px; height: 100px;"/>
-            </div>
+<div class="auth-form shadow-around">
+    <div class="site-logo">
+        <a href="#">
+            <img src="./assets/images/logo.png" alt="logo">
+        </a>
+    </div>
+    <div class="auth-form-title">
+        ثبت نام در همتا
+    </div>
+    <EditForm Model="RegisterUserModel" Enhance="true" OnValidSubmit="SubmitAsync">
+        <DataAnnotationsValidator/>
+        <!-- Phone Number Input -->
+        <MudItem xs="12" Class="form-element-row">
+            <MudTextField
+                Label="شماره موبایل"
+                Variant="Variant.Outlined"
+                Adornment="Adornment.End"
+                For="() => RegisterUserModel.PhoneNumber"
+                bind-Value="RegisterUserModel.PhoneNumber"
+                AdornmentIcon="@Icons.Material.Filled.PhoneIphone"/>
         </MudItem>
-        <MudItem xs="12">
-            <div class="d-flex justify-center">
-                <MudText Typo="Typo.h4">@_localizer["Register"]</MudText>
-            </div>
+
+        <!-- Password Input -->
+        <MudItem xs="12" Class="form-element-row">
+            <MudTextField 
+                Label="کلمه عبور"
+                Variant="Variant.Outlined"
+                InputType="InputType.Password"
+                For="() => RegisterUserModel.Password"
+                bind-Value="RegisterUserModel.Password"
+                Adornment="Adornment.End" 
+                AdornmentIcon="@Icons.Material.Filled.VpnKey"/>
         </MudItem>
-        <MudItem xs="12">
-            <div class="d-flex justify-center">
-                <MudText>
-                    @_localizer["Already have an account?"] <MudLink Href="/login">@_localizer["Sign In"]</MudLink>
-                </MudText>
-            </div>
+
+        <!-- Privacy Policy and Terms Checkbox -->
+        <MudItem xs="12" Class="form-element-row">
+            <MudCheckBox 
+                For="() => RegisterUserModel.AcceptedTerms"
+                bind-Value="RegisterUserModel.AcceptedTerms">
+                <a href="#" class="link--with-border-bottom">حریم خصوصی</a> و
+                <a href="#" class="link--with-border-bottom">شرایط و قوانین</a> استفاده از سرویس های سایت
+                همتا را مطالعه نموده و با کلیه موارد آن موافقم.
+            </MudCheckBox>
         </MudItem>
-        <MudItem xs="12" sm="6" md="6">
-            <MudTextField T="string" Label="@_localizer["Phone Number"]" @bind-Value="_registerUserModel.PhoneNumber" For="@(() => _registerUserModel.PhoneNumber)"/>
+
+        <!-- Submit Button -->
+        <MudItem xs="12" Class="form-element-row text-left">
+            <MudButton Color="Color.Success" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.PersonAdd">
+                ثبت نام در همتا
+            </MudButton>
         </MudItem>
-        <MudItem xs="12" sm="6" md="6">
-            <MudTextField For="@(() => _registerUserModel.Password)" InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" @bind-Value="_registerUserModel.Password" Label="@_localizer["Password"]"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="6">
-            <MudTextField For="@(() => _registerUserModel.ConfirmPassword)" InputType="InputType.Password" @bind-Value="_registerUserModel.ConfirmPassword" Label="@_localizer["Confirm Password"]"/>
-        </MudItem>
-        <MudItem xs="12" Class="d-flex justify-center">
-            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width: 100%;">@_localizer["Register"]</MudButton>
-        </MudItem>
-    </MudGrid>
-</EditForm>
+
+    </EditForm>
+    <div class="auth-form-footer">
+        <span>قبلا در همتا ثبت‌نام کرده‌اید؟</span>
+        <a href="#" class="link--with-border-bottom">وارد شوید</a>
+    </div>
+</div>
 
 
 @code
 {
-    private RegisterCommand _registerUserModel = new();
+    private RegisterCommand RegisterUserModel { set; get; } = new();
 
     private async Task SubmitAsync()
     {
-        var response = await AuthenticationManager.Register(_registerUserModel);
+        if (!RegisterUserModel.AcceptedTerms)
+            SnackBar.Add("پذیرش قوانین و مقررات ضروری است.", Severity.Info);
+
+        var response = await AuthenticationManager.Register(RegisterUserModel);
         if (response.IsSuccess)
         {
             SnackBar.Add(response.MetaData.Message, Severity.Success);
-            NavigationManager.NavigateTo("/login");
-            _registerUserModel = new RegisterCommand();
+            NavigationManager.NavigateTo("/login" , true);
         }
         else
         {
@@ -59,23 +85,4 @@
         }
     }
 
-    private bool _passwordVisibility;
-    private InputType _passwordInput = InputType.Password;
-    private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
-
-    private void TogglePasswordVisibility()
-    {
-        if (_passwordVisibility)
-        {
-            _passwordVisibility = false;
-            _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
-            _passwordInput = InputType.Password;
-        }
-        else
-        {
-            _passwordVisibility = true;
-            _passwordInputIcon = Icons.Material.Filled.Visibility;
-            _passwordInput = InputType.Text;
-        }
-    }
 }

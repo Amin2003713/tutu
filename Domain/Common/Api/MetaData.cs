@@ -2,6 +2,8 @@
 
 public class MetaData
 {
-    public string Message { get; set; }
-    public AppStatusCode AppStatusCode { get; set; }
+    public string Message { get; set; } = "مشکلی رخ داده است.";
+    public AppStatusCode AppStatusCode { get; set; } 
+
+
 }

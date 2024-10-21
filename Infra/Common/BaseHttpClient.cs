@@ -22,7 +22,7 @@ namespace Infra.Common;
 ///     with support for generic response types and multipart form data.
 /// </summary>
 public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
-    AuthenticationStateProvider authenticationStateProvider , ISnackbar snackbar)
+    ClientStateProvider authenticationStateProvider , ISnackbar snackbar)
     : IBaseHttpClient
 {
     /// <summary>
@@ -116,14 +116,17 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
 
         try
         {
-           var a = await localStorage.GetAsync<string>(StorageConstants.Local.AuthToken);
-            if (a is null || string.IsNullOrEmpty(a))
-                return ;
+           var token = await localStorage.GetAsync<string>(StorageConstants.Local.AuthToken);
+            if (token is null || string.IsNullOrEmpty(token))
+            {
+                authenticationStateProvider.MarkUserAsLoggedOut();
+                return;
+            }
 
             if (client.DefaultRequestHeaders.Any(a => a.Key == "Authorization"))
                 return ;
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", a);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
         catch (Exception e)
         {
@@ -165,14 +168,14 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
     /// <param name="response">The HTTP response message.</param>
     /// <returns>The deserialized response if successful; otherwise, throws an exception.</returns>
     /// <exception cref="HttpRequestException">Thrown when the response indicates an error.</exception>
-    private async Task<TResponse?> Response<TResponse>(HttpResponseMessage response)
+    private async Task<TResponse> Response<TResponse>(HttpResponseMessage response)
     {
         // Handle based on status code
         switch (response.StatusCode)
         {
             case HttpStatusCode.OK or HttpStatusCode.Created:
                 // Deserialize the response if the status code is 200 OK or 201 Created
-                return await response.Content.ReadFromJsonAsync<TResponse>();
+                return (await response.Content.ReadFromJsonAsync<TResponse>())!;
             case HttpStatusCode.BadRequest:
                 snackbar.Add($"""
                               خطایی در ارسال درخواست شما رخ داده است.
@@ -182,17 +185,13 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
                 break;
             case HttpStatusCode.Unauthorized:
             {
-                ((ClientStateProvider)authenticationStateProvider).MarkUserAsLoggedOut();
-                snackbar.Add($"""
-                              نسبت به اهراز هویت اقدام نمایید. 
-                              {((await response.Content.ReadFromJsonAsync<ApiResult>())!).MetaData.Message}
-                              """, Severity.Info);
-                break;
+                (authenticationStateProvider).MarkUserAsLoggedOut();
+                snackbar.Add("نسبت به اهراز هویت اقدام نمایید. ", Severity.Info);
+                return Activator.CreateInstance<TResponse>();
             }
             case HttpStatusCode.Forbidden:
                 snackbar.Add($"""
                               شما دسترسی استفاده از این بخش را ندارید. 
-                              {((await response.Content.ReadFromJsonAsync<ApiResult>())!).MetaData.Message}
                               """, Severity.Info);
                 break;
             case HttpStatusCode.NotFound:
@@ -204,7 +203,6 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
                 snackbar.Add($"""
                              مشکلی در سرور رخ داده است.
                              لطفا با پشتیبانی تماس بگیرد. 
-                             {((await response.Content.ReadFromJsonAsync<ApiResult>())!).MetaData.Message}
                              """ , Severity.Error);
                 break;
             default:
@@ -213,6 +211,6 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
         }
 
         // Return default if the response does not match the successful cases
-        return default!;
+        return Activator.CreateInstance<TResponse>();
     }
 }
