@@ -76,30 +76,30 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
     /// <summary>
     ///     Sends a POST request with multipart form data to the specified URI.
     /// </summary>
-    public async Task<TResponse?> PostMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
+    public async Task<TResponse?> PostMultipartAsync<TRequest, TResponse>(string uri, MultipartFormDataContent data)
     {
         await SetAuthHeader();
-        var response = await client.PostAsync(uri, data.CreateMultipartContent());
+        var response = await client.PostAsync(uri, data);
         return await Response<TResponse>(response);
     }
 
     /// <summary>
     ///     Sends a PUT request with multipart form data to the specified URI.
     /// </summary>
-    public async Task<TResponse?> PutMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
+    public async Task<TResponse?> PutMultipartAsync<TRequest, TResponse>(string uri, MultipartFormDataContent data)
     {
         await SetAuthHeader();
-        var response = await client.PutAsync(uri, data.CreateMultipartContent());
+        var response = await client.PutAsync(uri, data);
         return await Response<TResponse>(response);
     }
 
     /// <summary>
     ///     Sends a PATCH request with multipart form data to the specified URI.
     /// </summary>
-    public async Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
+    public async Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, MultipartFormDataContent data)
     {
         await SetAuthHeader();
-        var response = await client.PatchAsync(uri, data.CreateMultipartContent());
+        var response = await client.PatchAsync(uri, data);
         return await Response<TResponse>(response);
     }
 
@@ -180,13 +180,14 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
                 snackbar.Add($"""
                               خطایی در ارسال درخواست شما رخ داده است.
                               لطفا درستی درخواست خود را برسی کنید. 
-                              {((await response.Content.ReadFromJsonAsync<ApiResult>())!).MetaData.Message}
-                              """, Severity.Info);
+                              """, Severity.Error); 
+                snackbar.Add(
+                    (await response.Content.ReadFromJsonAsync<ApiResult>())!.MetaData.Message , Severity.Info);
                 break;
             case HttpStatusCode.Unauthorized:
             {
                 (authenticationStateProvider).MarkUserAsLoggedOut();
-                snackbar.Add("نسبت به اهراز هویت اقدام نمایید. ", Severity.Info);
+                snackbar.Add("نسبت به اهراز هویت اقدام نمایید. ", Severity.Error);
                 return Activator.CreateInstance<TResponse>();
             }
             case HttpStatusCode.Forbidden:
@@ -197,7 +198,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
             case HttpStatusCode.NotFound:
                 snackbar.Add($"""
                               {((await response.Content.ReadFromJsonAsync<ApiResult>())!).MetaData.Message}
-                              """, Severity.Info);
+                              """, Severity.Error);
                 break;
             case HttpStatusCode.InternalServerError:
                 snackbar.Add($"""
@@ -206,8 +207,9 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
                              """ , Severity.Error);
                 break;
             default:
-                throw new HttpRequestException(
-                    $"HTTP Error: {(int)response.StatusCode} - {response.ReasonPhrase}. Details: {await response.Content.ReadAsStringAsync()}");
+                snackbar.Add(
+                    $"HTTP Error: {(int)response.StatusCode} - {response.ReasonPhrase}. Details: {await response.Content.ReadAsStringAsync()}" , Severity.Error);
+                break;
         }
 
         // Return default if the response does not match the successful cases

@@ -3,50 +3,43 @@
 @using Microsoft.AspNetCore.Http.Internal
 @using MyShop.Ui.Commen.Controles.Inputs
 <MudPaper Class="shadow-around p-3">
-    <EditForm OnValidSubmit="OnValidSubmit" Model="UserDto">
+    <EditForm OnValidSubmit="OnValidSubmit" Model="Command">
         <DataAnnotationsValidator/>
         <MudGrid>
             <!-- Name Input -->
             <MudItem xs="12" lg="6" Class="mb-5">
                 <MudText Typo="Typo.subtitle2" Class="text-muted mb-3">نام:</MudText>
-                <MudTextField @bind-Value="UserDto.Name" Variant="Variant.Outlined" Class="font-weight-bold"/>
+                <MudTextField @bind-Value="Command.Name" Variant="Variant.Outlined" Class="font-weight-bold"/>
             </MudItem>
 
             <!-- Family Name Input -->
             <MudItem xs="12" lg="6" Class="mb-5">
                 <MudText Typo="Typo.subtitle2" Class="text-muted mb-3">نام خانوادگی:</MudText>
-                <MudTextField @bind-Value="UserDto.Family" Variant="Variant.Outlined" Class="font-weight-bold"/>
+                <MudTextField @bind-Value="Command.Family" Variant="Variant.Outlined" Class="font-weight-bold"/>
             </MudItem>
 
             <!-- Phone Number Input -->
             <MudItem xs="12" lg="6" Class="mb-5">
                 <MudText Typo="Typo.subtitle2" Class="text-muted mb-3">شماره تلفن همراه:</MudText>
-                <MudTextField @bind-Value="UserDto.PhoneNumber" Variant="Variant.Outlined" Class="font-weight-bold"/>
+                <MudTextField @bind-Value="Command.PhoneNumber" Variant="Variant.Outlined" Class="font-weight-bold"/>
             </MudItem>
 
             <!-- Email Input -->
             <MudItem xs="12" lg="6" Class="mb-5">
                 <MudText Typo="Typo.subtitle2" Class="text-muted mb-3">پست الکترونیک:</MudText>
-                <MudTextField @bind-Value="UserDto.Email" Variant="Variant.Outlined" Class="font-weight-bold"/>
+                <MudTextField @bind-Value="Command.Email" Variant="Variant.Outlined" Class="font-weight-bold"/>
             </MudItem>
 
-            <!-- Password Input -->
+            <!-- Avatar File Upload -->
             <MudItem xs="12" lg="6" Class="mb-5">
-                <MudText Typo="Typo.subtitle2" Class="text-muted mb-3">رمز عبور:</MudText>
-                <MudTextField @bind-Value="UserDto.Password" Variant="Variant.Outlined" InputType="InputType.Password"
-                              Class="font-weight-bold"/>
+                <MudText Typo="Typo.subtitle2" Class="text-muted mb-3">انتخاب آواتار:</MudText>
+                <ImageUploader @ref="ImageUploader" />
             </MudItem>
-
-            @* <!-- Avatar File Upload --> *@
-            @* <MudItem xs="12" lg="6" Class="mb-5"> *@
-            @*     <MudText Typo="Typo.subtitle2" Class="text-muted mb-3">انتخاب آواتار:</MudText> *@
-            @*     <ImageUploader @ref="ImageUploader"/> *@
-            @* </MudItem> *@
 
             <!-- Gender Radio -->
             <MudItem xs="12" lg="6" Class="mb-5">
                 <MudText Typo="Typo.subtitle2" Class="text-muted mb-3">جنسیت:</MudText>
-                <MudSelect @bind-Value="UserDto.Gender" Clearable="true" Variant="Variant.Outlined">
+                <MudSelect @bind-Value="Command.Gender" Clearable="true" Variant="Variant.Outlined">
                     <MudSelectItem Value="@(Gender.Male)">
                         آقا
                     </MudSelectItem>
@@ -71,29 +64,47 @@
 </MudPaper>
 
 @code{
-    private IReadOnlyList<IBrowserFile> _formFile { get; set; }
 
-    [Parameter] public UserDto UserDto { get; set; } = new();
 
-    private ImageUploader ImageUploader { get; set; }
+    public EditUserCommand Command { get; set; } = new EditUserCommand();
+
+    private ImageUploader ImageUploader { get; set; } = null!;
 
     [Parameter] public EventCallback<bool> IsEdit { get; set; }
 
     private bool UserGender { get; set; } = true;
 
+    protected override async Task OnParametersSetAsync()
+    {
+        var user = (await Local.GetAsync<UserDto>(UserConstants.UserLocation))!;
+
+        if (user is null)
+        {
+            var result = await UserService.GetCurrentUser();
+
+            if (!result!.IsSuccess)
+                SnackBar.Add(result.MetaData.Message, Severity.Error);
+
+            user = result.Data;
+        }
+
+        Command = (new EditUserCommand
+        {
+            Gender = user.Gender,
+            PhoneNumber = user.PhoneNumber,
+            Email = user.Email,
+            Family = user.Family,
+            Name = user.Name,
+            UserId = user.Id
+        });
+    }
+
 
     private async Task OnValidSubmit(EditContext obj)
     {
-        var result = await UserService.EditUser(new EditUserCommand
-        {
-            Gender = UserDto.Gender,
-            Avatar = await ImageUploader.ConvertBrowserFileToFormFile(),
-            PhoneNumber = UserDto.PhoneNumber,
-            Email = UserDto.Email,
-            Family = UserDto.Family,
-            Name = UserDto.Name
-        });
+        Command.Avatar = await ImageUploader.ConvertBrowserFileToFormFile();
 
+        var result = await UserService.EditUser(Command);
         if (!result!.IsSuccess)
             SnackBar.Add(result.MetaData.Message, Severity.Error);
 
@@ -110,7 +121,7 @@
 
     private void OnChange(Gender gender)
     {
-        UserDto.Gender = gender;
+        Command.Gender = gender;
     }
 
 }

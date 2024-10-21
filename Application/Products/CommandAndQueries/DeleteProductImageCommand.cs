@@ -1,7 +1,21 @@
-﻿namespace Application.Products.CommandAndQueries;
-
-public class DeleteProductImageCommand
+﻿namespace Application.Products.CommandAndQueries
 {
-    public long ImageId { get; set; }
-    public long ProductId { get; set; }
+    using System.Net.Http;
+
+    public class DeleteProductImageCommand
+    {
+        public long ImageId { get; set; }
+        public long ProductId { get; set; }
+
+        // Method to convert to MultipartFormDataContent
+        public MultipartFormDataContent ToMultipartFormData()
+        {
+            var formData = new MultipartFormDataContent();
+
+            formData.Add(new StringContent(ImageId.ToString()), nameof(ImageId));
+            formData.Add(new StringContent(ProductId.ToString()), nameof(ProductId));
+
+            return formData;
+        }
+    }
 }

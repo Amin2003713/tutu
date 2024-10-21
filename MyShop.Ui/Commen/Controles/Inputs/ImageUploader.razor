@@ -1,85 +1,84 @@
 @using Microsoft.AspNetCore.Http.Internal
-<MudFileUpload T="IBrowserFile"
-               @bind-File="FormFile"
-               For="@(() => FormFile!)"
-               Hidden="false"
-               InputClass="absolute mud-width-full mud-height-full overflow-hidden z-10"
-               InputStyle="opacity:0"
-               ErrorText="@string.Empty"/>
+    <MudFileUpload T="IReadOnlyList<IBrowserFile>"
+                   @ref="@_fileUpload"
+                   
+                   OnFilesChanged="OnInputFileChanged"
+                   InputClass="absolute overflow-hidden z-10"
+                   InputStyle="opacity:0"
+                   @ondrop="@ClearDragClass"
+                   @ondragenter="@SetDragClass"
+                   @ondragleave="@ClearDragClass"
+                   @ondragend="@ClearDragClass">
+        <ActivatorContent>
+            <MudTextField 
+                Value="@(_fileNames.FirstOrDefault())"
+                Placeholder="فایل‌ها را اینجا بکشید و رها کنید یا کلیک کنید"
+                AdornmentIcon="@Icons.Material.Filled.Delete"
+                OnAdornmentClick="@ClearAsync"
+                Variant="Variant.Outlined" Class="font-weight-bold" />
+        </ActivatorContent>
+    </MudFileUpload>
 
-@if (FormFile != null)
-{
-    <MudPaper Class="mt-4 file-preview" style="position: relative;">
-        <!-- Show remove icon for clearing the file -->
-        <MudIconButton Icon="Icons.Material.Filled.Clear" Color="Color.Error" Class="clear-button" @onclick="ClearFile"/>
+@code {
+    private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed mt-4 mud-width-full mud-height-full";
+    private string _dragClass = DefaultDragClass;
+    private readonly List<string> _fileNames = new();
+    private MudFileUpload<IReadOnlyList<IBrowserFile>> _fileUpload = null!;
+    private IBrowserFile Upload = null!;
 
-        <MudText Typo="Typo.body1">
-            <strong>File Name:</strong> @FormFile.Name <br/>
-            <strong>Size:</strong> @FormFile.Size bytes
-        </MudText>
-
-        <!-- Image preview for image files -->
-        @if (FormFile.ContentType.StartsWith("image"))
-        {
-            <MudImage Src="@_previewImageUrl" Alt="Preview" Class="preview-image mt-2"/>
-        }
-    </MudPaper>
-}
-
-@code { 
-
-    public IBrowserFile? FormFile = null!;
-    private string? _previewImageUrl;
-
-// Clear the uploaded file
-    private void ClearFile()
+    private async Task ClearAsync()
     {
-        FormFile = null;
-        _previewImageUrl = null;
+        await (_fileUpload?.ClearAsync() ?? Task.CompletedTask);
+        _fileNames.Clear();
+        ClearDragClass();
     }
 
-    private async Task LoadPreviewAsync()
+    private void OnInputFileChanged(InputFileChangeEventArgs e)
     {
-        if (FormFile != null &&  FormFile.ContentType.StartsWith("image"))
+        ClearDragClass();
+        var files = e.GetMultipleFiles();
+        foreach (var file in files)
         {
-            var imageStream = FormFile.OpenReadStream();
-            using var memoryStream = new MemoryStream();
-            await imageStream.CopyToAsync(memoryStream);
-            var imageBytes = memoryStream.ToArray();
-            var base64 = Convert.ToBase64String(imageBytes);
-            _previewImageUrl = $"data:{FormFile.ContentType};base64,{base64}";
-        }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (FormFile != null)
-        {
-            await LoadPreviewAsync();
+            _fileNames.Add(file.Name);
+            Upload = file;
         }
     }
 
     public async Task<IFormFile> ConvertBrowserFileToFormFile()
     {
-        if (FormFile is null)
+        if (Upload is null)
             return null!;
         // Prepare a memory stream to store the file data
         var memoryStream = new MemoryStream();
 
-        // Copy the file content into the memory stream
-        await FormFile.OpenReadStream().CopyToAsync(memoryStream);
+
+        if (Upload is null)
+            return null!;
+
+        await Upload!.OpenReadStream().CopyToAsync(memoryStream);
 
         // Reset the position of the memory stream to the beginning
         memoryStream.Position = 0;
 
         // Create a new FormFile instance using the memory stream
-        var formFile = new FormFile(memoryStream, 0, FormFile.Size, FormFile.Name, FormFile.Name)
+        var formFile = new FormFile(memoryStream, 0, Upload.Size, Upload.Name, Upload.Name)
         {
             Headers = new HeaderDictionary(),
-            ContentType = FormFile.ContentType
+            ContentType = Upload.ContentType
         };
 
         return formFile;
+    }
+
+
+    private void SetDragClass()
+    {
+        _dragClass = $"{DefaultDragClass} mud-border-primary";
+    }
+
+    private void ClearDragClass()
+    {
+        _dragClass = DefaultDragClass;
     }
 
 }

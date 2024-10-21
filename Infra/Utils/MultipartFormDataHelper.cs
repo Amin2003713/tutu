@@ -1,7 +1,9 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Infra.Utils;
+
 
 /// <summary>
 ///     Provides helper methods for creating multipart form data content.
@@ -29,17 +31,17 @@ public static class MultipartFormDataHelper
             {
                 case IFormFile file:
                     content = new StreamContent(file.OpenReadStream());
-                    multipartContent.Add(content, prop.Name, prop.Name);
+                    multipartContent.Add(content, prop.Name);
                     break;
 
                 case Stream streamValue:
                     content = new StreamContent(streamValue);
-                    multipartContent.Add(content, prop.Name, prop.Name);
+                    multipartContent.Add(content, prop.Name);
                     break;
 
                 case byte[] byteArrayValue:
                     content = new ByteArrayContent(byteArrayValue);
-                    multipartContent.Add(content, prop.Name, prop.Name);
+                    multipartContent.Add(content, prop.Name);
                     break;
 
 

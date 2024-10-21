@@ -54,10 +54,13 @@ public class ClientStateProvider(
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
+
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
         var state = new AuthenticationState(
             new ClaimsPrincipal(new ClaimsIdentity(GetClaimsFromJwt(savedToken), "jwt")));
+
         AuthenticationStateUser = state.User;
+
         return state;
     }
 

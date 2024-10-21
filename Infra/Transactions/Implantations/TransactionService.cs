@@ -10,6 +10,6 @@ public class TransactionService(IBaseHttpClient client) : ITransactionService
     public async Task<ApiResult?> CreateTransaction(CreateTransactionCommand command)
     {
         return await client.PostMultipartAsync<CreateTransactionCommand, ApiResult>(
-            TransactionRouts.CreateTransaction, command);
+            TransactionRouts.CreateTransaction, command.ToMultipartFormData());
     }
 }
