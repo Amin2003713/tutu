@@ -1,3 +1,4 @@
+using System.Text;
 using Domain.User.Users;
 using Microsoft.Net.Http.Headers;
 using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
@@ -18,25 +19,28 @@ public class EditUserCommand
 
     public MultipartFormDataContent ToMultipartFormData()
     {
-        var formData = new MultipartFormDataContent();
-        // Add form fields
-        formData.Add(new StringContent(UserId.ToString()), "UserId");
-        formData.Add(new StringContent(Name), "Name");
-        formData.Add(new StringContent(Family), "Family");
-        formData.Add(new StringContent(PhoneNumber), "PhoneNumber");
-        formData.Add(new StringContent(Email), "Email");
-        formData.Add(new StringContent(Gender.ToString()), "Gender");
+        var content = new MultipartFormDataContent();
 
+        content.Add(new StringContent(UserId.ToString()  , Encoding.UTF8), "UserId");
+        content.Add(new StringContent(Name, Encoding.UTF8), "Name");
+        content.Add(new StringContent(Family , Encoding.UTF8), "Family");
+        content.Add(new StringContent(PhoneNumber , Encoding.UTF8), "PhoneNumber");
+        content.Add(new StringContent(Email , Encoding.UTF8), "Email");
+        content.Add(new StringContent(Gender.ToString() , Encoding.UTF8), "Gender");
+
+        // Add the avatar file if it exists
         if (Avatar != null)
         {
-            var fileStream = Avatar.OpenReadStream();
-            var fileContent = new StreamContent(fileStream);
-            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(Avatar.ContentType);
-
-            // Note: `prop.Name` from the IFormFile is sent as "Avatar"
-            formData.Add(fileContent, "Avatar", Avatar.FileName);
+            var fileContent = new StreamContent(Avatar.OpenReadStream())
+            {
+                Headers =
+                {
+                    ContentType = MediaTypeHeaderValue.Parse(Avatar.ContentType)
+                }
+            };
+            content.Add(fileContent, "Avatar", Avatar.FileName);
         }
 
-        return formData;
+        return (content);
     }
 }

@@ -89,6 +89,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
     public async Task<TResponse?> PutMultipartAsync<TRequest, TResponse>(string uri, MultipartFormDataContent data)
     {
         await SetAuthHeader();
+       
         var response = await client.PutAsync(uri, data);
         return await Response<TResponse>(response);
     }
@@ -99,6 +100,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
     public async Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, MultipartFormDataContent data)
     {
         await SetAuthHeader();
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
         var response = await client.PatchAsync(uri, data);
         return await Response<TResponse>(response);
     }

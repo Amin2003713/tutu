@@ -6,6 +6,8 @@
     <EditForm OnValidSubmit="OnValidSubmit" Model="Command">
         <DataAnnotationsValidator/>
         <MudGrid>
+            <MudTextField @bind-Value="Command.UserId" Variant="Variant.Outlined" Class="font-weight-bold" hidden/>
+
             <!-- Name Input -->
             <MudItem xs="12" lg="6" Class="mb-5">
                 <MudText Typo="Typo.subtitle2" Class="text-muted mb-3">نام:</MudText>
@@ -55,8 +57,12 @@
 
             <!-- Submit Button -->
             <MudItem xs="12" Class="text-right">
-                <MudButton Color="Color.Warning" Variant="Variant.Filled" StartIcon="Icons.Material.Filled.Save" ButtonType="ButtonType.Submit">
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" StartIcon="Icons.Material.Filled.Save" ButtonType="ButtonType.Submit">
                     ذخیره تغییرات
+                </MudButton>
+                <MudButton Color="Color.Secondary" Variant="Variant.Filled" StartIcon="Icons.Material.Filled.Save"
+                           ButtonType="ButtonType.Button" OnClick="@(async () => await IsEdit.InvokeAsync(false))">
+                    انصراف
                 </MudButton>
             </MudItem>
         </MudGrid>
@@ -104,18 +110,22 @@
     {
         Command.Avatar = await ImageUploader.ConvertBrowserFileToFormFile();
 
-        var result = await UserService.EditUser(Command);
+        var result = await UserService.EditUserCurrent(Command);
         if (!result!.IsSuccess)
             SnackBar.Add(result.MetaData.Message, Severity.Error);
 
-        var userInfo = await UserService.GetCurrentUser();
+        SnackBar.Add(result.MetaData.Message, Severity.Success);
+
+    var userInfo = await UserService.GetCurrentUser();
 
         if (!userInfo!.IsSuccess)
             SnackBar.Add(result.MetaData.Message, Severity.Error);
 
-        await Local.UpdateAsync(UserConstants.UserLocation, userInfo);
+        await Local.UpdateAsync(UserConstants.UserLocation, userInfo.Data);
+     SnackBar.Add(userInfo.MetaData.Message, Severity.Success);
 
-        await IsEdit.InvokeAsync(false);
+    await IsEdit.InvokeAsync(false);
+    StateHasChanged();
     }
 
 

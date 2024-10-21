@@ -20,13 +20,13 @@ public class UserService(IBaseHttpClient client) : IUserService
     public async Task<ApiResult?> EditUser(EditUserCommand command)
     {
         return await client.PutMultipartAsync<EditUserCommand, ApiResult>(
-            UsersRoutes.UpdateUser, command.ToMultipartFormData());
+            UsersRoutes.UpdateUser, command.CreateMultipartContent());
     }
 
     public async Task<ApiResult?> EditUserCurrent(EditUserCommand command)
     {
         return await client.PutMultipartAsync<EditUserCommand, ApiResult>(
-            UsersRoutes.UpdateCurrentUser, command.ToMultipartFormData());
+            UsersRoutes.UpdateCurrentUser, command.CreateMultipartContent());
     }
 
     public async Task<ApiResult?> ChangePassword(ChangePasswordCommand command)
