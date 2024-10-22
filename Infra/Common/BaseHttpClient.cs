@@ -76,32 +76,31 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
     /// <summary>
     ///     Sends a POST request with multipart form data to the specified URI.
     /// </summary>
-    public async Task<TResponse?> PostMultipartAsync<TRequest, TResponse>(string uri, MultipartFormDataContent data)
+    public async Task<TResponse?> PostMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
     {
         await SetAuthHeader();
-        var response = await client.PostAsync(uri, data);
+        var response = await client.PostAsync(uri, data.CreateMultipartContent());
         return await Response<TResponse>(response);
     }
 
     /// <summary>
     ///     Sends a PUT request with multipart form data to the specified URI.
     /// </summary>
-    public async Task<TResponse?> PutMultipartAsync<TRequest, TResponse>(string uri, MultipartFormDataContent data)
+    public async Task<TResponse?> PutMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
     {
         await SetAuthHeader();
        
-        var response = await client.PutAsync(uri, data);
+        var response = await client.PutAsync(uri, data.CreateMultipartContent());
         return await Response<TResponse>(response);
     }
 
     /// <summary>
     ///     Sends a PATCH request with multipart form data to the specified URI.
     /// </summary>
-    public async Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, MultipartFormDataContent data)
+    public async Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, TRequest data)
     {
         await SetAuthHeader();
-        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
-        var response = await client.PatchAsync(uri, data);
+        var response = await client.PatchAsync(uri, data.CreateMultipartContent());
         return await Response<TResponse>(response);
     }
 

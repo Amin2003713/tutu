@@ -12,19 +12,19 @@ public class CategoryRepository(IBaseHttpClient client) : ICategoryRepository
     public async Task<ApiResult<long>?> AddChild(AddChildCategoryCommand command)
     {
         return await client.PostMultipartAsync<AddChildCategoryCommand, ApiResult<long>>
-            (CategoryRouts.PostCategoryChildMultipartData, command.ToMultipartFormData());
+            (CategoryRouts.PostCategoryChildMultipartData, command);
     }
 
     public async Task<ApiResult?> Edit(EditCategoryCommand command)
     {
         return await client.PutMultipartAsync<EditCategoryCommand, ApiResult>
-            (CategoryRouts.PutCategoryMultipartData, command.ToMultipartFormData());
+            (CategoryRouts.PutCategoryMultipartData, command);
     }
 
     public async Task<ApiResult<long>?> Create(CreateCategoryCommand command)
     {
         return await client.PostMultipartAsync<CreateCategoryCommand, ApiResult<long>>
-            (CategoryRouts.PostCategoryMultipartData, command.ToMultipartFormData());
+            (CategoryRouts.PostCategoryMultipartData, command);
     }
 
     public async Task<ApiResult?> Remove(CategoryIdCommand command)

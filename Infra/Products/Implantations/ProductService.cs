@@ -13,25 +13,25 @@ public class ProductService(IBaseHttpClient client) : IProductService
 {
     public async Task<ApiResult?> CreateProduct(CreateProductCommand command)
     {
-        return await client.PostMultipartAsync<CreateProductCommand, ApiResult>(ProductRouts.CreateProduct, command.ToMultipartFormData());
+        return await client.PostMultipartAsync<CreateProductCommand, ApiResult>(ProductRouts.CreateProduct, command);
     }
 
     public async Task<ApiResult?> EditProduct(EditProductCommand command)
     {
-        return await client.PutMultipartAsync<EditProductCommand, ApiResult>(ProductRouts.UpdateProduct, command.ToMultipartFormData());
+        return await client.PutMultipartAsync<EditProductCommand, ApiResult>(ProductRouts.UpdateProduct, command);
     }
 
     public async Task<ApiResult?> AddImage(AddProductImageCommand command)
     {
         return await client.PostMultipartAsync<AddProductImageCommand, ApiResult>(ProductRouts.UploadProductImages,
-            command.ToMultipartFormData());
+            command);
     }
 
     public async Task<ApiResult?> DeleteProductImage(DeleteProductImageCommand command)
     {
         return await client
             .PostMultipartAsync<DeleteProductImageCommand, ApiResult>
-                (ProductRouts.DeleteProductImages, command.ToMultipartFormData());
+                (ProductRouts.DeleteProductImages, command);
     }
 
     public async Task<ApiResult<ProductDto?>?> GetProductById(long productId)

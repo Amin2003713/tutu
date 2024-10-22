@@ -61,7 +61,7 @@ public interface IBaseHttpClient
     /// <param name="uri">The URI to which the POST request is sent.</param>
     /// <param name="data">data that will be converted to Multipart </param>
     /// <returns>A task representing the asynchronous operation, with a result of the expected response type.</returns>
-    Task<TResponse?> PostMultipartAsync<TRequest, TResponse>(string uri, MultipartFormDataContent data);
+    Task<TResponse?> PostMultipartAsync<TRequest, TResponse>(string uri, TRequest data);
 
     /// <summary>
     ///     Sends a PUT request with multipart form data to the specified URI.
@@ -71,7 +71,7 @@ public interface IBaseHttpClient
     /// <param name="data">data that will be converted to Multipart </param>
     /// <typeparam name="TRequest">The type of the request content.</typeparam>
     /// <returns>A task representing the asynchronous operation, with a result of the expected response type.</returns>
-    Task<TResponse?> PutMultipartAsync<TRequest, TResponse>(string uri, MultipartFormDataContent data);
+    Task<TResponse?> PutMultipartAsync<TRequest, TResponse>(string uri, TRequest data);
 
     /// <summary>
     ///     Sends a PATCH request with multipart form data to the specified URI.
@@ -81,7 +81,7 @@ public interface IBaseHttpClient
     /// <param name="data">data that will be converted to Multipart </param>
     /// <typeparam name="TRequest">The type of the request content.</typeparam>
     /// <returns>A task representing the asynchronous operation, with a result of the expected response type.</returns>
-    Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, MultipartFormDataContent data);
+    Task<TResponse?> PatchMultipartAsync<TRequest, TResponse>(string uri, TRequest data);
 
 
     Task SetAuthHeader(LoginResponse response = default!);

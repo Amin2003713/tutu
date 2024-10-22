@@ -12,13 +12,13 @@ public class SliderService(IBaseHttpClient client) : ISliderService
     public async Task<ApiResult?> CreateSlider(CreateSliderCommand command)
     {
         return await client.PostMultipartAsync<CreateSliderCommand, ApiResult>(
-            SliderRoute.CreateSlider, command.ToMultipartFormData());
+            SliderRoute.CreateSlider, command);
     }
 
     public async Task<ApiResult?> EditSlider(EditSliderCommand command)
     {
         return await client.PutMultipartAsync<EditSliderCommand, ApiResult>(
-            SliderRoute.CreateSlider, command.ToMultipartFormData());
+            SliderRoute.CreateSlider, command);
     }
 
     public async Task<ApiResult?> DeleteSlider(long sliderId)
