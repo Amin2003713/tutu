@@ -120,7 +120,7 @@
 
         if (!userInfo!.IsSuccess)
             SnackBar.Add(result.MetaData.Message, Severity.Error);
-
+        
         await Local.UpdateAsync(UserConstants.UserLocation, userInfo.Data);
      SnackBar.Add(userInfo.MetaData.Message, Severity.Success);
 
