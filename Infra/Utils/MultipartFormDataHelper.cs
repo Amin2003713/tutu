@@ -31,7 +31,7 @@ public static class MultipartFormDataHelper
             {
                 case IFormFile file:
                     content = new StreamContent(file.OpenReadStream());
-                    multipartContent.Add(content, prop.Name);
+                    multipartContent.Add(content, prop.Name  , file.FileName);
                     break;
 
                 case Stream streamValue:
