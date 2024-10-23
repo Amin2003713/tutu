@@ -47,6 +47,17 @@ public class ClientStateProvider(
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var savedToken = await localStorage.GetAsync<string>(StorageConstants.Local.AuthToken);
+        var lastVisitedUrl = await localStorage.GetAsync<string>(StorageConstants.Local.LastUrl);
+
+        if(!navigationManager.Uri.EndsWith($"/") && !navigationManager.Uri.Equals(lastVisitedUrl)  )
+        {
+            await localStorage.UpdateAsync(StorageConstants.Local.LastUrl, navigationManager.Uri);
+        }
+        else
+        {
+            navigationManager.NavigateTo(lastVisitedUrl);
+        }
+
         if (string.IsNullOrWhiteSpace(savedToken))
         {
             if (!navigationManager.Uri.Contains("/login"))

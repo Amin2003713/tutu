@@ -1,25 +1,49 @@
 @using Application.User.UserAddress.Responses
+        
+<div class="col-xl-3 col-lg-4 col-sm-6 mb-3 Text-Color">
+    <MudCard Outlined="true" Elevation="@Elevation" >
+        <MudCardHeader class="cardHeader">
+            <CardHeaderActions>
+                <MudRadio                   
+                    Placement="Placement.Right"
+                    Color="Color.Success"  
+                    UncheckedColor="Color.Warning"
+                    Size="Size.Small"
+                    Value="Address.Id"
+                    Dense="true">
+                    <MudText
+                        Color="Color.Dark"
+                        GutterBottom="true"
+                        Align="Align.Start">
+                        به این آدرس ارسال شود
+                    </MudText>
+                </MudRadio>
+            </CardHeaderActions>
+        </MudCardHeader>
+
+        <MudDivider DividerType="DividerType.Middle" class="Address-Divider"/>
 
 
-<MudItem xs="12" sm="6" lg="4" xl="3" Class="mb-3" Style="border: solid rgba(7,3,2,0.22)">
-    <MudToggleIconButton Color="Color.Default" Variant="Variant.Text" bind-Toggled="Address.ActiveAddress" ToggledColor="Color.Success" ToggledChanged="@ToggleChanged">
-        <MudText Typo="Typo.subtitle2">
-            به این آدرس ارسال شود
-        </MudText>
-    </MudToggleIconButton>
-  
-    <MudText Typo="Typo.body2">
-        @Address.FullAddress()
-    </MudText>
-    <MudText Typo="Typo.body2">
-        <MudIcon Icon="@Icons.Material.Filled.Person"/>
-        @Address.ContactName()
-    </MudText>
-    <MudLink Underline="Underline.None" OnClick="EditAddress">
-        ویرایش
-        <MudIcon Icon="@Icons.Material.Filled.Edit"/>
-    </MudLink>
-</MudItem>
+        <MudCardContent>
+            <MudText Align="Align.Start">
+                @Address.FullAddress()
+            </MudText>
+            <MudText Align="Align.Start">
+                <MudIcon Icon="@Icons.Material.Filled.Person"/>
+                @Address.ContactName()
+            </MudText>
+        </MudCardContent>
+        <MudCardActions >
+            <MudLink Underline="Underline.None" OnClick="EditAddress">
+                ویرایش
+                <MudIcon Icon="@Icons.Material.Filled.Edit"/>
+            </MudLink>        </MudCardActions>
+    </MudCard>
+</div>
+ 
+
+
+
 
 
 
@@ -33,6 +57,7 @@
 
 
     private bool Selected { get; set; }
+    [Parameter] public int Elevation { get; set; } = 1;
 
     protected override void OnParametersSet()
     {

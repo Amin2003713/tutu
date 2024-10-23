@@ -36,6 +36,7 @@ public static class WebAssemblyHostBuilderExtensions
                 configuration.SnackbarConfiguration.VisibleStateDuration = 5000;
                 configuration.SnackbarConfiguration.ShowCloseIcon = true;
                 configuration.SnackbarConfiguration.PreventDuplicates = true;
+
             })
             .AddScoped<ClientPreferenceManager>()
             .AddScoped<ClientStateProvider>()
