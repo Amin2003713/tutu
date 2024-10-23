@@ -184,6 +184,12 @@ hr {
     text-align: center;
 }
 
+
+.Text-Color {
+    color: #997799 !important;
+    font-size: 13px !important;
+}
+
 .shadow-around {
     background-color: #fff;
     border: 1px solid #ededed;
@@ -2954,7 +2960,7 @@ header.page-header.fixed {
     Checkout
 ------------------------------------*/
 .checkout-section {
-    padding: 40px 0;
+    padding: 8px 0;
 }
 
 .checkout-section .checkout-step {

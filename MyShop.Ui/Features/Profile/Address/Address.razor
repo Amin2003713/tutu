@@ -3,42 +3,33 @@
                          
 @layout ProfileLayout
 
+<MudPaper Elevation="1" Class="checkout-section shadow-around">
+    <MudToolBar Class="justify-space-between" Dense="@true" WrapContent="false">
+        <MudText Typo="Typo.h6" Class="mb-2" Align="Align.Start">
+            نشانی‌ها
+        </MudText> 
+        <MudIconButton Icon="@Icons.Material.Outlined.Add"/>
+    </MudToolBar>
 
-<MudText Typo="Typo.h6" Class="mb-2" Align="Align.Start">
-    نشانی‌ها
-</MudText>
-
-        <div class="checkout-section shadow-around">
+        <div class="checkout-section-content">
 
             <MudRadioGroup
                 T="long"
                 bind-Value="SelectedAddress"
                 ValueChanged="Callback">
-                <div class="checkout-section-content">
-                    <div class="row mx-0">
-                        <Virtualize Items="@Addresses">
+                <div class="row mx-0">
+                    <MudVirtualize Items="@Addresses">
 
-                            <AddressInfo
-                                Elevation="@(context.ActiveAddress ? 2 : 1)"
-                                Address="context"/>
-
-                        </Virtualize>
-
-                        <div class="col-xl-3 col-lg-4 col-sm-6 mb-3">
-                            <div class="custom-control custom-radio">
-                                <button class="add-address" data-toggle="modal"
-                                        data-target="#addAddressModal">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-
+                        <AddressInfo
+                            Elevation="@(context.ActiveAddress ? 2 : 1)"
+                            Address="context"/>
+                    </MudVirtualize>
                 </div>
             </MudRadioGroup>
-
         </div>
+
+
+</MudPaper>
 
 @code {
 

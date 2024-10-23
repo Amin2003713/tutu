@@ -1,43 +1,49 @@
 @using Application.User.UserAddress.Responses
         
 <div class="col-xl-3 col-lg-4 col-sm-6 mb-3 Text-Color">
-    <MudCard Outlined="true" Elevation="@Elevation" >
+    <MudCard Outlined="true" Elevation="@Elevation">
         <MudCardHeader class="cardHeader">
             <CardHeaderActions>
                 <MudRadio                   
-                    Placement="Placement.Right"
+                    Placement="Placement.Left"
                     Color="Color.Success"  
                     UncheckedColor="Color.Warning"
                     Size="Size.Small"
                     Value="Address.Id"
                     Dense="true">
                     <MudText
+                        Class="Text-Color"
                         Color="Color.Dark"
                         GutterBottom="true"
-                        Align="Align.Start">
+                        Align="Align.Left">
                         به این آدرس ارسال شود
                     </MudText>
                 </MudRadio>
             </CardHeaderActions>
         </MudCardHeader>
 
-        <MudDivider DividerType="DividerType.Middle" class="Address-Divider"/>
+        <MudDivider DividerType="DividerType.FullWidth"/>
 
 
         <MudCardContent>
-            <MudText Align="Align.Start">
+            <MudText Align="Align.Start" Class="Text-Color">
                 @Address.FullAddress()
             </MudText>
-            <MudText Align="Align.Start">
+            <MudText
+                Class="Text-Color"
+                Align="Align.Start">
                 <MudIcon Icon="@Icons.Material.Filled.Person"/>
                 @Address.ContactName()
             </MudText>
         </MudCardContent>
         <MudCardActions >
-            <MudLink Underline="Underline.None" OnClick="EditAddress">
-                ویرایش
-                <MudIcon Icon="@Icons.Material.Filled.Edit"/>
-            </MudLink>        </MudCardActions>
+            <MudText Align="Align.End">
+                <MudLink Underline="Underline.None" OnClick="EditAddress">
+                    ویرایش
+                    <MudIcon Icon="@Icons.Material.Filled.Edit"/>
+                </MudLink>
+            </MudText>
+            </MudCardActions>
     </MudCard>
 </div>
  
@@ -71,8 +77,4 @@
 
     }
 
-    private async Task ToggleChanged(bool arg)
-    {
-        SnackBar.Add("hii", Severity.Success);
-    }
 }
