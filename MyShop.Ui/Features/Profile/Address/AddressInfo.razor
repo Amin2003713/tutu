@@ -1,0 +1,53 @@
+@using Application.User.UserAddress.Responses
+
+
+<MudItem xs="12" sm="6" lg="4" xl="3" Class="mb-3" Style="border: solid rgba(7,3,2,0.22)">
+    <MudToggleIconButton Color="Color.Default" Variant="Variant.Text" bind-Toggled="Address.ActiveAddress" ToggledColor="Color.Success" ToggledChanged="@ToggleChanged">
+        <MudText Typo="Typo.subtitle2">
+            به این آدرس ارسال شود
+        </MudText>
+    </MudToggleIconButton>
+  
+    <MudText Typo="Typo.body2">
+        @Address.FullAddress()
+    </MudText>
+    <MudText Typo="Typo.body2">
+        <MudIcon Icon="@Icons.Material.Filled.Person"/>
+        @Address.ContactName()
+    </MudText>
+    <MudLink Underline="Underline.None" OnClick="EditAddress">
+        ویرایش
+        <MudIcon Icon="@Icons.Material.Filled.Edit"/>
+    </MudLink>
+</MudItem>
+
+
+
+
+
+
+@code
+{                         
+    [Parameter]
+    public required AddressDto Address { get; set; } = null!;
+
+
+    private bool Selected { get; set; }
+
+    protected override void OnParametersSet()
+    {
+
+        Selected = Address.ActiveAddress;
+    }
+
+
+    private async Task EditAddress()
+    {
+
+    }
+
+    private async Task ToggleChanged(bool arg)
+    {
+        SnackBar.Add("hii", Severity.Success);
+    }
+}
