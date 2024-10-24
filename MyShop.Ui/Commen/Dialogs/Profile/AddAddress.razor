@@ -1,0 +1,85 @@
+<h3>AddAddress</h3>
+
+<MudDialog>
+    <DialogContent>
+        <MudPaper Class="modal-dialog modal-dialog-centered modal-lg">
+            <MudCard Class="modal-content">
+                <MudCardHeader Class="modal-header">
+                    <MudText Typo="Typo.h5" Class="modal-title">آدرس جدید</MudText>
+                    <MudIconButton Icon="Icons.Material.Filled.Close" Class="close" ></MudIconButton>
+                </MudCardHeader>
+
+                <MudCardContent Class="modal-body">
+                    <MudForm>
+                        <MudGrid>
+                            <MudItem xs="12" lg="6" Class="mb-3">
+                                <MudText Typo="Typo.body2" Class="text-sm text-muted mb-1">نام و نام خانوادگی:</MudText>
+                                <MudTextField Class="input-element" HelperText="علی احمدی"/>
+                            </MudItem>
+
+                            <MudItem xs="12" lg="6" Class="mb-3">
+                                <MudText Typo="Typo.body2" Class="text-sm text-muted mb-1">شماره موبایل:</MudText>
+                                <MudTextField Class="input-element dir-ltr" HelperText="09*********"/>
+                            </MudItem>
+
+                            <MudItem xs="12" lg="6" Class="mb-3">
+                                <MudText Typo="Typo.body2" Class="text-sm text-muted mb-1">استان:</MudText>
+                                <MudSelect Class="select2">
+                                    <MudSelectItem Value="0">انتخاب استان</MudSelectItem>
+                                    <MudSelectItem Value="1">خراسان شمالی</MudSelectItem>
+                                    <MudSelectItem Value="2">تهران</MudSelectItem>
+                                    <MudSelectItem Value="3">تبریز</MudSelectItem>
+                                    <MudSelectItem Value="4">شیراز</MudSelectItem>
+                                    <MudSelectItem Value="5">کرمان</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" lg="6" Class="mb-3">
+                                <MudText Typo="Typo.body2" Class="text-sm text-muted mb-1">شهر:</MudText>
+                                <MudSelect Class="select2">
+                                    <MudSelectItem Value="0">انتخاب شهر</MudSelectItem>
+                                    <MudSelectItem Value="1">بجنورد</MudSelectItem>
+                                    <MudSelectItem Value="2">شیروان</MudSelectItem>
+                                    <MudSelectItem Value="3">اسفراین</MudSelectItem>
+                                    <MudSelectItem Value="4">مانه و سملقان</MudSelectItem>
+                                    <MudSelectItem Value="5">راز و جرگلان</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" Class="mb-3">
+                                <MudText Typo="Typo.body2" Class="text-sm text-muted mb-1">آدرس کامل:</MudText>
+                                <MudTextField Class="input-element" Multiline="true" Rows="10"/>
+                            </MudItem>
+                        </MudGrid>
+                    </MudForm>
+                </MudCardContent>
+
+                <MudCardActions Class="modal-footer">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary"  Class="btn btn-primary">
+                        ذخیره تغییرات
+                        <MudIcon Icon="Icons.Material.Filled.Edit"/>
+                    </MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudPaper>
+    </DialogContent>
+</MudDialog>
+
+
+
+
+@code {
+    [Parameter] public CreateUserAddressCommand? Address { get; set; }
+
+    //
+    // private void Close()
+    // {
+    //     DialogService.Close();
+    // }
+    //
+    // private void SaveChanges()
+    // {
+    //     // Logic to save changes
+    //     DialogService.Close();
+    // }
+}

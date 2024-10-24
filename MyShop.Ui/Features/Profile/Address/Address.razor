@@ -1,5 +1,6 @@
 @page "/Profile/Address"
 @using Application.User.UserAddress.Responses
+@using MyShop.Ui.Commen.Dialogs.Profile
                          
 @layout ProfileLayout
 
@@ -8,7 +9,7 @@
         <MudText Typo="Typo.h6" Class="mb-2" Align="Align.Start">
             نشانی‌ها
         </MudText> 
-        <MudIconButton Icon="@Icons.Material.Outlined.Add"/>
+        <MudIconButton OnClick="OpenAddAddressModal" Icon="@Icons.Material.Outlined.Add"/>
     </MudToolBar>
         <div class="checkout-section-content">
             <MudRadioGroup
@@ -33,9 +34,17 @@
 
 
 // Handle add new address button
-    private void OpenAddAddressModal()
+    private async Task OpenAddAddressModal()
     {
-// Open modal to add a new address
+        var parameters = new DialogParameters();
+
+        var dialog = await DialogService.ShowAsync<AddAddress>("آدرس جدید");
+        var result = await dialog.Result;
+
+        if (!result!.Canceled)
+        {
+            // Handle the result when the dialog is confirmed
+        }
     }
 
     private ICollection<AddressDto>? AddressList { get; set; } = [];
