@@ -1,7 +1,7 @@
 @using Application.User.UserAddress.Responses
         
 <div class="col-xl-3 col-lg-4 col-sm-6 mb-3 Text-Color">
-    <MudCard Outlined="true" Elevation="@Elevation">
+    <MudCard Outlined="true" Elevation="@(Address.ActiveAddress ? 2 : 1)">
         <MudCardHeader class="cardHeader">
             <CardHeaderActions>
                 <MudRadio                   
@@ -9,7 +9,7 @@
                     Color="Color.Success"  
                     UncheckedColor="Color.Warning"
                     Size="Size.Small"
-                    Value="Address.Id"
+                    Value="Address.Id" 
                     Dense="true">
                     <MudText
                         Class="Text-Color"
@@ -22,7 +22,7 @@
             </CardHeaderActions>
         </MudCardHeader>
 
-        <MudDivider DividerType="DividerType.FullWidth"/>
+        <MudDivider DividerType="DividerType.Middle" Style="border-color: #997799"/>
 
 
         <MudCardContent>
@@ -63,7 +63,10 @@
 
 
     private bool Selected { get; set; }
-    [Parameter] public int Elevation { get; set; } = 1;
+
+
+
+
 
     protected override void OnParametersSet()
     {

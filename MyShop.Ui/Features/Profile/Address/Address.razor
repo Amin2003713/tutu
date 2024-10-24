@@ -13,13 +13,13 @@
         <div class="checkout-section-content">
             <MudRadioGroup
                 T="long"
-                bind-Value="SelectedAddress"
-                ValueChanged="Callback">
-                <div class="row mx-0">
-                    <MudVirtualize Items="@Addresses">
+                Value="SelectedAddress"
+                ValueChanged="@(async (long id) => await OnValueChanged(id))"
+                >
 
+                <div class="row mx-0">
+                    <MudVirtualize Items="@AddressList">
                         <AddressInfo
-                            Elevation="@(context.ActiveAddress ? 2 : 1)"
                             Address="context"/>
                     </MudVirtualize>
                 </div>
@@ -38,35 +38,63 @@
 // Open modal to add a new address
     }
 
-    private ICollection<AddressDto>? Addresses { get; set; }
+    private ICollection<AddressDto>? AddressList { get; set; } = [];
 
 
 
     protected override async Task OnInitializedAsync()
     {
-            var result =await AddressService.GetCurrentUserAddresses(await UserInfo.Id());
-
-            if (result!.IsSuccess)
-            {
-                SnackBar.Add(result.MetaData.Message, Severity.Error);
-                return;
-            }
-            if (result.Data is null)
-            {
-                SnackBar.Add("یافت نشد.", Severity.Warning);
-                return;
-            }
-            Addresses = result.Data;
+        await Addresses();
     }
 
+   
 
-    private async Task OnAddressChanged(long arg)
+
+    private async Task OnValueChanged(long arg)
     {
+        var address = AddressList!.FirstOrDefault(a => a.Id == arg);
+
+
+        var result = await AddressService.SetActiveAddress(address.Id);
+
+        if (!result!.IsSuccess)
+        {
+            SnackBar.Add(result.MetaData.Message, Severity.Error);
+            return;
+        }
+
+        SnackBar.Add(result.MetaData.Message, Severity.Success);
+
+        foreach (var ad in AddressList!)
+        {
+            ad.ActiveAddress = ad == address;
+        }
+
+        SelectedAddress = arg;
+        StateHasChanged();
+
     }
 
-    private async Task Callback(long arg)
+
+
+    private async Task Addresses()
     {
-        SnackBar.Add(arg.ToString(), Severity.Info);
-    }
+        var result = await AddressService.GetCurrentUserAddresses();
 
+        if (!result!.IsSuccess)
+        {
+            SnackBar.Add(result.MetaData.Message, Severity.Error);
+            return;
+        }
+
+        if (result.Data is null)
+        {
+            SnackBar.Add("یافت نشد.", Severity.Warning);
+            return;
+        }
+
+    SelectedAddress = result.Data.FirstOrDefault(a => a.ActiveAddress)!.Id;
+
+    AddressList = result.Data;
+    }
 }

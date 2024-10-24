@@ -30,7 +30,7 @@ public class UserAddressService(IBaseHttpClient client) : IUserAddressService
     public async Task<ApiResult?> SetActiveAddress(long addressId)
     {
         return await client.PutAsync<object, ApiResult>(
-            UserAddressRouts.SetActiveUserAddress.BuildRequestUrl([addressId])!, null!);
+            UserAddressRouts.SetActiveUserAddress.BuildRequestUrl([addressId.ToString()])!, null!);
     }
 
     public async Task<ApiResult<AddressDto>?> GetAddressById(long id)
@@ -39,9 +39,9 @@ public class UserAddressService(IBaseHttpClient client) : IUserAddressService
             UserAddressRouts.GetCurrentUserAddress.BuildRequestUrl([id])!);
     }
 
-    public async Task<ApiResult<List<AddressDto>>?> GetCurrentUserAddresses(long id)
+    public async Task<ApiResult<List<AddressDto>>?> GetCurrentUserAddresses()
     {
         return await client.GetAsync<ApiResult<List<AddressDto>>>(
-            UserAddressRouts.GetCurrentUserAddress.BuildRequestUrl([id.ToString()])!);
+            UserAddressRouts.GetCurrentUserAddress);
     }
 }
