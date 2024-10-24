@@ -36,9 +36,8 @@
 // Handle add new address button
     private async Task OpenAddAddressModal()
     {
-        var parameters = new DialogParameters();
-
-        var dialog = await DialogService.ShowAsync<AddAddress>("آدرس جدید");
+         
+        var dialog = await DialogService.ShowAsync<AddAddress>("آدرس جدید" , new DialogOptions() { CloseButton = true , BackgroundClass = "backdrop-filter: blur(8px);"});
         var result = await dialog.Result;
 
         if (!result!.Canceled)

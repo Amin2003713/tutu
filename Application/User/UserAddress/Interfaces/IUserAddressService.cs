@@ -1,5 +1,6 @@
 ﻿using Application.User.UserAddress.CommandAndQueries;
 using Application.User.UserAddress.Responses;
+using Domain.User.Address;
 
 namespace Application.User.UserAddress.Interfaces;
 
@@ -12,4 +13,6 @@ public interface IUserAddressService
 
     Task<ApiResult<AddressDto>?> GetAddressById(long id);
     Task<ApiResult<List<AddressDto>>?> GetCurrentUserAddresses();
+    List<Province> ListProvince();
+    List<Cities> ListCity(string province);
 }

@@ -2,8 +2,11 @@
 using Application.User.UserAddress.CommandAndQueries;
 using Application.User.UserAddress.Interfaces;
 using Application.User.UserAddress.Responses;
+using DNTPersianUtils.Core.IranCities;
 using Domain.Common.Api;
+using Domain.User.Address;
 using Infra.Utils;
+using Province = Domain.User.Address.Province;
 
 namespace Infra.User.UserAddress;
 
@@ -44,4 +47,36 @@ public class UserAddressService(IBaseHttpClient client) : IUserAddressService
         return await client.GetAsync<ApiResult<List<AddressDto>>>(
             UserAddressRouts.GetCurrentUserAddress);
     }
+
+
+    public List<Province> ListProvince()
+    {
+        return (from province in Iran.Provinces
+            let countiesList = province.Counties.Select(a =>
+                new Counties(a.CountyName,
+                    a.Districts.Select(w =>
+                        new Districts(w.DistrictName,
+                            w.Cities.Select(s => new Cities(s.CityName)).ToList()
+                        )
+                    ).ToList()
+                )
+            ).ToList()
+            select new Province(province.ProvinceName, countiesList)).ToList();
+    }
+
+    public List<Cities> ListCity(string provinceName)
+    {
+        var province = Iran.Provinces.FirstOrDefault(p => p.ProvinceName == provinceName);
+
+        if (province == null)
+            return new List<Cities>(); // Return empty list if province not found
+
+        return province.Counties
+            .SelectMany(c => c.Districts) // Flatten the districts
+            .SelectMany(d => d.Cities) // Flatten the cities
+            .Select(city => new Cities(city.CityName)) // Return only the city name
+            .ToList();
+    }
+
 }
+
