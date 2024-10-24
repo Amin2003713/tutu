@@ -120,7 +120,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
            var token = await localStorage.GetAsync<string>(StorageConstants.Local.AuthToken);
             if (token is null || string.IsNullOrEmpty(token))
             {
-                authenticationStateProvider.MarkUserAsLoggedOut();
+                await authenticationStateProvider.MarkUserAsLoggedOut();
                 return;
             }
 
@@ -187,7 +187,7 @@ public class BaseHttpClient(HttpClient client, ILocalStorage localStorage,
                 break;
             case HttpStatusCode.Unauthorized:
             {
-                (authenticationStateProvider).MarkUserAsLoggedOut();
+                await (authenticationStateProvider).MarkUserAsLoggedOut();
                 snackbar.Add("نسبت به اهراز هویت اقدام نمایید. ", Severity.Error);
                 return Activator.CreateInstance<TResponse>();
             }

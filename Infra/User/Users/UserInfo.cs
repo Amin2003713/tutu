@@ -7,48 +7,14 @@ namespace Infra.User.Users;
 
 public class UserInfo(ILocalStorage localStorage)
 {
-    public async Task<string> Email()
-    {
-        return (await localStorage.GetAsync<UserDto>(UserConstants.UserLocation))?.Email ?? string.Empty;
-    }
+    private Task<UserDto?> User { get; set; } = localStorage.GetAsync<UserDto>(UserConstants.UserLocation);
 
-    public async  Task<string> FirstName()
-    {
-        return (await localStorage.GetAsync<UserDto>(UserConstants.UserLocation))?.Name ?? string.Empty;
-    }
-
-    public async  Task<string> FullName()
-    {
-        return (await localStorage.GetAsync<UserDto>(UserConstants.UserLocation))?.FullName() ?? string.Empty;
-    }
-
-    public async  Task<string> LastName()
-    {
-
-                return (await localStorage.GetAsync<UserDto>(UserConstants.UserLocation))?.Family ?? string.Empty;
-
-    }
-
-    public async  Task<string> PhoneNumber()
-    {
-                return (await localStorage.GetAsync<UserDto>(UserConstants.UserLocation))?.PhoneNumber ?? string.Empty;
-
-    }
-
-    public async  Task<long> UserId()
-    {
-                return (await localStorage.GetAsync<UserDto>(UserConstants.UserLocation))!.Id;
-
-    }
-    public async  Task<string> Avatar()
-    {
-                return (await localStorage.GetAsync<UserDto>(UserConstants.UserLocation))?.AvatarName ?? string.Empty;
-
-    }
-
-    public async Task<Gender?> Gender()
-    {
-                return (await localStorage.GetAsync<UserDto>(UserConstants.UserLocation))?.Gender;
-
-    }
+    public async Task<string> FirstName() => (await User)?.Name ?? "";
+    public async Task<string> LastName() => (await User)?.Family ?? "";
+    public async Task<string> PhoneNumber() => (await User)?.PhoneNumber ?? "";
+    public async Task<string> Email() => (await User)?.Email ?? "";
+    public async Task<Gender> Gender() => (await User)?.Gender ?? Domain.User.Users.Gender.None;
+    public async Task<string> Avatar() => (await User)?.AvatarName ?? "";
+    public async Task<long> Id() => (await User)!.Id;
+    public string FullName() => $"{FirstName()} {LastName()}".Trim();
 }

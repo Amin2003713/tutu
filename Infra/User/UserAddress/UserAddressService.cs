@@ -39,9 +39,9 @@ public class UserAddressService(IBaseHttpClient client) : IUserAddressService
             UserAddressRouts.GetUserAddressById.BuildRequestUrl([id])!);
     }
 
-    public async Task<ApiResult<List<AddressDto>>?> GetUserAddresses()
+    public async Task<ApiResult<List<AddressDto>>?> GetUserAddresses(long userId)
     {
         return await client.GetAsync<ApiResult<List<AddressDto>>>(
-            UserAddressRouts.GetUserAddressById);
+            UserAddressRouts.GetUserAddressById.BuildRequestUrl([userId])!);
     }
 }

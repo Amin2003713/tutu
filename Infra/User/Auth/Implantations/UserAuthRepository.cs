@@ -64,7 +64,7 @@ public class UserAuthRepository(
         await _localStorage.DeleteAsync(StorageConstants.Local.RefreshToken);
         await _localStorage.DeleteAsync(StorageConstants.Local.UserImageURL);
 
-        ((ClientStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
+        await ((ClientStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
 
         await client.SetAuthHeader();
         return new ApiResult

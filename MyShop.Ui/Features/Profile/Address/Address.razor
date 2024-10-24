@@ -10,9 +10,7 @@
         </MudText> 
         <MudIconButton Icon="@Icons.Material.Outlined.Add"/>
     </MudToolBar>
-
         <div class="checkout-section-content">
-
             <MudRadioGroup
                 T="long"
                 bind-Value="SelectedAddress"
@@ -27,8 +25,6 @@
                 </div>
             </MudRadioGroup>
         </div>
-
-
 </MudPaper>
 
 @code {
@@ -42,88 +38,31 @@
 // Open modal to add a new address
     }
 
-    public ICollection<AddressDto> Addresses { get; } =
-    [
-        new AddressDto
-        {
-            Id = 1,
-            UserId = 1,
-            Shire = "تهران",
-            City = "تهران",
-            PostalCode = "1234567890",
-            PostalAddress = "تهران، خیابان ولیعصر، پلاک 10",
-            PhoneNumber = "09123456789",
-            Name = "علی",
-            Family = "احمدی",
-            NationalCode = "1111111111",
-            ActiveAddress = true
-        },
-        new AddressDto
-        {
-            Id = 1,
-            UserId = 2,
-            Shire = "اصفهان",
-            City = "اصفهان",
-            PostalCode = "6543210987",
-            PostalAddress = "اصفهان، خیابان انقلاب، پلاک 22",
-            PhoneNumber = "09121234567",
-            Name = "رضا",
-            Family = "محمدی",
-            NationalCode = "2222222222",
-            ActiveAddress = false
-        },
-        new AddressDto
-        {
-            Id = 3,
-            UserId = 3,
-            Shire = "فارس",
-            City = "شیراز",
-            PostalCode = "9876543210",
-            PostalAddress = "شیراز، خیابان زند، پلاک 33",
-            PhoneNumber = "09351234567",
-            Name = "سارا",
-            Family = "جعفری",
-            NationalCode = "3333333333",
-            ActiveAddress = false
-        },
-        new AddressDto
-        {
-            Id = 4,
-            UserId = 4,
-            Shire = "مازندران",
-            City = "ساری",
-            PostalCode = "3210987654",
-            PostalAddress = "ساری، خیابان امام، پلاک 44",
-            PhoneNumber = "09211234567",
-            Name = "نیما",
-            Family = "کاظمی",
-            NationalCode = "4444444444",
-            ActiveAddress = true
-        },
-        new AddressDto
-        {
-            Id = 5,
-            UserId = 5,
-            Shire = "خراسان",
-            City = "مشهد",
-            PostalCode = "7890123456",
-            PostalAddress = "مشهد، خیابان آزادی، پلاک 55",
-            PhoneNumber = "09131234567",
-            Name = "مهدی",
-            Family = "هاشمی",
-            NationalCode = "5555555555",
-            ActiveAddress = true
-        }
-    ];
+    private ICollection<AddressDto>? Addresses { get; set; }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+            var result =await AddressService.GetUserAddresses(await UserInfo.Id());
+
+            if (result!.IsSuccess || result.Data is null)
+            {
+                SnackBar.Add(result.MetaData.Message, Severity.Error);
+                return;
+            }
+            Addresses = result.Data;
+       
+    }
 
 
     private async Task OnAddressChanged(long arg)
     {
     }
 
-    private Task Callback(long arg)
+    private async Task Callback(long arg)
     {
-        throw new NotImplementedException();
+        SnackBar.Add(arg.ToString(), Severity.Info);
     }
 
 }

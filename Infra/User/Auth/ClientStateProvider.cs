@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
+using Application.User.Auth.Interfaces;
 using Infra.Utils;
 using Infra.Utils.Constants.Permission;
 using Infra.Utils.Constants.Storage;
@@ -13,7 +14,7 @@ namespace Infra.User.Auth;
 public class ClientStateProvider(
     HttpClient httpClient,
     ILocalStorage localStorage ,
-    NavigationManager navigationManager , IHttpContextAccessor accessor)
+    NavigationManager navigationManager)
     : AuthenticationStateProvider
 {
 
@@ -24,13 +25,15 @@ public class ClientStateProvider(
         var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
 
         NotifyAuthenticationStateChanged(authState);
-
     }
 
-    public void MarkUserAsLoggedOut()
+    public async Task MarkUserAsLoggedOut()
     {
         var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
         var authState = Task.FromResult(new AuthenticationState(anonymousUser));
+        await localStorage.DeleteAsync(StorageConstants.Local.AuthToken);
+        await localStorage.DeleteAsync(StorageConstants.Local.RefreshToken);
+        await localStorage.DeleteAsync(StorageConstants.Local.UserImageURL);
 
         NotifyAuthenticationStateChanged(authState);
 
@@ -49,7 +52,14 @@ public class ClientStateProvider(
         var savedToken = await localStorage.GetAsync<string>(StorageConstants.Local.AuthToken);
         var lastVisitedUrl = await localStorage.GetAsync<string>(StorageConstants.Local.LastUrl);
 
-        if(!navigationManager.Uri.EndsWith($"/") && !navigationManager.Uri.Equals(lastVisitedUrl)  )
+        if (string.IsNullOrWhiteSpace(savedToken))
+        {
+            if (!navigationManager.Uri.Contains("/login"))
+                navigationManager.NavigateTo("/login", true);
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+        }
+
+        if(!navigationManager.Uri.EndsWith($"/") && !navigationManager.Uri.Equals(lastVisitedUrl) && !navigationManager.Uri.Contains("/login")  )
         {
             await localStorage.UpdateAsync(StorageConstants.Local.LastUrl, navigationManager.Uri);
         }
@@ -58,12 +68,7 @@ public class ClientStateProvider(
             navigationManager.NavigateTo(lastVisitedUrl);
         }
 
-        if (string.IsNullOrWhiteSpace(savedToken))
-        {
-            if (!navigationManager.Uri.Contains("/login"))
-                navigationManager.NavigateTo("/login", true);
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-        }
+      
 
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);

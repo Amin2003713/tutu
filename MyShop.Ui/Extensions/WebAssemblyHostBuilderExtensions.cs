@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Http;
 using MudBlazor;
 using MudBlazor.Services;
 
@@ -44,6 +45,7 @@ public static class WebAssemblyHostBuilderExtensions
             .AddScoped<ILocalStorage, LocalStorage>()
             // .AddTransient<AuthenticationHeaderHandler>()
             .AddHttpContextAccessor();
+
         return builder;
     }
 

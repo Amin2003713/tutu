@@ -4,6 +4,7 @@ using Application.Comment.Interfaces;
 using Application.Common;
 using Application.Order.Interfaces;
 using Application.User.Auth.Interfaces;
+using Application.User.UserAddress.Interfaces;
 using Application.User.Users.Interfaces;
 using Blazored.LocalStorage;
 using Infra.Banner.Implantations;
@@ -13,8 +14,10 @@ using Infra.Common;
 using Infra.Orders.Implantations;
 using Infra.User.Auth;
 using Infra.User.Auth.Implantations;
+using Infra.User.UserAddress;
 using Infra.User.Users;
 using Infra.User.Users.Implantations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infra.Extensions;
@@ -43,6 +46,7 @@ public static class InfraDi
 
         services.AddScoped<IUserAuthRepository, UserAuthRepository>();
         services.AddScoped<IBannerRepository, BannerRepository>();
+        services.AddScoped<IUserAddressService , UserAddressService>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<IOrderService, OrderService>();

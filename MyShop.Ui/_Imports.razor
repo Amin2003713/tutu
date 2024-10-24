@@ -22,6 +22,7 @@
 
 @* Application & Infrastructure *@
 @using Application.User.Auth.Interfaces
+@using Application.User.UserAddress.Interfaces
 @using Application.User.Users.Interfaces
 @using Application.User.Users.Responses
 @using Infra.Utils
@@ -52,6 +53,7 @@
 @* User Authentication & Services *@
 @inject IUserAuthRepository AuthenticationManager
 @inject IUserService UserService
+@inject IUserAddressService AddressService
 
 @* HTTP Context Access *@
 @inject IHttpContextAccessor Accessor
