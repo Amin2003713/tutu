@@ -50,7 +50,7 @@ public class ClientStateProvider(
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var savedToken = await localStorage.GetAsync<string>(StorageConstants.Local.AuthToken);
-        var lastVisitedUrl = await localStorage.GetAsync<string>(StorageConstants.Local.LastUrl);
+        var lastVisitedUrl = await localStorage.GetAsync<string>(StorageConstants.Local.LastUrl) ?? "/";
 
         if (string.IsNullOrWhiteSpace(savedToken))
         {

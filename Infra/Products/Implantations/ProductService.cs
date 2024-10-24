@@ -66,7 +66,7 @@ public class ProductService(IBaseHttpClient client) : IProductService
             new() { { "Slug", filterParams.Slug! } }
         };
         return await client.GetAsync<ApiResult<ProductFilterResult>>(
-            ProductRouts.GetAllProductsFiltered.ToQueryString(filterParams));
+            ProductRouts.GetAllProductsFiltered.ToQueryString(requestParams));
     }
 
     public async Task<ApiResult<ProductShopResult>?> GetProductForShop(ProductShopFilterParam filterParams)

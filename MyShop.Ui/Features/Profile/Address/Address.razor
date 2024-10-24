@@ -44,15 +44,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-            var result =await AddressService.GetUserAddresses(await UserInfo.Id());
+            var result =await AddressService.GetCurrentUserAddresses(await UserInfo.Id());
 
-            if (result!.IsSuccess || result.Data is null)
+            if (result!.IsSuccess)
             {
                 SnackBar.Add(result.MetaData.Message, Severity.Error);
                 return;
             }
+            if (result.Data is null)
+            {
+                SnackBar.Add("یافت نشد.", Severity.Warning);
+                return;
+            }
             Addresses = result.Data;
-       
     }
 
 

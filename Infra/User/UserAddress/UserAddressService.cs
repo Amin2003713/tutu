@@ -36,12 +36,12 @@ public class UserAddressService(IBaseHttpClient client) : IUserAddressService
     public async Task<ApiResult<AddressDto>?> GetAddressById(long id)
     {
         return await client.GetAsync<ApiResult<AddressDto>>(
-            UserAddressRouts.GetUserAddressById.BuildRequestUrl([id])!);
+            UserAddressRouts.GetCurrentUserAddress.BuildRequestUrl([id])!);
     }
 
-    public async Task<ApiResult<List<AddressDto>>?> GetUserAddresses(long userId)
+    public async Task<ApiResult<List<AddressDto>>?> GetCurrentUserAddresses(long id)
     {
         return await client.GetAsync<ApiResult<List<AddressDto>>>(
-            UserAddressRouts.GetUserAddressById.BuildRequestUrl([userId])!);
+            UserAddressRouts.GetCurrentUserAddress.BuildRequestUrl([id.ToString()])!);
     }
 }

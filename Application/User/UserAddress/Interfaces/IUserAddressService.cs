@@ -11,5 +11,5 @@ public interface IUserAddressService
     Task<ApiResult?> SetActiveAddress(long addressId);
 
     Task<ApiResult<AddressDto>?> GetAddressById(long id);
-    Task<ApiResult<List<AddressDto>>?> GetUserAddresses(long userId);
+    Task<ApiResult<List<AddressDto>>?> GetCurrentUserAddresses(long userId);
 }
