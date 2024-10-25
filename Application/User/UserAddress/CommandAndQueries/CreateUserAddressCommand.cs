@@ -29,4 +29,14 @@ public class CreateUserAddressCommand
     [Required(ErrorMessage = "نام خانوادگی الزامی است")]
     [MaxLength(50, ErrorMessage = "نام خانوادگی نباید بیشتر از ۵۰ کاراکتر باشد")]
     public string Family { get; set; }
+
+
+    [Required(ErrorMessage = "کد پستی الزامی است")]
+    [RegularExpression(@"^\d{10}$", ErrorMessage = "کد پستی باید ۱۰ رقم باشد")]
+    public string PostalCode { get; set; } 
+    
+    
+    [Required(ErrorMessage = "کد پستی الزامی است")]
+    [RegularExpression(@"^\d{10}$", ErrorMessage = "کد پستی باید ۱۰ رقم باشد")]
+    public string NationalCode { get; set; }
 }

@@ -1,44 +1,12 @@
 @using Domain.User.Address
 
-<MudDialog class="Blu   r">
+<MudDialog>
     <DialogContent>
         <div class="modal-body">
             <EditForm Model="Command" OnValidSubmit="Submit" FormName="1212" Enhance="true">
+                <DataAnnotationsValidator/>
                 <div class="row">
-                    <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3">
-                        <div class="form-element-row mb-0">
-                            <MudTextField
-                                Class="input-element"
-                                HelperText="علی"
-                                Label="نام:"
-                                bind-Value="Command!.Name"
-                                HelperTextOnFocus="true"
-                                AutoFocus="true"
-                                T="string"/>
-                        </div>
-                    </MudItem>
-                    <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3">
-                        <div class="form-element-row mb-0">
-                            <MudTextField
-                                Class="input-element"
-                                HelperText="احمدی"
-                                bind-Value="Command!.Family"
-                                Label="نام خانوادگی:"
-                                T="string"/>
-                        </div>
-                    </MudItem>
 
-                    <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3">
-                        <div class="form-element-row mb-0">
-                            <MudTextField
-                                Class="input-element"
-                                HelperTextOnFocus="true"
-                                Label="شماره موبایل:"
-                                HelperText="09*********"
-                                bind-Value="Command.PhoneNumber"
-                                T="string"/>
-                        </div>
-                    </MudItem>
 
                     <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3">
                         <div class="form-element-row mb-0">
@@ -47,11 +15,12 @@
                                                  class="select2"
                                                  Label="استان:"
                                                  @bind-Value="Command.Shire"
+                                                 For="@(() => Command!.Shire)"
                                                  SelectValueOnTab="true"
                                                  SearchFunc="SearchProvince"
-                                                 ToStringFunc="@(e => { GetCityData(e);return e == null ? string.Empty : $"{e} ({e})"; })"
+                                                 ToStringFunc="@(e => { GetCityData(e); return e == null ? string.Empty : $"{e} ({e})"; })"
                                                  Strict="false"
-                                                 Clearable="true"/> 
+                                                 Clearable="true"/>
                             </div>
                         </div>
                     </MudItem>
@@ -63,6 +32,7 @@
                                                  class="select2"
                                                  Label="شهر:"
                                                  @bind-Value="Command.City"
+                                                 For="@(() => Command!.City)"
                                                  SearchFunc="SearchCity"
                                                  ToStringFunc="@(e => e == null ? string.Empty : $"{e} ({e})")"
                                                  Strict="false"
@@ -71,19 +41,81 @@
                         </div>
                     </MudItem>
 
-
-                    <MudItem xs="12" Class="mb-3">
-                        <MudText Typo="Typo.body2" Class="text-sm text-muted mb-1">آدرس کامل:</MudText>
-                        <MudTextField Class="input-element" bind-Value="Command.PostalAddress" T="string" AutoGrow/>
+                    <MudItem xs="12" Class="mb-3 dir-ltr">
+                        <MudTextField
+                            HelperTextOnFocus
+                            @bind-Value="Command.PostalCode"
+                            For="@(() => Command!.PostalCode)"
+                            Label="کد پستی:"
+                            AutoGrow
+                            T="string"/>
                     </MudItem>
 
+                    <MudItem xs="12" Class="mb-3">
+                        <MudTextField
+                            HelperText="خیابان ....."
+                            HelperTextOnFocus
+                            @bind-Value="Command.PostalAddress"
+                            For="@(() => Command!.PostalAddress)"
+                            Label="آدرس تحویل:"
+                            AutoGrow
+                            T="string"/>
+                    </MudItem>
                     
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit"
-                                   Class="btn btn-primary">
-                            ذخیره تغییرات
-                            <MudIcon Icon="Icons.Material.Filled.Edit"/>
-                        </MudButton>
-                  
+                    <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3">
+                        <div class="form-element-row mb-0">
+                            <MudTextField
+                                HelperText="علی"
+                                Label="نام:"
+                                @bind-Value="Command.Name"
+                                For="@(() => Command.Name)"
+                                HelperTextOnFocus="true"
+                                T="string"/>
+                        </div>
+                    </MudItem>
+                    <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3">
+                        <div class="form-element-row mb-0">
+                            <MudTextField
+                                HelperText="احمدی"
+                                HelperTextOnFocus="true"
+                                @bind-Value="Command.Family"
+                                For="@(() => Command.Family)"
+                                Label="نام خانوادگی:"
+                                T="string"/>
+                        </div>
+                    </MudItem>
+
+                    <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3 dir-ltr">
+                        <div class="form-element-row mb-0">
+                            <MudTextField
+                                HelperTextOnFocus="true"
+                                Label="شماره موبایل:"
+                                HelperText="09*********"
+                                @bind-Value="Command.PhoneNumber"
+                                For="@(() => Command!.PhoneNumber)"
+
+                                T="string"/>
+                        </div>
+                    </MudItem>
+
+
+                    <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3 dir-ltr">
+                    <MudTextField
+                            HelperText="127*******"
+                            HelperTextOnFocus
+                            @bind-Value="Command.NationalCode"
+                            For="@(() => Command!.NationalCode)"
+                            Label="کد ملی:"
+                            T="string"/>
+                    </MudItem>
+
+
+                    <MudButton Variant="Variant.Filled" FullWidth="false" Color="Color.Primary" ButtonType="ButtonType.Submit"
+                               Class="btn btn-primary">
+                        ذخیره تغییرات
+                        <MudIcon Icon="Icons.Material.Filled.Edit"/>
+                    </MudButton>
+
 
                 </div>
             </EditForm>
@@ -96,15 +128,18 @@
 
 
 @code {
-    [Parameter] public CreateUserAddressCommand? Command { get; set; } = new CreateUserAddressCommand();
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter] public CreateUserAddressCommand? Command { get; set; } 
 
     private List<Province> _provinces = [];
     private List<Cities> _citiesList = [];
 
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         _provinces = AddressService.ListProvince();
+        Command = new CreateUserAddressCommand();
     }
 
     private void GetCityData(string province) => _citiesList = AddressService.ListCity(province);   
@@ -115,9 +150,21 @@
     private async Task<IEnumerable<string>> SearchCity(string value, CancellationToken arg2)
         => string.IsNullOrEmpty(value) ? _citiesList.Select(a=>a.Name).ToList() : _citiesList.Select(a=>a.Name).Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase)).ToList();
 
-    private Task Submit(EditContext arg)
+    private async Task Submit(EditContext arg)
     {
-        throw new NotImplementedException();
+
+        var result =await AddressService.CreateAddress(Command);
+
+        if (!result!.IsSuccess)
+        {
+            SnackBar.Add(result.MetaData.Message, Severity.Error);
+            MudDialog.Close();
+            return;
+        }
+
+    
+        SnackBar.Add(result.MetaData.Message, Severity.Success);
+        MudDialog.Close();
     }
 
 

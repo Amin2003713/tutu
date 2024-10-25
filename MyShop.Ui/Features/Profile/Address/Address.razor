@@ -4,7 +4,7 @@
                          
 @layout ProfileLayout
 
-<MudPaper Elevation="1" Class="checkout-section shadow-around">
+<MudPaper Elevation="1" Class="checkout-section align-stretch shadow-around">
     <MudToolBar Class="justify-space-between" Dense="@true" WrapContent="false">
         <MudText Typo="Typo.h6" Class="mb-2" Align="Align.Start">
             نشانی‌ها
@@ -18,7 +18,7 @@
                 ValueChanged="@(async (long id) => await OnValueChanged(id))"
                 >
 
-                <div class="row mx-0">
+                <div class="row mx-0 align-items-stretch">
                     <MudVirtualize Items="@AddressList">
                         <AddressInfo
                             Address="context"/>
