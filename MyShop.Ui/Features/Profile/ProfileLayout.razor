@@ -3,11 +3,26 @@
 @using MyShop.Ui.Features.Profile.Shared
 @inherits LayoutComponentBase
 
+@code {
+
+    public MudTheme? Theme { get; } = new MudTheme()
+    {
+        Typography = new Typography()
+        {
+            Default = new Default()
+            {
+                FontFamily = ["Shabnam", "Shabnam-Light", "Shabnam-Bold", "Shabnam-Medium", "Shabnam-Thin"]
+            },
+        },
+    };
+
+}
+
 @attribute [Authorize]
 
 
 <MudRTLProvider RightToLeft="true" >
-    <MudThemeProvider/>
+    <MudThemeProvider Theme="Theme"/>
 
     @* Provides popover functionality throughout the page *@
     <MudPopoverProvider/>

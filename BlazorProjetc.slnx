@@ -1,0 +1,6 @@
+﻿<Solution>
+  <Project Path="Application\Application.csproj" Type="Classic C#" />
+  <Project Path="Domain\Domain.csproj" Type="Classic C#" />
+  <Project Path="Infra\Infra.csproj" Type="Classic C#" />
+  <Project Path="MyShop.Ui\MyShop.Ui.csproj" Type="Classic C#" />
+</Solution>

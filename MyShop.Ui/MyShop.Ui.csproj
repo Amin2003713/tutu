@@ -67,7 +67,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Commen\Notifications\" />
+      <Folder Include="Commen\Notifications\" CssScope="custom-scope-identifier"/>
+        <None Update="Components/*/*.razor.css" CssScope="custom-scope-identifier"/>
+        <None Update="Features/*/*.razor.css" CssScope="custom-scope-identifier"/>
+        <None Update="{Features|Views|Commen}/*/*.razor.css" CssScope="custom-scope-identifier"/>
+
     </ItemGroup>
 
 </Project>

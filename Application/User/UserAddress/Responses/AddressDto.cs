@@ -1,4 +1,6 @@
-﻿namespace Application.User.UserAddress.Responses;
+﻿using Application.User.UserAddress.CommandAndQueries;
+
+namespace Application.User.UserAddress.Responses;
 
 public class AddressDto : BaseDto
 {
@@ -23,4 +25,19 @@ public class AddressDto : BaseDto
     {
         return $"{PostalAddress}";
     }
+
+
+    public static AddressDto ToDto(CreateUserAddressCommand command, long userId) =>
+        new()
+        {
+            UserId = userId,
+            Shire = command.Shire,
+            City = command.City,
+            PostalCode = command.PostalCode,
+            PostalAddress = command.PostalAddress,
+            PhoneNumber = command.PhoneNumber,
+            Name = command.Name,
+            Family = command.Family,
+            NationalCode = command.NationalCode,
+        };
 }

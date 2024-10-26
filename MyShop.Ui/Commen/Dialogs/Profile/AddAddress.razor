@@ -164,7 +164,7 @@
 
     
         SnackBar.Add(result.MetaData.Message, Severity.Success);
-        MudDialog.Close();
+        MudDialog.Close(AddressDto.ToDto(Command ,await UserInfo.Id()));
     }
 
 

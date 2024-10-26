@@ -1,32 +1,28 @@
 @page "/Profile/Address"
 @using Application.User.UserAddress.Responses
 @using MyShop.Ui.Commen.Dialogs.Profile
-                         
+
 @layout ProfileLayout
 
 <MudPaper Elevation="1" Class="checkout-section align-stretch shadow-around">
-    <MudToolBar Class="justify-space-between" Dense="@true" WrapContent="false">
+    <MudToolBar Class="justify-space-between" Dense="true" WrapContent="false">
         <MudText Typo="Typo.h6" Class="mb-2" Align="Align.Start">
             نشانی‌ها
-        </MudText> 
+        </MudText>
         <MudIconButton OnClick="OpenAddAddressModal" Icon="@Icons.Material.Outlined.Add"/>
     </MudToolBar>
-        <div class="checkout-section-content">
-            <MudRadioGroup
-                T="long"
-                Value="SelectedAddress"
-                ValueChanged="@(async (long id) => await OnValueChanged(id))"
-                >
 
-                <div class="row mx-0 align-items-stretch">
-                    <MudVirtualize Items="@AddressList">
-                        <AddressInfo
-                            Address="context"/>
-                    </MudVirtualize>
-                </div>
-            </MudRadioGroup>
-        </div>
+    <div class="checkout-section-content">
+        <MudRadioGroup T="long" Value="SelectedAddress" ValueChanged="@(async id => await OnValueChanged(id))">
+            <div class="row mx-0 align-items-stretch">
+                <MudVirtualize Items="@AddressList">
+                    <AddressInfo Address="context"/>
+                </MudVirtualize>
+            </div>
+        </MudRadioGroup>
+    </div>
 </MudPaper>
+
 
 @code {
 
@@ -36,26 +32,19 @@
 // Handle add new address button
     private async Task OpenAddAddressModal()
     {
-         
-        var dialog = await DialogService.ShowAsync<AddAddress>("آدرس جدید" , new DialogOptions() { CloseButton = true , BackgroundClass = "backdrop-filter: blur(8px);"});
-        var result = await dialog.Result;
-
-        if (!result!.Canceled)
-        {
-            // Handle the result when the dialog is confirmed
-        }
+        var dialog = await DialogService.ShowAsync<AddAddress>("آدرس جدید", new DialogOptions { CloseButton = true, BackgroundClass = "backdrop-filter: blur(8px);" });
+        await dialog.Result;
+        await Addresses();
+        StateHasChanged();
     }
 
     private ICollection<AddressDto>? AddressList { get; set; } = [];
-
 
 
     protected override async Task OnInitializedAsync()
     {
         await Addresses();
     }
-
-   
 
 
     private async Task OnValueChanged(long arg)
@@ -80,9 +69,7 @@
 
         SelectedAddress = arg;
         StateHasChanged();
-
     }
-
 
 
     private async Task Addresses()
@@ -101,8 +88,9 @@
             return;
         }
 
-    SelectedAddress = result.Data.FirstOrDefault(a => a.ActiveAddress)!.Id;
+        SelectedAddress = result.Data.FirstOrDefault(a => a.ActiveAddress)!.Id;
 
-    AddressList = result.Data;
+        AddressList = result.Data;
     }
+
 }

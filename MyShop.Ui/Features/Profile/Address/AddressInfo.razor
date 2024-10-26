@@ -1,53 +1,69 @@
-@using Application.User.UserAddress.Responses
-        
-<div class="col-xl-3 col-lg-4 col-sm-6 mb-3 Text-Color Mini-height">
-    <MudCard Outlined="true" Elevation="@(Address.ActiveAddress ? 2 : 1)" >
-        <MudCardHeader class="cardHeader">
-            <CardHeaderActions>
-                <MudRadio                   
-                    Placement="Placement.Left"
-                    Color="Color.Success"  
-                    UncheckedColor="Color.Warning"
-                    Size="Size.Small"
-                    Value="Address.Id" 
-                    Dense="true">
-                    <MudText
-                        Class="Text-Color"
-                        Color="Color.Dark"
-                        GutterBottom="true"
-                        Align="Align.Left">
-                        به این آدرس ارسال شود
-                    </MudText>
-                </MudRadio>
-            </CardHeaderActions>
-        </MudCardHeader>
-
-        <MudDivider DividerType="DividerType.Middle" Style="border-color: #997799"/>
+    
 
 
-        <MudCardContent>
-            <MudText Align="Align.Start" Class="Text-Color">
-                @Address.FullAddress()
-            </MudText>
-            <MudText
-                Class="Text-Color"
-                Align="Align.Start">
-                <MudIcon Icon="@Icons.Material.Filled.Person"/>
-                @Address.ContactName()
-            </MudText>
 
-            <MudText Align="Align.End">
-                <MudLink Underline="Underline.None" OnClick="EditAddress">
-                    ویرایش
-                    <MudIcon Icon="@Icons.Material.Filled.Edit"/>
-                </MudLink>
-            </MudText>
-        </MudCardContent>
-    </MudCard>
-</div>
- 
+<div class="col-xl-3 col-lg-4 col-sm-6 mb-3 Text-Color">
+        <MudCard Outlined="true" Elevation="@(Address.ActiveAddress ? 2 : 1)" >
+            <div class="height align-stretch mud-card-header">
+                <div class="mud-card-header-content">
 
 
+                    <div Class="justify-space-between Min-ToolBar mud-toolbar" role="toolbar">
+                        <MudRadio
+                            class="Min-height-Content"
+                            Placement="Placement.Left"
+                            Color="Color.Success"
+                            UncheckedColor="Color.Warning"
+                            Size="Size.Small"
+                            Value="Address.Id"
+                            Dense="true">
+                            <MudText Typo="Typo.caption">
+                                آدرس @(Address.ActiveAddress ? " فعال" : " غیر فعال")
+                            </MudText>
+                        </MudRadio>
+
+                        <div>
+                            <MudIconButton class="Min-height-Content"
+                                           Icon="@Icons.Material.Outlined.Edit"
+                                           Size="Size.Small"
+                                           Color="Color.Warning"
+                            />
+                            <MudIconButton class="Min-height-Content"
+                                           Icon="@Icons.Material.Outlined.Delete"
+                                           Color="Color.Error"
+                                           Size="Size.Small"/>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <MudDivider DividerType="DividerType.Middle" Style="border-color: #997799"/>
+
+
+            <MudCardContent>
+                <MudText Align="Align.Start" Class="Text-Color">
+                    @Address.FullAddress()
+                </MudText>
+                <MudText
+                    Class="Text-Color"
+                    Align="Align.Start">
+                    <MudIcon Icon="@Icons.Material.Filled.Person"/>
+                    @Address.ContactName()
+                </MudText>
+
+                <MudText Align="Align.End">
+                    <MudLink Underline="Underline.None" OnClick="EditAddress">
+                        <MudText Typo="Typo.caption">
+                            ویرایش
+                        </MudText>
+                        <MudIcon Icon="@Icons.Material.Filled.Edit"/>
+                    </MudLink>
+                </MudText>
+            </MudCardContent>
+        </MudCard>
+    </div>
 
 
 
