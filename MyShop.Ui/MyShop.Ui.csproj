@@ -53,7 +53,6 @@
       <AdditionalFiles Include="Commen\StatusCodes\NotFound404.razor" />
       <AdditionalFiles Include="Features\Profile\Account\ChangePassword.razor" />
       <AdditionalFiles Include="Features\Profile\Account\ProfileForm.razor" />
-      <AdditionalFiles Include="Features\Profile\Orders\LatestOrders.razor" />
       <AdditionalFiles Include="Features\Profile\Profile.razor" />
       <AdditionalFiles Include="Features\Profile\ProfileLayout.razor" />
       <AdditionalFiles Include="Features\Profile\Shared\LatestFavorites.razor" />
@@ -68,6 +67,7 @@
 
     <ItemGroup>
       <Folder Include="Commen\Notifications\" CssScope="custom-scope-identifier"/>
+      <Folder Include="Features\Orders\" />
         <None Update="Components/*/*.razor.css" CssScope="custom-scope-identifier"/>
         <None Update="Features/*/*.razor.css" CssScope="custom-scope-identifier"/>
         <None Update="{Features|Views|Commen}/*/*.razor.css" CssScope="custom-scope-identifier"/>

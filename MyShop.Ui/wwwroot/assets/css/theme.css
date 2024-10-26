@@ -4874,7 +4874,6 @@ header.page-header.fixed {
 }
 
 .profile-sidebar .profile-avatar:after {
-    content: '';
     position: absolute;
     right: 28px;
     top: 50%;

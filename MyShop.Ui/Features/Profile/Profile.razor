@@ -35,7 +35,8 @@
 
     public UserDto User { get; set; } = new();
 
-    private bool ShowEdit { get; set; } = false;
+    [SupplyParameterFromQuery] 
+    public bool ShowEdit { get; set; } = false;
 
    
 
