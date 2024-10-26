@@ -184,6 +184,16 @@ hr {
     text-align: center;
 }
 
+.Dialog-Background-blur 
+{
+    min-width: 20% !important;
+    min-height: 20% !important;
+    backdrop-filter: blur(8px);
+}
+
+ .Dialog-Font{
+     font-size: 16px !important;
+ }
 
 .Text-Color {
     color: #997799 !important;

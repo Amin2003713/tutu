@@ -1,3 +1,4 @@
+@using MyShop.Ui.Commen.Dialogs
 @using MyShop.Ui.Commen.Dialogs.Profile
     
 
@@ -77,13 +78,26 @@
     {
     var parameters = new DialogParameters<AddressDialog> { { a=>a.Command, Address } };
 
-    var dialog = await DialogService.ShowAsync<AddressDialog>(" ویرایش آدرس", parameters , new DialogOptions { CloseButton = true, BackgroundClass = "backdrop-filter: blur(8px);" } );
+         var dialog = await DialogService.ShowAsync<AddressDialog>(" ویرایش آدرس", parameters , new DialogOptions { CloseButton = true, BackgroundClass = "Dialog-Background-blur" } );
         await dialog.Result;
         StateHasChanged();
     }
 
     private async Task Delete(MouseEventArgs arg)
     {
+        var parameters = new DialogParameters<DeleteConfirmation> { { a => a.ContentText, Address.PostalCode } };
+
+        var dialog = await DialogService.ShowAsync<DeleteConfirmation>("حذف آدرس", parameters, new DialogOptions { CloseButton = true, BackgroundClass = "Dialog-Background-blur"});
+       var result =  await dialog.Result;
+
+       if(result!.Canceled || result.Data is null)
+           return;
+
+       bool.TryParse(result!.Data!.ToString(), out var confirmed);
+
+       if(confirmed)
         await DeleteAddress.InvokeAsync(Address.Id);
+
+       return;
     }
 }
