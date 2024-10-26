@@ -68,6 +68,7 @@
     <ItemGroup>
       <Folder Include="Commen\Notifications\" CssScope="custom-scope-identifier"/>
       <Folder Include="Features\Orders\" />
+      <Folder Include="wwwroot\Users\" />
         <None Update="Components/*/*.razor.css" CssScope="custom-scope-identifier"/>
         <None Update="Features/*/*.razor.css" CssScope="custom-scope-identifier"/>
         <None Update="{Features|Views|Commen}/*/*.razor.css" CssScope="custom-scope-identifier"/>
