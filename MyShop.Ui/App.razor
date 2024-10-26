@@ -1,12 +1,12 @@
 ﻿@using MyShop.Ui.Commen
-@using MyShop.Ui.Features.Authentication
 @using MyShop.Ui.Layout
+@using MyShop.Ui.Features.Users.Authentication
 
 <CascadingAuthenticationState>
     <Error>
         <Router AppAssembly="@typeof(Program).Assembly">
             <Found Context="routeData">
-                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="typeof(MainLayout)">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="typeof(UserMainLayout)">
                     <NotAuthorized>
                         <Login/>
                     </NotAuthorized>

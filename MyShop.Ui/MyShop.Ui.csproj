@@ -51,14 +51,10 @@
       <AdditionalFiles Include="Commen\Headers\PageHeader.razor" />
       <AdditionalFiles Include="Commen\Notifications\SnackBar.razor" />
       <AdditionalFiles Include="Commen\StatusCodes\NotFound404.razor" />
-      <AdditionalFiles Include="Features\Profile\Account\ChangePassword.razor" />
-      <AdditionalFiles Include="Features\Profile\Account\ProfileForm.razor" />
-      <AdditionalFiles Include="Features\Profile\Profile.razor" />
-      <AdditionalFiles Include="Features\Profile\ProfileLayout.razor" />
-      <AdditionalFiles Include="Features\Profile\Shared\LatestFavorites.razor" />
-      <AdditionalFiles Include="Features\Profile\Shared\ProfileBanner.razor" />
-      <AdditionalFiles Include="Features\Profile\Shared\ProfileFooter.razor" />
-      <AdditionalFiles Include="Features\Profile\Shared\ProfileSideBar.razor" />
+      <AdditionalFiles Include="Features\Users\Authentication\RedirectToLogin.razor" />
+      <AdditionalFiles Include="Features\Users\Profile\Account\ProfileInfo.razor" />
+      <AdditionalFiles Include="Features\Users\Profile\Address\Address.razor" />
+      <AdditionalFiles Include="Features\Users\Profile\Address\AddressInfo.razor" />
     </ItemGroup>
 
     <ItemGroup>
@@ -67,7 +63,7 @@
 
     <ItemGroup>
       <Folder Include="Commen\Notifications\" CssScope="custom-scope-identifier"/>
-      <Folder Include="Features\Orders\" />
+      <Folder Include="Features\Users\Orders\" />
       <Folder Include="wwwroot\Users\" />
         <None Update="Components/*/*.razor.css" CssScope="custom-scope-identifier"/>
         <None Update="Features/*/*.razor.css" CssScope="custom-scope-identifier"/>

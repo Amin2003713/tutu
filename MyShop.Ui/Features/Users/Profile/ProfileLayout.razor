@@ -1,0 +1,68 @@
+@using MyShop.Ui.Commen.Headers
+@using MyShop.Ui.Commen.Footers
+@using MyShop.Ui.Features.Users.Profile.Shared
+@inherits LayoutComponentBase
+
+@code {
+
+    public MudTheme? Theme { get; } = new MudTheme()
+    {
+        Typography = new Typography()
+        {
+            Default = new Default()
+            {
+                FontFamily = ["Shabnam"],
+                FontSize = "13px" 
+            },
+        },
+    };
+
+}
+
+@attribute [Authorize]
+
+
+<MudRTLProvider RightToLeft="true" >
+    <MudThemeProvider Theme="Theme"/>
+
+    @* Provides popover functionality throughout the page *@
+    <MudPopoverProvider/>
+
+    @* Needed for handling dialog components across the app *@
+    <MudDialogProvider/>
+
+    @* Provides snackbar notifications across the app *@
+    <MudSnackbarProvider/>
+    <MudLayout class="page-wrapper">
+            @* Main page wrapper layout *@
+
+            <PageHeader/> @* Custom page header component *@
+            <HeaderResponsive/> 
+
+            <MudMainContent class="page-content">
+
+                <div Class="container">
+                    <div class="row mb-5">
+                        <div class="col-lg-3 col-md-4 mb-md-0 mb-3 " >
+                            <div class="sticky-sidebar">
+                                <ProfileSideBar/>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 col-md-8">
+                            @Body
+                        </div>
+                        
+                        <div Class="row mb-5">
+                            <ProfileBanner/>
+                        </div>
+                    </div>
+                </div>
+            </MudMainContent>
+
+            @* Footer section for the profile page *@
+            <MainFooter/>
+    </MudLayout>
+
+</MudRTLProvider>
+
+

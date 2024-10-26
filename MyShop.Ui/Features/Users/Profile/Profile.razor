@@ -1,0 +1,65 @@
+@page "/Profile"
+@using MyShop.Ui.Features.Users.Profile.Account
+@layout ProfileLayout
+
+
+<div class="row mb-4">
+    <div class="@(ShowEdit ? "col-12" : "col-lg-6 mb-lg-0 mb-3")">
+        @if(!ShowEdit)
+        {
+            <ProfileInfo
+                UserDto="User"
+                EditUser="HandelEditForm"/>
+        }
+        else
+        {
+            <ProfileForm 
+                IsEdit="HandelEditForm"/>
+        }
+    </div>    
+
+       @if(!ShowEdit)
+       { 
+           <div class="col-lg-6 mb-lg-0 mb-3">
+           <LatestFavorites/> 
+           </div>
+       }
+   
+</div>
+
+<LatestOrders/>  
+
+
+@code
+{
+
+    public UserDto User { get; set; } = new();
+
+    [SupplyParameterFromQuery] 
+    public bool ShowEdit { get; set; } = false;
+
+   
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var user = (await Local.GetAsync<UserDto>(UserConstants.UserLocation))!;
+
+        if (user is null)
+        {
+            var result =await UserService.GetCurrentUser();
+
+            if (!result!.IsSuccess)
+                SnackBar.Add(result.MetaData.Message, Severity.Error);
+
+            user = result.Data;
+        }
+
+        User = user;
+    }
+
+    private void HandelEditForm(bool showEdit)
+    {
+        ShowEdit = showEdit;
+        StateHasChanged();
+    }
+}
