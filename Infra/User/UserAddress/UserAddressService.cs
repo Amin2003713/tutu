@@ -27,7 +27,7 @@ public class UserAddressService(IBaseHttpClient client) : IUserAddressService
     public async Task<ApiResult?> DeleteAddress(long addressId)
     {
         return await client.DeleteAsync<ApiResult>(
-            UserAddressRouts.DeleteUserAddressById.BuildRequestUrl([addressId])!);
+            UserAddressRouts.DeleteUserAddressById.BuildRequestUrl([addressId.ToString()])!);
     }
 
     public async Task<ApiResult?> SetActiveAddress(long addressId)

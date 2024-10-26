@@ -27,17 +27,30 @@ public class AddressDto : BaseDto
     }
 
 
-    public static AddressDto ToDto(CreateUserAddressCommand command, long userId) =>
+    public CreateUserAddressCommand ToAddCommand() =>
         new()
         {
-            UserId = userId,
-            Shire = command.Shire,
-            City = command.City,
-            PostalCode = command.PostalCode,
-            PostalAddress = command.PostalAddress,
-            PhoneNumber = command.PhoneNumber,
-            Name = command.Name,
-            Family = command.Family,
-            NationalCode = command.NationalCode,
+            Shire = this.Shire,
+            City = this.City,
+            PostalCode = this.PostalCode,
+            PostalAddress = this.PostalAddress,
+            PhoneNumber = this.PhoneNumber,
+            Name = this.Name,
+            Family = this.Family,
+            NationalCode = this.NationalCode,
+        };
+
+    public EditUserAddressCommand ToEditCommand() =>
+        new()
+        {
+            Shire = this.Shire,
+            City = this.City,
+            PostalCode = this.PostalCode,
+            PostalAddress = this.PostalAddress,
+            PhoneNumber = this.PhoneNumber,
+            Name = this.Name,
+            Family = this.Family,
+            NationalCode = this.NationalCode,
+            Id = this.Id
         };
 }

@@ -1,3 +1,4 @@
+@using MyShop.Ui.Commen.Dialogs.Profile
     
 
 
@@ -26,11 +27,13 @@
                             <MudIconButton class="Min-height-Content"
                                            Icon="@Icons.Material.Outlined.Edit"
                                            Size="Size.Small"
+                                           OnClick="EditAddress"
                                            Color="Color.Warning"
                             />
                             <MudIconButton class="Min-height-Content"
                                            Icon="@Icons.Material.Outlined.Delete"
                                            Color="Color.Error"
+                                           OnClick="Delete"
                                            Size="Size.Small"/>
                         </div>
                     </div>
@@ -52,15 +55,6 @@
                     <MudIcon Icon="@Icons.Material.Filled.Person"/>
                     @Address.ContactName()
                 </MudText>
-
-                <MudText Align="Align.End">
-                    <MudLink Underline="Underline.None" OnClick="EditAddress">
-                        <MudText Typo="Typo.caption">
-                            ویرایش
-                        </MudText>
-                        <MudIcon Icon="@Icons.Material.Filled.Edit"/>
-                    </MudLink>
-                </MudText>
             </MudCardContent>
         </MudCard>
     </div>
@@ -74,25 +68,22 @@
 @code
 {                         
     [Parameter]
-    public required AddressDto Address { get; set; } = null!;
+    public required AddressDto Address { get; set; }
 
-
-    private bool Selected { get; set; }
-
-
-
-
-
-    protected override void OnParametersSet()
-    {
-
-        Selected = Address.ActiveAddress;
-    }
+    [Parameter] public EventCallback<long> DeleteAddress { get; set; }
 
 
     private async Task EditAddress()
     {
+    var parameters = new DialogParameters<AddressDialog> { { a=>a.Command, Address } };
 
+    var dialog = await DialogService.ShowAsync<AddressDialog>(" ویرایش آدرس", parameters , new DialogOptions { CloseButton = true, BackgroundClass = "backdrop-filter: blur(8px);" } );
+        await dialog.Result;
+        StateHasChanged();
     }
 
+    private async Task Delete(MouseEventArgs arg)
+    {
+        await DeleteAddress.InvokeAsync(Address.Id);
+    }
 }

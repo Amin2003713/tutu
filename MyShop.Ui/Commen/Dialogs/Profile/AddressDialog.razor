@@ -41,8 +41,9 @@
                         </div>
                     </MudItem>
 
-                    <MudItem xs="12" Class="mb-3 dir-ltr">
-                        <MudTextField
+                    <MudItem xs="12" Class="mb-3 ">
+                        <MudTextField 
+                            class="Ltr-Text-Input" 
                             HelperTextOnFocus
                             @bind-Value="Command.PostalCode"
                             For="@(() => Command!.PostalCode)"
@@ -85,7 +86,7 @@
                         </div>
                     </MudItem>
 
-                    <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3 dir-ltr">
+                    <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3">
                         <div class="form-element-row mb-0">
                             <MudTextField
                                 HelperTextOnFocus="true"
@@ -99,13 +100,13 @@
                     </MudItem>
 
 
-                    <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3 dir-ltr">
+                    <MudItem xs="12" lg="6" class="text-dark font-weight-bold mb-3">
                     <MudTextField
                             HelperText="127*******"
-                            HelperTextOnFocus
+                            HelperTextOnFocus 
                             @bind-Value="Command.NationalCode"
                             For="@(() => Command!.NationalCode)"
-                            Label="کد ملی:"
+                            Label="کد ملی:"    
                             T="string"/>
                     </MudItem>
 
@@ -130,7 +131,7 @@
 @code {
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
-    [Parameter] public CreateUserAddressCommand? Command { get; set; } 
+    [Parameter] public AddressDto? Command { get; set; }
 
     private List<Province> _provinces = [];
     private List<Cities> _citiesList = [];
@@ -139,7 +140,7 @@
     protected override async Task OnParametersSetAsync()
     {
         _provinces = AddressService.ListProvince();
-        Command = new CreateUserAddressCommand();
+        Command = Command ?? new AddressDto();
     }
 
     private void GetCityData(string province) => _citiesList = AddressService.ListCity(province);   
@@ -153,7 +154,7 @@
     private async Task Submit(EditContext arg)
     {
 
-        var result =await AddressService.CreateAddress(Command);
+        var result = Command!.Id is 0 ? await AddressService.CreateAddress(Command!.ToAddCommand()) : await AddressService.EditAddress(Command!.ToEditCommand());  
 
         if (!result!.IsSuccess)
         {
@@ -164,7 +165,7 @@
 
     
         SnackBar.Add(result.MetaData.Message, Severity.Success);
-        MudDialog.Close(AddressDto.ToDto(Command ,await UserInfo.Id()));
+        MudDialog.Close();
     }
 
 
