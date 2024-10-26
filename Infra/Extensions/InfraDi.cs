@@ -17,6 +17,7 @@ using Infra.User.Auth.Implantations;
 using Infra.User.UserAddress;
 using Infra.User.Users;
 using Infra.User.Users.Implantations;
+using Infra.Utils.Constants.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,11 +36,11 @@ public static class InfraDi
 
     private static IServiceCollection AddApisToDiRegistry(this IServiceCollection services)
     {
-        const string baseAddress = "https://localhost:5001/";
+        
 
         services.AddHttpClient<IBaseHttpClient, BaseHttpClient>(client =>
         {
-            client.BaseAddress = new Uri(baseAddress);
+            client.BaseAddress = new Uri(StorageConstants.Server.ServerUrl);
              
 
         });

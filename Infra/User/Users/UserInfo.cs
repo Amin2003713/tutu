@@ -1,6 +1,7 @@
 ﻿using Application.User.Users.Responses;
 using Domain.User.Users;
 using Infra.Utils;
+using Infra.Utils.Constants.Storage;
 using Infra.Utils.Constants.User;
 
 namespace Infra.User.Users;
@@ -17,4 +18,6 @@ public class UserInfo(ILocalStorage localStorage)
     public async Task<string> Avatar() => (await User)?.AvatarName ?? "";
     public async Task<long> Id() => (await User)!.Id;
     public string FullName() => $"{FirstName()} {LastName()}".Trim();
+
+   public async Task<string> UserAvatar() =>   $"{StorageConstants.Server.ServerUrl}/images/users/avatar/{(await User)!.AvatarName}";
 }

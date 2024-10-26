@@ -15,7 +15,7 @@ public static class StorageConstants
     public static class Server
     {
         public static string Preference = "serverPreference";
+        public static string ServerUrl = "https://localhost:5001/";
 
-        //TODO - add
     }
 }
