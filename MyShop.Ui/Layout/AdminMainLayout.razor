@@ -1,9 +1,10 @@
 
 @using MyShop.Ui.Features.Admins.Drawer
+@using MyShop.Ui.Features.Admins.Shared
 @inherits LayoutComponentBase
+ @attribute [AllowAnonymous]
 
-
-<MudRTLProvider RightToLeft="true" Class="">
+ <MudRTLProvider RightToLeft="true"   >
     <MudThemeProvider/>
 
     @* Provides popover functionality throughout the page *@
@@ -15,14 +16,8 @@
     @* Provides snackbar notifications across the app *@
     <MudSnackbarProvider/>
         
-    <MudLayout>
-        <MudAppBar Elevation="1">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
-                           OnClick="@((e) => DrawerToggle())"/>
-        </MudAppBar>
-        <MudDrawer @bind-Open="_drawerOpen" OpenMiniOnHover="true" Variant="DrawerVariant.Responsive" Elevation="2">
-            <AdminDrawer/>
-        </MudDrawer>
+    <MudLayout class="vertical-layout vertical-menu-modern semi-dark-layout 2-columns  navbar-sticky footer-static  ">
+        <HeaderNavbar/>
 
         <div class="app-content content">
             <div class="content-overlay"></div>
@@ -40,12 +35,3 @@
 </MudRTLProvider>
 
 
-@code {
-bool _drawerOpen = true;
-
-void DrawerToggle()
-{
-_drawerOpen = !_drawerOpen;
-}
-
-}

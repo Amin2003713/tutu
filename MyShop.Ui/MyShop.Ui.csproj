@@ -49,7 +49,6 @@
       <AdditionalFiles Include="Commen\Footers\MiniFooter.razor" />
       <AdditionalFiles Include="Commen\Headers\HeaderResponsive.razor" />
       <AdditionalFiles Include="Commen\Headers\PageHeader.razor" />
-      <AdditionalFiles Include="Commen\Notifications\SnackBar.razor" />
       <AdditionalFiles Include="Commen\StatusCodes\NotFound404.razor" />
       <AdditionalFiles Include="Features\Users\Authentication\RedirectToLogin.razor" />
       <AdditionalFiles Include="Features\Users\Profile\Account\ProfileInfo.razor" />
