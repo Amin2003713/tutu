@@ -31,6 +31,11 @@ public static class WebAssemblyHostBuilderExtensions
             .AddBlazoredLocalStorage()
             .AddMudServices(configuration =>
             {
+                configuration.ResizeOptions.EnableLogging = true;
+                configuration.ResizeObserverOptions.EnableLogging = true;
+
+
+
                 configuration.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.TopLeft;
                 configuration.SnackbarConfiguration.HideTransitionDuration = 200;
                 configuration.SnackbarConfiguration.ShowTransitionDuration = 200;

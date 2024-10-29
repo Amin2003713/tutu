@@ -1,35 +1,120 @@
-@using MyShop.Ui.Features.Admins.Drawer
+@using MyShop.Ui.Features.Admins.Drawer 
+@using MudBlazor
 
 
-    <MudAppBar Elevation="1" Color="Color.Transparent" Dense Gutters Fixed  WrapContent="true">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
-                       OnClick="@((e) => DrawerToggle())"/>
-        <MudSpacer/>
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End"/>
-    </MudAppBar> 
-    
+<div class="header-navbar-shadow"></div>
 
-    <MudDrawer
-        @bind-Open="_drawerOpen"
-        Elevation="2"
-        Breakpoint="Breakpoint.MdAndDown">
-       <MudDrawerHeader>test</MudDrawerHeader>
-    </MudDrawer>
-       
-    
-    
-    
-    
-    
-    
-    
-    
+<MudAppBar Color="Color.Transparent">
+    <MudToolBar Dense WrapContent Gutters>
+        <MudGrid Justify="Justify.SpaceAround">
 
-    @code {
-bool _drawerOpen = true;
+            <!-- Left Side - Toggle Menu and Bookmarks -->
+            <MudItem lg="5" md="6" sm="0" xl="0" xs="0" xxl="0">
+                <MudGrid Justify="Justify.FlexStart" Spacing="8">
+                    <MudItem>
+                        <MudIconButton Icon="@Icons.Material.Filled.Menu" OnClick="ToggleDrawer"
+                                       Class="d-lg-none"/>
+                    </MudItem>
 
-void DrawerToggle()
+                    <MudItem >
+                        <MudTooltip Text="ایمیل">
+                            <MudIconButton Icon="@Icons.Material.Filled.Email"
+                                           Class="d-none d-lg-inline"/>
+                        </MudTooltip>
+                    </MudItem>
+
+                    <MudItem >
+                        <MudTooltip Text="گفتگو">
+                            <MudIconButton Icon="@Icons.Material.Filled.Chat"
+                                           Class="d-none d-lg-inline"/>
+                        </MudTooltip>
+                    </MudItem>
+
+                    <MudItem >
+                        <MudTooltip Text="وظایف">
+                            <MudIconButton Icon="@Icons.Material.Filled.CheckCircle"
+                                           Class="d-none d-lg-inline"/>
+                        </MudTooltip>
+                    </MudItem>
+
+                    <MudItem >
+                        <MudTooltip Text="تقویم">
+                            <MudIconButton Icon="@Icons.Material.Filled.CalendarToday"
+                                           Class="d-none d-lg-inline"/>
+                        </MudTooltip>
+                    </MudItem>
+                    <MudItem>
+                        <MudText Typo="Typo.h6" Class="ml-3">جستجو</MudText>
+                        <MudTextField T="string" Placeholder="جستجو..." Class="mx-2" Adornment="Adornment.Start"
+                                      AdornmentIcon="@Icons.Material.Filled.Search"/>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+            <!-- Right Side - Language, Notifications, Profile, Search -->
+            <MudItem lg="7" md="6" sm="12" xl="12" xs="12" xxl="12">
+                <MudGrid Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                    
+
+                    <MudItem>
+                        <MudMenu Icon="@Icons.Material.Filled.Language" Class="ml-auto">
+                            <MudMenuItem OnClick="@(() => ChangeLanguage("fa"))">فارسی</MudMenuItem>
+                            <MudMenuItem OnClick="@(() => ChangeLanguage("en"))">انگلیسی</MudMenuItem>
+                            <MudMenuItem OnClick="@(() => ChangeLanguage("fr"))">فرانسوی</MudMenuItem>
+                            <MudMenuItem OnClick="@(() => ChangeLanguage("de"))">آلمانی</MudMenuItem>
+                            <MudMenuItem OnClick="@(() => ChangeLanguage("pt"))">پرتغالی</MudMenuItem>
+                        </MudMenu>
+                    </MudItem>
+
+                    <MudItem>
+                        <MudIconButton Icon="@Icons.Material.Filled.Fullscreen"/>
+                    </MudItem>
+
+                    <MudItem>
+                        <MudMenu Icon="@Icons.Material.Filled.Notifications">
+                            <MudMenuItem>7 اعلان جدید</MudMenuItem>
+                            <!-- Other Notifications -->
+                        </MudMenu>
+                    </MudItem>
+
+                    <MudItem>
+                        <MudMenu Icon="@Icons.Material.Filled.AccountCircle">
+                            <MudMenuItem Icon="@Icons.Material.Filled.Person">ویرایش پروفایل</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.Email">صندوق ورودی من</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.CheckCircle">وظیفه</MudMenuItem>
+                            <MudMenuItem Icon="@Icons.Material.Filled.Chat">گفتگو ها</MudMenuItem>
+                            <MudDivider/>
+                            <MudMenuItem Icon="@Icons.Material.Filled.ExitToApp">خروج</MudMenuItem>
+                        </MudMenu>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+        </MudGrid>
+    </MudToolBar>
+</MudAppBar>
+
+
+@* <MudDrawer @bind-Open="@isDrawerOpen" Elevation="2" ClipMode="DrawerClipMode.Always" Color="Color.Default" Anchor="Anchor.Start" *@
+@*            Variant="DrawerVariant.Responsive"> *@
+@*     <MudNavMenu> *@
+@*         <MudNavLink Href="~/page1" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All">Page 1</MudNavLink> *@
+@*         <MudNavLink Href="~/page2" Icon="@Icons.Material.Filled.Settings">Page 2</MudNavLink> *@
+@*         <!-- Add more MudNavLinks as needed --> *@
+@*     </MudNavMenu> *@
+@* </MudDrawer> *@
+
+@code {
+private bool isDrawerOpen = true;
+
+private void ToggleDrawer()
 {
-_drawerOpen = !_drawerOpen;
+isDrawerOpen = !isDrawerOpen;
 }
+
+private void ChangeLanguage(string languageCode)
+{
+    // Change language logic
+}
+
 }

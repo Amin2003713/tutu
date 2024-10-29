@@ -1,7 +1,362 @@
 @page "/Admin" 
 @layout AdminMainLayout
-<h3>Admin</h3>
-
-@code {
-    
+  <div class="content-header row">
+          <div class="content-header-left col-12 mb-2 mt-1">
+            <div class="row breadcrumbs-top">
+              <div class="col-12">
+                <h5 class="content-header-title float-left pr-1">هایلایت Syntax</h5>
+                <div class="breadcrumb-wrapper">
+                  <ol class="breadcrumb p-0 mb-0">
+                    <li class="breadcrumb-item"><a href="index.html"><i class="bx bx-home-alt"></i></a>
+                    </li>
+                    <li class="breadcrumb-item"><a href="#">محتوا</a>
+                    </li>
+                    <li class="breadcrumb-item active">هایلایت Syntax
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-body"><!-- Basic Usage -->
+<section id="basic-usage" class="row">
+  <div class=" col-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">کاربرد پایه</h4>
+      </div>
+      <div class="card-content">
+        <div class="card-body">
+          <p>ابتدا نیاز دارید تا فایل های prism.css و prism.js را در صفحه خود قرار دهید.</p>
+          <p>Prism تمام تلاش خود را برای تشویق به استفاده از شیوه های نویسندگی خوب انجام می دهد. بنابراین فقط با المان های
+            <code>&lt;code&gt;</code>کار میکند، چرا که نمایش کد کد بدون استفاده از تگ <code>&lt;code&gt; </code> کار نادرستی است. برای راحتی کار شما Prism تعریف زبان را به صورت ارثی در نظر میگیرد. بنابراین اگر چند المان <code>&lt;code&gt; </code> زبان مشترکی دارند میتوانید کلاس
+            <code>language-xxxx</code> را به والد مشترک ان ها اضافه کنید. به این طریق میتوانید یک زبان پیش فرض برای کل سند با افزودن کلاس <code>language-xxxx</code> به تگ
+            <code>&lt;body&gt; </code> یا <code>&lt;html&gt;</code> تعریف کنید.</p>
+          <p>اگر میخواهید هایلایت کردن را برای یک المان <code>&lt;code&gt;</code> غیرفعال کنید که داخل یک المانی که برای آن زبان کد تعریف کرده اید قرار دارد، میتوانید کلاس  <code>language-none</code> را به آن اضافه کنید (یا هر زبان ناموجود).</p>
+          <p>کد:</p>
+          <pre><code class="language-html">&lt;pre&gt;
+&lt;code class="language-css"&gt;
+p {
+    color: red
 }
+
+&lt;/code&gt;
+&lt;/pre&gt;
+</code></pre>
+          <p>خروجی</p>
+          <pre><code class="language-css">p {
+    color: red
+}
+</code></pre>
+          <p>اگر از این الگو استفاده کنید تگ <code>&lt;pre&gt;
+</code> به صورت خودکار کلاس <code>language-xxxx</code> را می گیرد (اگر خودش آن را نداشته باشد) و به عنوان یک بلوک کد استایل دهی می شود.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Basic Usage -->
+<!-- Examples -->
+<section id="examples" class="row">
+  <div class=" col-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">مثال ها</h4>
+      </div>
+      <div class="card-content">
+        <div class="card-body">
+          <h5 class="card-title">کد HTML</h5>
+          <p>از کد زیر برای هایلایت کردن کدهای HTML استفاده کنید</p>
+          <p class="text-bold-800">کاربرد:</p>
+          <pre><code class="language-html"> &lt;pre&gt;
+&lt;code class="language-html"&gt;
+HTML CODE ... &lt;/code&gt;
+&lt;/pre&gt;
+</code></pre>
+          <p class="text-bold-800">مثال:</p>
+          <pre><code class="language-html"> &lt;div class="card"&gt;
+&lt;img class="card-img-top" src="..." alt="Card image cap"&gt;
+&lt;div class="card-body"&gt;
+&lt;h4 class="card-title"&gt;
+Card title&lt;/h4&gt;
+&lt;p class="card-text"&gt;
+Some quick example text to build on the card title and make up the bulk of the card's content.&lt;/p&gt;
+ &lt;/div&gt;
+&lt;ul class="list-group list-group-flush"&gt;
+&lt;li class="list-group-item"&gt;
+Cras justo odio&lt;/li&gt;
+&lt;li class="list-group-item"&gt;
+Dapibus ac facilisis in&lt;/li&gt;
+&lt;li class="list-group-item"&gt;
+Vestibulum at eros&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="card-body"&gt;
+&lt;a href="#" class="card-link"&gt;
+Card link&lt;/a&gt;
+&lt;a href="#" class="card-link"&gt;
+Another link&lt;/a&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">کد CSS</h5>
+          <p>از کد زیر برای هایلایت کردن کدهای CSS استفاده کنید.</p>
+          <p class="text-bold-800">کاربرد:</p>
+          <pre><code class="language-html"> &lt;pre&gt;
+&lt;code class="language-css"&gt;
+CSS CODE ... &lt;/code&gt;
+&lt;/pre&gt;
+</code></pre>
+          <p class="text-bold-800">مثال:</p>
+          <pre><code class="language-css"> a:active {
+    outline: 0;
+}
+
+a:hover {
+    outline: 0;
+}
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+b, strong {
+    font-weight: bold;
+}
+
+dfn {
+    font-style: italic;
+}
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+</code></pre>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">کد JS</h5>
+          <p>از کد زیر برای هایلایت کردن کدهای JS استفاده کنید.</p>
+          <p class="text-bold-800">کاربرد:</p>
+          <pre><code class="language-html"> &lt;pre&gt;
+&lt;code class="language-js"&gt;
+HTML CODE ... &lt;/code&gt;
+&lt;/pre&gt;
+</code></pre>
+          <p class="text-bold-800">مثال:</p>
+          <pre><code class="language-js"> init: function() {
+    var scroll_theme=($('.main-menu').hasClass('menu-dark')) ? 'light': 'dark';
+    this.obj=$(".main-menu-content").perfectScrollbar( {
+        suppressScrollX: true, theme: scroll_theme
+    }
+    );
+}
+
+, update: function() {
+    if (this.obj) {
+        $(".main-menu-content").perfectScrollbar('update');
+    }
+}
+
+, enable: function() {
+    this.init();
+}
+
+, </code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Examples -->
+<!-- Line Numbers -->
+<section id="line-numbers" class="row">
+  <div class=" col-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">شماره خط ها</h4>
+      </div>
+      <div class="card-content">
+        <div class="card-body">
+          <p>نمایش شماره خط در ابتدای خط های کد.</p>
+          <p>به طور مشخص، این گزینه فقط برای بلوک های کد کار می کند (<code>&lt;pre&gt;
+&lt;code&gt;
+</code>) نه برای کد های درون خطی. کلاس line-numbers را به تگ <code>&lt;pre&gt;
+</code> مورد نظر خود اضافه کنید و افزونه line-numbers بقیه کارها را انجام می دهد.</p>
+          <p>اختیاری: میتوانید صفت data-start (عدد) را به تگ <code>&lt;pre&gt;
+</code> اضافه کنید. این مقدار شمارنده خطوط را تغییر می دهد.</p>
+          <p class="text-bold-800">کاربرد:</p>
+          <pre><code class="language-html"> &lt;pre class="line-numbers"&gt;
+&lt;code class="language-css"&gt;
+p {
+    color: red
+}
+
+&lt;/code&gt;
+&lt;/pre&gt;
+</code></pre>
+          <p class="text-bold-800">مثال:</p>
+          <pre class="line-numbers"><code class="language-js"> (function() {
+    if (typeof self==='undefined' || !self.Prism || !self.document) {
+        return;
+    }
+}
+
+());
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Line Numbers -->
+<!-- Line highlight -->
+<section id="line-highlight" class="row">
+  <div class=" col-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">هایلایت خط</h4>
+      </div>
+      <div class="card-content">
+        <div class="card-body">
+          <p>خطوط یا محدوده ای از خطوط به خصوص را هایلایت کنید.</p>
+          <p>خطوط مورد نظر برای هایلایت شدن را توسط صفت <em>data-line</em> بر روی المان
+            <code>&lt;pre&gt; </code> با فرمت ساده زیر مشخص کنید:</p>
+          <ul class="line-height-2">
+            <li>یک تک شماره به خط مربوط به آن شماره اشاره می کند</li>
+            <li>محدوده ها توسط دو شماره جدا شده با خط تیره (-) مشخص می شوند</li>
+            <li>شماره خطوط متعدد یا محدوده های خطوط متعدد با کاما (,) از هم جدا می شوند</li>
+            <li>فاصله های خالی مجاز هستند و تاثیری در نتیجه ندارند</li>
+          </ul>
+          <p class="text-bold-800">کاربرد:</p>
+          <pre><code class="language-html"> &lt;pre data-line="2, 4, 8-10"&gt;
+&lt;code class="language-css"&gt;
+p {
+    color: red
+}
+
+&lt;/code&gt;
+&lt;/pre&gt;
+</code></pre>
+          <p class="text-bold-800">مثال:</p>
+          <pre data-line="2, 4, 7-9"><code class="language-css"> pre.line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+}
+
+pre.line-numbers &gt; code {
+    position: relative;
+}
+
+.line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    font-size: 100%;
+    left: -3.8em;
+    width: 3em;
+    /* works for line-numbers below 1000 lines */
+    letter-spacing: -1px;
+    border-right: 1px solid #999;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Line highlight -->
+<!-- Autolinker -->
+<section id="autolinker" class="row">
+  <div class=" col-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">لینک خودکار</h4>
+      </div>
+      <div class="card-content">
+        <div class="card-body">
+          <p>آدرس ها و ایمیل های موجود در کد را به لینک های قابل کلیک تبدیل می کند. <a href="#">لینک های Markdown</a> موجود در کامنت ها را Parse میکند.</p>
+          <p>آدرس ها و ایمیل ها به صورت خودکار لینک میشوند، نیازی نیست شما کاری انجام دهید برای لینک کردن یک متن به یک آدرس خاص در کامنت، از Markdown Syntax ممکن است استفاده کنید:</p>
+          <p class="text-bold-800">کاربرد:</p>
+          <pre><code class="language-html"> 
+</code></pre>
+          <p class="text-bold-800">مثال:</p>
+          <pre><code class="language-js"> 
+
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Autolinker -->
+<!-- Show Invisibles -->
+<section id="show-invisibles" class="row">
+  <div class=" col-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">نمایش کاراکتر های پنهان</h4>
+      </div>
+      <div class="card-content">
+        <div class="card-body">
+          <p>کاراکتر های مخفی مانند tab ها و یا line break ها را نمایش دهید.</p>
+          <p class="text-bold-800">مثال:</p>
+          <pre><code class="language-js"> (function() {
+    if ( typeof self !=='undefined' && !self.Prism || typeof global !=='undefined' && !global.Prism) {
+        return;
+    }
+    Prism.hooks.add('before-highlight', function(env) {
+        var tokens=env.grammar;
+        tokens.tab=/\t/g;
+        tokens.crlf=/\r\n/g;
+        tokens.lf=/\n/g;
+        tokens.cr=/\r/g;
+        tokens.space=/ /g;
+    }
+    );
+}
+
+)();
+</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Show Invisibles -->
+<!-- File Highlight -->
+<section id="file-highlight" class="row">
+  <div class=" col-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">هایلایت فایل</h4>
+      </div>
+      <div class="card-content">
+        <div class="card-body">
+          <p>فایل های خارجی را بارگیری کرده و توسط Prism هایلایت کنید. در خود وب سایت Prism از این روش استفاده شده است.</p>
+          <p>از صف <em>data-src</em> بر روی یک المان <code>&lt;pre&gt; </code> خالی استفاده کنید، به این صورت:</p>
+          <p class="text-bold-800">کاربرد:</p>
+          <pre><code class="language-html"> &lt;pre data-src="myfile.js"&gt;
+&lt;/pre&gt;
+</code></pre>
+          <p>نیازی نیست که زبان را مشخص کنید، چرا که به صورت خودکار از روی پسوند فایل مشخص می شود. اگر به هر علت زبان از روی فایل مشخص نشود و یا پسوند فایل نادرست باشد، میتوانید زبان را نیز مشخص کنید (با روش افزودن کلاس به طور معمول).</p>
+          <p>توجه داشته باشید که فایل ها توسط XMLHttpRequest بارگیری می شوند. این به این معنی است که اگر فایل شما بر روی یک Origin متفاوت باشد دریافت با خطا مواجه خواهد شد، مگر اینکه CORS در آن وب سایت فعال باشد.</p>
+          <p class="text-bold-800">مثال:</p>
+          <pre data-src="../../assets/js/scripts/components.js"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ File Highlight -->
+
+        </div>
