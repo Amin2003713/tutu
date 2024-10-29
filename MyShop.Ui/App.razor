@@ -6,7 +6,7 @@
     <Error>
         <Router AppAssembly="@typeof(Program).Assembly">
             <Found Context="routeData">
-                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@(GetMainLayout()))">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="typeof(UserMainLayout)">
                     <NotAuthorized>
                         <Login/>
                     </NotAuthorized>
@@ -20,17 +20,3 @@
         </Router>
     </Error>
 </CascadingAuthenticationState>
-
-
-
-
- @code
- {
-     private Type GetMainLayout()
-     {
-         var roles = UserInfo.Roles().Result;
-
-
-         return typeof(UserMainLayout);
-     }
- }
