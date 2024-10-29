@@ -3,7 +3,8 @@
 @inherits LayoutComponentBase
 
 <MudRTLProvider RightToLeft="true">
-    <MudThemeProvider/>
+    <MudThemeProvider Theme="Theme"/>
+
 
     @* Provides popover functionality throughout the page *@
     <MudPopoverProvider/>
@@ -16,3 +17,19 @@
   @Body
 
 </MudRTLProvider>
+
+@code {
+
+    public MudTheme? Theme { get; } = new()
+    {
+        Typography = new Typography()
+        {
+            Default = new Default()
+            {
+                FontFamily = ["Shabnam"],
+                FontSize = "13px"
+            },
+        },
+    };
+
+}

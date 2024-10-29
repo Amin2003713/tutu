@@ -2,37 +2,10 @@
 @using MyShop.Ui.Commen.Footers
 @using MyShop.Ui.Features.Users.Profile.Shared
 @inherits LayoutComponentBase
-
-@code {
-
-    public MudTheme? Theme { get; } = new MudTheme()
-    {
-        Typography = new Typography()
-        {
-            Default = new Default()
-            {
-                FontFamily = ["Shabnam"],
-                FontSize = "13px" 
-            },
-        },
-    };
-
-}
-
+@layout MudProviderLayout
 @attribute [Authorize]
 
 
-<MudRTLProvider RightToLeft="true" >
-    <MudThemeProvider Theme="Theme"/>
-
-    @* Provides popover functionality throughout the page *@
-    <MudPopoverProvider/>
-
-    @* Needed for handling dialog components across the app *@
-    <MudDialogProvider/>
-
-    @* Provides snackbar notifications across the app *@
-    <MudSnackbarProvider/>
     <MudLayout class="page-wrapper">
             @* Main page wrapper layout *@
 
@@ -63,6 +36,5 @@
             <MainFooter/>
     </MudLayout>
 
-</MudRTLProvider>
 
 

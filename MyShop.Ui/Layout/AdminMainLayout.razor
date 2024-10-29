@@ -2,19 +2,10 @@
 @using MyShop.Ui.Features.Admins.Drawer
 @using MyShop.Ui.Features.Admins.Shared
 @inherits LayoutComponentBase
+@layout MudProviderLayout
  @attribute [AllowAnonymous]
 
- <MudRTLProvider RightToLeft="true"   >
-    <MudThemeProvider/>
 
-    @* Provides popover functionality throughout the page *@
-    <MudPopoverProvider/>
-
-    @* Needed for handling dialog components across the app *@
-    <MudDialogProvider/>
-
-    @* Provides snackbar notifications across the app *@
-    <MudSnackbarProvider/>
         
     <MudLayout class="vertical-layout vertical-menu-modern semi-dark-layout 2-columns  navbar-sticky footer-static  ">
         <HeaderNavbar/>
@@ -29,9 +20,5 @@
             </div>
         </div>
     </MudLayout>
-
-    
-
-</MudRTLProvider>
 
 

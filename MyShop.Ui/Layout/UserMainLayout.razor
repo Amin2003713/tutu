@@ -1,22 +1,12 @@
 ﻿
 @using MyShop.Ui.Commen.Headers
 @using MyShop.Ui.Commen.Footers
-@inherits LayoutComponentBase
 
+@inherits LayoutComponentBase
+@layout MudProviderLayout
 @attribute [Authorize]
 
 
-<MudRTLProvider RightToLeft="true">
-    <MudThemeProvider/>
-
-    @* Provides popover functionality throughout the page *@
-    <MudPopoverProvider/>
-
-    @* Needed for handling dialog components across the app *@
-    <MudDialogProvider/>
-
-    @* Provides snackbar notifications across the app *@
-    <MudSnackbarProvider/>
     <MudLayout class="@PageWrapper">
 
         <PageHeader/>
@@ -31,9 +21,6 @@
         <MainFooter/>
 
     </MudLayout>
-
-</MudRTLProvider>
-
 
 @code
 {
