@@ -19,5 +19,8 @@ public class UserInfo(ILocalStorage localStorage)
     public async Task<long> Id() => (await User)!.Id;
     public string FullName() => $"{FirstName()} {LastName()}".Trim();
 
+    public async Task<List<UserRoleDto>> Roles() => (await User)?.Roles ?? [];
+    public async Task<bool> IsInRoles(params string[] roleTitle ) => (await User)?.Roles.Any(a=> roleTitle.Contains(a.RoleTitle)) ?? false;
+
    public async Task<string> UserAvatar() =>   $"{StorageConstants.Server.ServerUrl}/images/users/avatar/{(await User)!.AvatarName}";
 }
